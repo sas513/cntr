@@ -67,7 +67,7 @@ export default function ProductCard({ product }: ProductCardProps) {
 
   return (
     <Card 
-      className="product-card overflow-hidden group cursor-pointer"
+      className="product-card overflow-hidden group cursor-pointer w-full"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -75,7 +75,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         <img
           src={product.images?.[0] || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300"}
           alt={product.nameAr}
-          className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+          className="w-full h-48 sm:h-56 md:h-64 object-cover group-hover:scale-105 transition-transform duration-300"
         />
         
         {/* Badges */}
@@ -118,19 +118,19 @@ export default function ProductCard({ product }: ProductCardProps) {
         </div>
       </div>
 
-      <CardContent className="p-6">
+      <CardContent className="p-3 sm:p-4 md:p-6">
         <Link href={`/product/${product.id}`}>
-          <h3 className="text-lg font-semibold mb-2 arabic-text hover:text-primary transition-colors line-clamp-2">
+          <h3 className="text-base sm:text-lg font-semibold mb-2 arabic-text hover:text-primary transition-colors line-clamp-2">
             {product.nameAr}
           </h3>
         </Link>
         
-        <p className="text-muted-foreground text-sm mb-3 arabic-text line-clamp-2">
+        <p className="text-muted-foreground text-xs sm:text-sm mb-3 arabic-text line-clamp-2 hidden sm:block">
           {product.descriptionAr}
         </p>
 
-        {/* Rating */}
-        <div className="flex items-center gap-2 mb-3">
+        {/* Rating - Hidden on mobile to save space */}
+        <div className="hidden sm:flex items-center gap-2 mb-3">
           <div className="flex text-yellow-400 text-sm">
             {[...Array(5)].map((_, i) => (
               <Star key={i} className="w-4 h-4 fill-current" />
@@ -140,14 +140,14 @@ export default function ProductCard({ product }: ProductCardProps) {
         </div>
 
         {/* Price */}
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2">
-            <span className="text-2xl font-bold text-primary">
+        <div className="flex items-center justify-between mb-3 sm:mb-4">
+          <div className="flex items-center gap-1 sm:gap-2">
+            <span className="text-lg sm:text-xl md:text-2xl font-bold text-primary">
               {parseFloat(product.price).toLocaleString()}
             </span>
-            <span className="text-sm text-muted-foreground">د.ع</span>
+            <span className="text-xs sm:text-sm text-muted-foreground">د.ع</span>
             {hasDiscount && (
-              <span className="text-sm text-muted-foreground line-through">
+              <span className="text-xs sm:text-sm text-muted-foreground line-through">
                 {parseFloat(product.originalPrice!).toLocaleString()}
               </span>
             )}
@@ -155,19 +155,19 @@ export default function ProductCard({ product }: ProductCardProps) {
         </div>
 
         {/* Stock Status */}
-        <div className="mb-4">
+        <div className="mb-3 sm:mb-4">
           {product.stock && product.stock > 0 ? (
-            <span className="text-green-600 text-sm arabic-text">
+            <span className="text-green-600 text-xs sm:text-sm arabic-text">
               متوفر ({product.stock} قطعة)
             </span>
           ) : (
-            <span className="text-red-600 text-sm arabic-text">نفدت الكمية</span>
+            <span className="text-red-600 text-xs sm:text-sm arabic-text">نفدت الكمية</span>
           )}
         </div>
 
         {/* Add to Cart Button */}
         <Button 
-          className="w-full"
+          className="w-full text-xs sm:text-sm py-2 sm:py-3"
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();

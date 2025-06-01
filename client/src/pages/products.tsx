@@ -60,15 +60,15 @@ export default function Products() {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-3 sm:px-4 py-4 sm:py-8">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-4 arabic-text">المنتجات</h1>
-          <p className="text-muted-foreground arabic-text">اكتشف مجموعتنا الكاملة من الساعات والعطور الفاخرة</p>
+        <div className="mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2 sm:mb-4 arabic-text">المنتجات</h1>
+          <p className="text-sm sm:text-base text-muted-foreground arabic-text">اكتشف مجموعتنا الكاملة من الساعات والعطور الفاخرة</p>
         </div>
 
         {/* Filters */}
-        <div className="mb-8 space-y-4 md:space-y-0 md:flex md:items-center md:gap-4">
+        <div className="mb-6 sm:mb-8 space-y-3 sm:space-y-4 md:space-y-0 md:flex md:items-center md:gap-4">
           {/* Search */}
           <div className="relative flex-1 max-w-sm">
             <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
@@ -76,13 +76,13 @@ export default function Products() {
               placeholder="ابحث عن المنتجات..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pr-10"
+              className="pr-10 text-sm sm:text-base"
             />
           </div>
 
           {/* Category Filter */}
           <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-            <SelectTrigger className="w-48">
+            <SelectTrigger className="w-full sm:w-48">
               <SelectValue placeholder="اختر الفئة" />
             </SelectTrigger>
             <SelectContent>
@@ -97,7 +97,7 @@ export default function Products() {
 
           {/* Sort */}
           <Select value={sortBy} onValueChange={setSortBy}>
-            <SelectTrigger className="w-48">
+            <SelectTrigger className="w-full sm:w-48">
               <SelectValue placeholder="ترتيب حسب" />
             </SelectTrigger>
             <SelectContent>
