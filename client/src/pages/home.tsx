@@ -1,0 +1,267 @@
+import { useQuery } from "@tanstack/react-query";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import ProductCard from "@/components/product-card";
+import { Gem, Clock, Truck, Shield, Headphones, RotateCcw, Star } from "lucide-react";
+import { Link } from "wouter";
+import type { Product, Category } from "@shared/schema";
+
+export default function Home() {
+  const { data: featuredProducts = [], isLoading: productsLoading } = useQuery<Product[]>({
+    queryKey: ["/api/products?featured=true"],
+  });
+
+  const { data: categories = [] } = useQuery<Category[]>({
+    queryKey: ["/api/categories"],
+  });
+
+  const watchesCategory = categories.find(cat => cat.slug === "watches");
+  const perfumesCategory = categories.find(cat => cat.slug === "perfumes");
+
+  return (
+    <div className="min-h-screen">
+      {/* Hero Section */}
+      <section className="relative bg-gradient-to-r from-primary to-primary/80 text-white overflow-hidden">
+        <div className="absolute inset-0 bg-black/20"></div>
+        <div 
+          className="absolute inset-0 bg-cover bg-center opacity-30"
+          style={{
+            backgroundImage: 'url("https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080")'
+          }}
+        ></div>
+        
+        <div className="relative container mx-auto px-4 py-20">
+          <div className="max-w-2xl animate-fade-in">
+            <h1 className="text-5xl font-bold mb-6 leading-tight arabic-text">
+              أفخر تشكيلة من الساعات والعطور
+            </h1>
+            <p className="text-xl mb-8 opacity-90 arabic-text">
+              اكتشف مجموعتنا الحصرية من أرقى الساعات والعطور العالمية بأفضل الأسعار
+            </p>
+            <div className="flex gap-4 flex-wrap">
+              <Link href="/products">
+                <Button size="lg" className="bg-secondary hover:bg-secondary/90 text-primary font-medium">
+                  تسوق الآن
+                </Button>
+              </Link>
+              <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-primary">
+                العروض الخاصة
+              </Button>
+            </div>
+          </div>
+        </div>
+        
+        {/* Floating Elements */}
+        <div className="absolute top-20 left-10 animate-bounce-subtle opacity-20">
+          <Gem className="w-16 h-16" />
+        </div>
+        <div className="absolute bottom-20 right-10 animate-bounce-subtle opacity-20" style={{animationDelay: '1s'}}>
+          <Clock className="w-12 h-12" />
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="py-16 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="grid md:grid-cols-4 gap-8">
+            <div className="text-center group">
+              <div className="bg-primary/10 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-primary group-hover:text-white transition-all">
+                <Truck className="w-8 h-8 text-primary group-hover:text-white" />
+              </div>
+              <h3 className="text-lg font-semibold mb-2 arabic-text">شحن سريع</h3>
+              <p className="text-muted-foreground arabic-text">توصيل مجاني لجميع أنحاء العراق</p>
+            </div>
+            
+            <div className="text-center group">
+              <div className="bg-primary/10 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-primary group-hover:text-white transition-all">
+                <Shield className="w-8 h-8 text-primary group-hover:text-white" />
+              </div>
+              <h3 className="text-lg font-semibold mb-2 arabic-text">ضمان الجودة</h3>
+              <p className="text-muted-foreground arabic-text">منتجات أصلية مع ضمان شامل</p>
+            </div>
+            
+            <div className="text-center group">
+              <div className="bg-primary/10 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-primary group-hover:text-white transition-all">
+                <Headphones className="w-8 h-8 text-primary group-hover:text-white" />
+              </div>
+              <h3 className="text-lg font-semibold mb-2 arabic-text">دعم 24/7</h3>
+              <p className="text-muted-foreground arabic-text">خدمة عملاء متاحة على مدار الساعة</p>
+            </div>
+            
+            <div className="text-center group">
+              <div className="bg-primary/10 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-primary group-hover:text-white transition-all">
+                <RotateCcw className="w-8 h-8 text-primary group-hover:text-white" />
+              </div>
+              <h3 className="text-lg font-semibold mb-2 arabic-text">إرجاع مجاني</h3>
+              <p className="text-muted-foreground arabic-text">إمكانية الإرجاع خلال 30 يوم</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Categories Section */}
+      <section className="py-16 bg-muted/50">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold mb-4 arabic-text">تسوق حسب الفئة</h2>
+            <p className="text-xl text-muted-foreground arabic-text">اختر من مجموعتنا المتنوعة</p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* Watches Category */}
+            <Link href={`/products?category=${watchesCategory?.id}`}>
+              <div className="relative group cursor-pointer overflow-hidden rounded-2xl shadow-lg">
+                <img 
+                  src="https://images.unsplash.com/photo-1524592094714-0f0654e20314?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600" 
+                  alt="مجموعة الساعات الفاخرة" 
+                  className="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                <div className="absolute bottom-6 right-6 text-white">
+                  <h3 className="text-3xl font-bold mb-2 arabic-text">الساعات</h3>
+                  <p className="text-lg opacity-90 arabic-text">أحدث التصاميم العالمية</p>
+                  <Button className="mt-4 bg-secondary hover:bg-secondary/90 text-primary">
+                    تسوق الآن
+                  </Button>
+                </div>
+              </div>
+            </Link>
+            
+            {/* Perfumes Category */}
+            <Link href={`/products?category=${perfumesCategory?.id}`}>
+              <div className="relative group cursor-pointer overflow-hidden rounded-2xl shadow-lg">
+                <img 
+                  src="https://images.unsplash.com/photo-1541643600914-78b084683601?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600" 
+                  alt="مجموعة العطور الفاخرة" 
+                  className="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                <div className="absolute bottom-6 right-6 text-white">
+                  <h3 className="text-3xl font-bold mb-2 arabic-text">العطور</h3>
+                  <p className="text-lg opacity-90 arabic-text">أرقى العطور العالمية</p>
+                  <Button className="mt-4 bg-secondary hover:bg-secondary/90 text-primary">
+                    تسوق الآن
+                  </Button>
+                </div>
+              </div>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Featured Products */}
+      <section className="py-16 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold mb-4 arabic-text">المنتجات المميزة</h2>
+            <p className="text-xl text-muted-foreground arabic-text">اختيارات منسقة خصيصاً لك</p>
+          </div>
+          
+          {productsLoading ? (
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {[...Array(4)].map((_, i) => (
+                <div key={i} className="animate-pulse">
+                  <div className="bg-muted h-64 rounded-lg mb-4"></div>
+                  <div className="space-y-2">
+                    <div className="bg-muted h-4 rounded w-3/4"></div>
+                    <div className="bg-muted h-4 rounded w-1/2"></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {featuredProducts.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+          )}
+          
+          <div className="text-center mt-12">
+            <Link href="/products">
+              <Button size="lg" className="bg-secondary hover:bg-secondary/90 text-primary font-medium">
+                عرض جميع المنتجات
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      <section className="py-16 bg-primary text-white">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold mb-4 arabic-text">آراء عملائنا</h2>
+            <p className="text-xl opacity-90 arabic-text">تجارب حقيقية من عملائنا الكرام</p>
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              {
+                name: "أحمد محمد",
+                location: "بغداد",
+                content: "منتجات عالية الجودة وخدمة عملاء ممتازة. أنصح بشدة بالتسوق من هنا",
+                image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100"
+              },
+              {
+                name: "فاطمة علي",
+                location: "البصرة",
+                content: "تجربة تسوق رائعة، المنتجات أصلية والتوصيل سريع جداً",
+                image: "https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100"
+              },
+              {
+                name: "خالد حسن",
+                location: "أربيل",
+                content: "أسعار منافسة وجودة ممتازة، سأكون عميل دائم بإذن الله",
+                image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100"
+              }
+            ].map((testimonial, index) => (
+              <Card key={index} className="bg-white/10 backdrop-blur-lg border-white/20">
+                <CardContent className="p-6 text-center">
+                  <div className="flex justify-center text-yellow-400 text-xl mb-4">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="w-5 h-5 fill-current" />
+                    ))}
+                  </div>
+                  <p className="text-lg mb-6 opacity-90 arabic-text">"{testimonial.content}"</p>
+                  <div className="flex items-center justify-center gap-4">
+                    <img 
+                      src={testimonial.image} 
+                      alt={testimonial.name} 
+                      className="w-12 h-12 rounded-full object-cover"
+                    />
+                    <div>
+                      <h4 className="font-semibold arabic-text">{testimonial.name}</h4>
+                      <p className="text-sm opacity-75 arabic-text">{testimonial.location}</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Newsletter */}
+      <section className="py-16 bg-gradient-to-r from-secondary to-accent text-white">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-4xl font-bold mb-4 arabic-text">اشترك في نشرتنا الإخبارية</h2>
+          <p className="text-xl mb-8 opacity-90 arabic-text">كن أول من يعلم بالمنتجات الجديدة والعروض الخاصة</p>
+          <div className="max-w-md mx-auto">
+            <div className="flex gap-2">
+              <input 
+                type="email" 
+                placeholder="أدخل بريدك الإلكتروني" 
+                className="flex-1 px-4 py-3 rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-white"
+              />
+              <Button className="bg-primary hover:bg-primary/90 px-6 py-3">
+                اشتراك
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}

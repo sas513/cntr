@@ -1,0 +1,216 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;900&family=Cairo:wght@300;400;600;700&display=swap');
+
+:root {
+  --background: 210 11% 98%; /* #F5F7FA */
+  --foreground: 216 14% 15%; /* #1B365D */
+  --muted: 210 9% 95%; /* #F0F4F8 */
+  --muted-foreground: 215 25% 27%; /* #25445C */
+  --popover: 0 0% 100%; /* #FFFFFF */
+  --popover-foreground: 216 14% 15%; /* #1B365D */
+  --card: 0 0% 100%; /* #FFFFFF */
+  --card-foreground: 216 14% 15%; /* #1B365D */
+  --border: 214 32% 91%; /* #E2E8F0 */
+  --input: 214 32% 91%; /* #E2E8F0 */
+  --primary: 216 80% 22%; /* #1B365D */
+  --primary-foreground: 210 40% 98%; /* #F8FAFC */
+  --secondary: 33 64% 63%; /* #F4A460 */
+  --secondary-foreground: 216 14% 15%; /* #1B365D */
+  --accent: 14 100% 57%; /* #FF6B35 */
+  --accent-foreground: 0 0% 100%; /* #FFFFFF */
+  --destructive: 0 84% 60%; /* #EF4444 */
+  --destructive-foreground: 0 0% 100%; /* #FFFFFF */
+  --ring: 216 80% 22%; /* #1B365D */
+  --radius: 0.5rem;
+}
+
+.dark {
+  --background: 222 84% 5%; /* #0F0F23 */
+  --foreground: 210 40% 98%; /* #F8FAFC */
+  --muted: 217 33% 17%; /* #1E293B */
+  --muted-foreground: 215 20% 65%; /* #94A3B8 */
+  --popover: 222 84% 5%; /* #0F0F23 */
+  --popover-foreground: 210 40% 98%; /* #F8FAFC */
+  --card: 222 84% 5%; /* #0F0F23 */
+  --card-foreground: 210 40% 98%; /* #F8FAFC */
+  --border: 217 33% 17%; /* #1E293B */
+  --input: 217 33% 17%; /* #1E293B */
+  --primary: 216 80% 22%; /* #1B365D */
+  --primary-foreground: 210 40% 98%; /* #F8FAFC */
+  --secondary: 33 64% 63%; /* #F4A460 */
+  --secondary-foreground: 216 14% 15%; /* #1B365D */
+  --accent: 14 100% 57%; /* #FF6B35 */
+  --accent-foreground: 0 0% 100%; /* #FFFFFF */
+  --destructive: 0 62% 30%; /* #DC2626 */
+  --destructive-foreground: 0 0% 100%; /* #FFFFFF */
+  --ring: 216 80% 22%; /* #1B365D */
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Tajawal', 'Cairo', sans-serif;
+    direction: rtl;
+  }
+
+  html {
+    direction: rtl;
+  }
+
+  /* RTL specific styles */
+  .rtl-flip {
+    transform: scaleX(-1);
+  }
+
+  /* Arabic text improvements */
+  .arabic-text {
+    font-family: 'Cairo', 'Tajawal', sans-serif;
+    line-height: 1.8;
+  }
+
+  /* Animation keyframes */
+  @keyframes fadeIn {
+    from { 
+      opacity: 0; 
+      transform: translateY(20px); 
+    }
+    to { 
+      opacity: 1; 
+      transform: translateY(0); 
+    }
+  }
+
+  @keyframes slideUp {
+    from { 
+      transform: translateY(100%); 
+    }
+    to { 
+      transform: translateY(0); 
+    }
+  }
+
+  @keyframes bounceSubtle {
+    0%, 20%, 50%, 80%, 100% { 
+      transform: translateY(0); 
+    }
+    40% { 
+      transform: translateY(-10px); 
+    }
+    60% { 
+      transform: translateY(-5px); 
+    }
+  }
+
+  /* Custom animations */
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.3s ease-out;
+  }
+
+  .animate-bounce-subtle {
+    animation: bounceSubtle 2s infinite;
+  }
+
+  /* Product card hover effects */
+  .product-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  }
+
+  /* Admin card hover effects */
+  .admin-card {
+    transition: transform 0.2s ease;
+  }
+
+  .admin-card:hover {
+    transform: translateY(-2px);
+  }
+
+  /* Custom scrollbar for RTL */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: hsl(var(--muted));
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--muted-foreground));
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--primary));
+  }
+
+  /* RTL input styles */
+  input[type="text"],
+  input[type="email"],
+  input[type="search"],
+  textarea {
+    text-align: right;
+  }
+
+  /* Button improvements for Arabic */
+  .btn-arabic {
+    font-weight: 500;
+    letter-spacing: 0.025em;
+  }
+
+  /* Gradient backgrounds */
+  .gradient-primary {
+    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary) / 0.8) 100%);
+  }
+
+  .gradient-secondary {
+    background: linear-gradient(135deg, hsl(var(--secondary)) 0%, hsl(var(--accent)) 100%);
+  }
+
+  /* Card shadows */
+  .card-shadow {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+
+  .card-shadow-lg {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  }
+
+  /* Responsive text sizes */
+  .text-responsive-xl {
+    @apply text-2xl md:text-3xl lg:text-4xl;
+  }
+
+  .text-responsive-lg {
+    @apply text-xl md:text-2xl lg:text-3xl;
+  }
+
+  /* Loading spinner */
+  .loading-spinner {
+    border: 2px solid hsl(var(--muted));
+    border-top: 2px solid hsl(var(--primary));
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+}

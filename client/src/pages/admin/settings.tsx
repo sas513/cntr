@@ -1,0 +1,406 @@
+import { useState } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Separator } from "@/components/ui/separator";
+import AdminSidebar from "@/components/admin/sidebar";
+import { useToast } from "@/hooks/use-toast";
+import { apiRequest } from "@/lib/queryClient";
+import { Save, Store, Palette, Phone, MapPin, Mail } from "lucide-react";
+import type { StoreSetting } from "@shared/schema";
+
+export default function AdminSettings() {
+  const [isDirty, setIsDirty] = useState(false);
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+
+  const { data: settings = [], isLoading } = useQuery<StoreSetting[]>({
+    queryKey: ["/api/settings"],
+  });
+
+  const [formData, setFormData] = useState<Record<string, string>>({});
+
+  // Initialize form data when settings load
+  useState(() => {
+    if (settings.length > 0) {
+      const initialData: Record<string, string> = {};
+      settings.forEach(setting => {
+        initialData[setting.key] = setting.value || "";
+      });
+      setFormData(initialData);
+    }
+  });
+
+  const updateSettingMutation = useMutation({
+    mutationFn: async ({ key, value }: { key: string; value: string }) => {
+      await apiRequest("PUT", `/api/settings/${key}`, { value });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/settings"] });
+    },
+  });
+
+  const saveAllSettings = async () => {
+    try {
+      const promises = Object.entries(formData).map(([key, value]) =>
+        updateSettingMutation.mutateAsync({ key, value })
+      );
+      
+      await Promise.all(promises);
+      
+      setIsDirty(false);
+      toast({
+        title: "تم حفظ الإعدادات",
+        description: "تم حفظ جميع الإعدادات بنجاح",
+      });
+    } catch (error) {
+      toast({
+        title: "خطأ",
+        description: "حدث خطأ أثناء حفظ الإعدادات",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleInputChange = (key: string, value: string) => {
+    setFormData(prev => ({ ...prev, [key]: value }));
+    setIsDirty(true);
+  };
+
+  const getSetting = (key: string) => formData[key] || "";
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-muted/30">
+        <div className="flex">
+          <AdminSidebar />
+          <div className="flex-1 p-8">
+            <div className="animate-pulse space-y-4">
+              <div className="bg-muted h-8 rounded w-1/4"></div>
+              <div className="bg-muted h-64 rounded"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-muted/30">
+      <div className="flex">
+        <AdminSidebar />
+        
+        <div className="flex-1 p-8">
+          {/* Header */}
+          <div className="flex justify-between items-center mb-8">
+            <div>
+              <h1 className="text-3xl font-bold arabic-text">إعدادات المتجر</h1>
+              <p className="text-muted-foreground arabic-text">
+                تخصيص إعدادات ومظهر المتجر
+              </p>
+            </div>
+            
+            <Button 
+              onClick={saveAllSettings}
+              disabled={!isDirty || updateSettingMutation.isPending}
+              className="gap-2"
+            >
+              <Save className="w-4 h-4" />
+              {updateSettingMutation.isPending ? "جاري الحفظ..." : "حفظ التغييرات"}
+            </Button>
+          </div>
+
+          <Tabs defaultValue="store" className="space-y-6">
+            <TabsList className="grid w-full grid-cols-3">
+              <TabsTrigger value="store" className="arabic-text">معلومات المتجر</TabsTrigger>
+              <TabsTrigger value="appearance" className="arabic-text">المظهر والألوان</TabsTrigger>
+              <TabsTrigger value="contact" className="arabic-text">معلومات التواصل</TabsTrigger>
+            </TabsList>
+
+            {/* Store Information */}
+            <TabsContent value="store" className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 arabic-text">
+                    <Store className="w-5 h-5" />
+                    معلومات المتجر الأساسية
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="store_name" className="arabic-text">اسم المتجر بالعربية</Label>
+                      <Input
+                        id="store_name"
+                        value={getSetting("store_name")}
+                        onChange={(e) => handleInputChange("store_name", e.target.value)}
+                        placeholder="سنتر المستودع للساعات والعطور"
+                      />
+                    </div>
+                    
+                    <div>
+                      <Label htmlFor="store_name_en">اسم المتجر بالإنجليزية</Label>
+                      <Input
+                        id="store_name_en"
+                        value={getSetting("store_name_en")}
+                        onChange={(e) => handleInputChange("store_name_en", e.target.value)}
+                        placeholder="Center Warehouse for Watches and Perfumes"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <Label htmlFor="store_description" className="arabic-text">وصف المتجر</Label>
+                    <Input
+                      id="store_description"
+                      value={getSetting("store_description")}
+                      onChange={(e) => handleInputChange("store_description", e.target.value)}
+                      placeholder="وجهتك الأولى للساعات والعطور الفاخرة في العراق"
+                    />
+                  </div>
+
+                  <Separator />
+
+                  <div>
+                    <Label htmlFor="store_address" className="arabic-text">عنوان المتجر</Label>
+                    <Input
+                      id="store_address"
+                      value={getSetting("store_address")}
+                      onChange={(e) => handleInputChange("store_address", e.target.value)}
+                      placeholder="الرمادي المستودع قرب مول الستي سنتر"
+                    />
+                  </div>
+
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="store_city" className="arabic-text">المدينة</Label>
+                      <Input
+                        id="store_city"
+                        value={getSetting("store_city")}
+                        onChange={(e) => handleInputChange("store_city", e.target.value)}
+                        placeholder="الرمادي"
+                      />
+                    </div>
+                    
+                    <div>
+                      <Label htmlFor="store_country" className="arabic-text">البلد</Label>
+                      <Input
+                        id="store_country"
+                        value={getSetting("store_country")}
+                        onChange={(e) => handleInputChange("store_country", e.target.value)}
+                        placeholder="العراق"
+                      />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            {/* Appearance */}
+            <TabsContent value="appearance" className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 arabic-text">
+                    <Palette className="w-5 h-5" />
+                    ألوان المتجر
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <div className="grid md:grid-cols-3 gap-4">
+                    <div>
+                      <Label htmlFor="primary_color" className="arabic-text">اللون الأساسي</Label>
+                      <div className="flex gap-2">
+                        <Input
+                          id="primary_color"
+                          type="color"
+                          value={getSetting("primary_color") || "#1B365D"}
+                          onChange={(e) => handleInputChange("primary_color", e.target.value)}
+                          className="w-16 h-10 p-1"
+                        />
+                        <Input
+                          value={getSetting("primary_color") || "#1B365D"}
+                          onChange={(e) => handleInputChange("primary_color", e.target.value)}
+                          placeholder="#1B365D"
+                          className="flex-1"
+                        />
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <Label htmlFor="secondary_color" className="arabic-text">اللون الثانوي</Label>
+                      <div className="flex gap-2">
+                        <Input
+                          id="secondary_color"
+                          type="color"
+                          value={getSetting("secondary_color") || "#F4A460"}
+                          onChange={(e) => handleInputChange("secondary_color", e.target.value)}
+                          className="w-16 h-10 p-1"
+                        />
+                        <Input
+                          value={getSetting("secondary_color") || "#F4A460"}
+                          onChange={(e) => handleInputChange("secondary_color", e.target.value)}
+                          placeholder="#F4A460"
+                          className="flex-1"
+                        />
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <Label htmlFor="accent_color" className="arabic-text">لون التمييز</Label>
+                      <div className="flex gap-2">
+                        <Input
+                          id="accent_color"
+                          type="color"
+                          value={getSetting("accent_color") || "#FF6B35"}
+                          onChange={(e) => handleInputChange("accent_color", e.target.value)}
+                          className="w-16 h-10 p-1"
+                        />
+                        <Input
+                          value={getSetting("accent_color") || "#FF6B35"}
+                          onChange={(e) => handleInputChange("accent_color", e.target.value)}
+                          placeholder="#FF6B35"
+                          className="flex-1"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <Separator />
+
+                  <div>
+                    <Label htmlFor="logo_url" className="arabic-text">رابط الشعار</Label>
+                    <Input
+                      id="logo_url"
+                      value={getSetting("logo_url")}
+                      onChange={(e) => handleInputChange("logo_url", e.target.value)}
+                      placeholder="https://example.com/logo.png"
+                    />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="hero_image" className="arabic-text">صورة الغلاف الرئيسية</Label>
+                    <Input
+                      id="hero_image"
+                      value={getSetting("hero_image")}
+                      onChange={(e) => handleInputChange("hero_image", e.target.value)}
+                      placeholder="https://example.com/hero.jpg"
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            {/* Contact Information */}
+            <TabsContent value="contact" className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 arabic-text">
+                    <Phone className="w-5 h-5" />
+                    معلومات التواصل
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="store_phone1" className="arabic-text">رقم الهاتف الأول</Label>
+                      <Input
+                        id="store_phone1"
+                        value={getSetting("store_phone1")}
+                        onChange={(e) => handleInputChange("store_phone1", e.target.value)}
+                        placeholder="07813961800"
+                      />
+                    </div>
+                    
+                    <div>
+                      <Label htmlFor="store_phone2" className="arabic-text">رقم الهاتف الثاني</Label>
+                      <Input
+                        id="store_phone2"
+                        value={getSetting("store_phone2")}
+                        onChange={(e) => handleInputChange("store_phone2", e.target.value)}
+                        placeholder="07810125388"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <Label htmlFor="store_email" className="arabic-text">البريد الإلكتروني</Label>
+                    <Input
+                      id="store_email"
+                      type="email"
+                      value={getSetting("store_email")}
+                      onChange={(e) => handleInputChange("store_email", e.target.value)}
+                      placeholder="info@centermustaudaa.com"
+                    />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="whatsapp_number" className="arabic-text">رقم الواتساب</Label>
+                    <Input
+                      id="whatsapp_number"
+                      value={getSetting("whatsapp_number")}
+                      onChange={(e) => handleInputChange("whatsapp_number", e.target.value)}
+                      placeholder="9647813961800"
+                    />
+                  </div>
+
+                  <Separator />
+
+                  <div className="space-y-4">
+                    <Label className="text-base font-semibold arabic-text">روابط وسائل التواصل الاجتماعي</Label>
+                    
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor="facebook_url" className="arabic-text">رابط الفيسبوك</Label>
+                        <Input
+                          id="facebook_url"
+                          value={getSetting("facebook_url")}
+                          onChange={(e) => handleInputChange("facebook_url", e.target.value)}
+                          placeholder="https://facebook.com/yourpage"
+                        />
+                      </div>
+                      
+                      <div>
+                        <Label htmlFor="instagram_url" className="arabic-text">رابط الإنستغرام</Label>
+                        <Input
+                          id="instagram_url"
+                          value={getSetting("instagram_url")}
+                          onChange={(e) => handleInputChange("instagram_url", e.target.value)}
+                          placeholder="https://instagram.com/yourpage"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor="telegram_url" className="arabic-text">رابط التيليغرام</Label>
+                        <Input
+                          id="telegram_url"
+                          value={getSetting("telegram_url")}
+                          onChange={(e) => handleInputChange("telegram_url", e.target.value)}
+                          placeholder="https://t.me/yourchannel"
+                        />
+                      </div>
+                      
+                      <div>
+                        <Label htmlFor="youtube_url" className="arabic-text">رابط اليوتيوب</Label>
+                        <Input
+                          id="youtube_url"
+                          value={getSetting("youtube_url")}
+                          onChange={(e) => handleInputChange("youtube_url", e.target.value)}
+                          placeholder="https://youtube.com/yourchannel"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          </Tabs>
+        </div>
+      </div>
+    </div>
+  );
+}

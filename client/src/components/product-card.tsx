@@ -1,0 +1,183 @@
+import { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { useCart } from "@/hooks/use-cart";
+import { useToast } from "@/hooks/use-toast";
+import { apiRequest } from "@/lib/queryClient";
+import { Heart, Star, Eye } from "lucide-react";
+import { Link } from "wouter";
+import type { Product } from "@shared/schema";
+
+interface ProductCardProps {
+  product: Product;
+}
+
+export default function ProductCard({ product }: ProductCardProps) {
+  const [isHovered, setIsHovered] = useState(false);
+  const { addToCart } = useCart();
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+
+  const addToCartMutation = useMutation({
+    mutationFn: async () => {
+      const sessionId = localStorage.getItem("sessionId") || 
+        (() => {
+          const newId = Math.random().toString(36).substring(7);
+          localStorage.setItem("sessionId", newId);
+          return newId;
+        })();
+
+      await apiRequest("POST", "/api/cart", {
+        sessionId,
+        productId: product.id,
+        quantity: 1
+      });
+
+      // Log activity
+      await apiRequest("POST", "/api/activity", {
+        sessionId,
+        action: "add_to_cart",
+        productId: product.id,
+        metadata: { quantity: 1 }
+      });
+    },
+    onSuccess: () => {
+      addToCart(product, 1);
+      toast({
+        title: "تم إضافة المنتج",
+        description: "تم إضافة المنتج إلى سلة التسوق بنجاح",
+      });
+      queryClient.invalidateQueries({ queryKey: ["/api/cart"] });
+    },
+    onError: () => {
+      toast({
+        title: "خطأ",
+        description: "حدث خطأ أثناء إضافة المنتج",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const hasDiscount = product.originalPrice && parseFloat(product.originalPrice) > parseFloat(product.price);
+  const discountPercentage = hasDiscount 
+    ? Math.round(((parseFloat(product.originalPrice!) - parseFloat(product.price)) / parseFloat(product.originalPrice!)) * 100)
+    : 0;
+
+  return (
+    <Card 
+      className="product-card overflow-hidden group cursor-pointer"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <div className="relative">
+        <img
+          src={product.images?.[0] || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300"}
+          alt={product.nameAr}
+          className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+        />
+        
+        {/* Badges */}
+        <div className="absolute top-4 right-4 space-y-2">
+          {hasDiscount && (
+            <Badge className="bg-red-500 text-white">
+              خصم {discountPercentage}%
+            </Badge>
+          )}
+          {product.isFeatured && (
+            <Badge className="bg-blue-500 text-white">
+              مميز
+            </Badge>
+          )}
+          {product.stock === 0 && (
+            <Badge variant="destructive">
+              نفدت الكمية
+            </Badge>
+          )}
+        </div>
+
+        {/* Wishlist Button */}
+        <div className={`absolute top-4 left-4 transition-opacity ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
+          <Button size="sm" variant="secondary" className="rounded-full p-2 bg-white/90 hover:bg-white">
+            <Heart className="w-4 h-4" />
+          </Button>
+        </div>
+
+        {/* Quick View Overlay */}
+        <div className={`absolute inset-0 bg-black/20 flex items-center justify-center transition-opacity ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
+          <Link href={`/product/${product.id}`}>
+            <Button 
+              size="sm" 
+              className="bg-white text-primary hover:bg-gray-100 transform transition-all"
+            >
+              <Eye className="w-4 h-4 ml-2" />
+              عرض سريع
+            </Button>
+          </Link>
+        </div>
+      </div>
+
+      <CardContent className="p-6">
+        <Link href={`/product/${product.id}`}>
+          <h3 className="text-lg font-semibold mb-2 arabic-text hover:text-primary transition-colors line-clamp-2">
+            {product.nameAr}
+          </h3>
+        </Link>
+        
+        <p className="text-muted-foreground text-sm mb-3 arabic-text line-clamp-2">
+          {product.descriptionAr}
+        </p>
+
+        {/* Rating */}
+        <div className="flex items-center gap-2 mb-3">
+          <div className="flex text-yellow-400 text-sm">
+            {[...Array(5)].map((_, i) => (
+              <Star key={i} className="w-4 h-4 fill-current" />
+            ))}
+          </div>
+          <span className="text-muted-foreground text-sm">(127 تقييم)</span>
+        </div>
+
+        {/* Price */}
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2">
+            <span className="text-2xl font-bold text-primary">
+              {parseFloat(product.price).toLocaleString()}
+            </span>
+            <span className="text-sm text-muted-foreground">د.ع</span>
+            {hasDiscount && (
+              <span className="text-sm text-muted-foreground line-through">
+                {parseFloat(product.originalPrice!).toLocaleString()}
+              </span>
+            )}
+          </div>
+        </div>
+
+        {/* Stock Status */}
+        <div className="mb-4">
+          {product.stock && product.stock > 0 ? (
+            <span className="text-green-600 text-sm arabic-text">
+              متوفر ({product.stock} قطعة)
+            </span>
+          ) : (
+            <span className="text-red-600 text-sm arabic-text">نفدت الكمية</span>
+          )}
+        </div>
+
+        {/* Add to Cart Button */}
+        <Button 
+          className="w-full"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            addToCartMutation.mutate();
+          }}
+          disabled={!product.stock || product.stock === 0 || addToCartMutation.isPending}
+        >
+          {addToCartMutation.isPending ? "جاري الإضافة..." : "أضف إلى السلة"}
+        </Button>
+      </CardContent>
+    </Card>
+  );
+}
