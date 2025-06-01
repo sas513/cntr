@@ -75,35 +75,55 @@ export default function AdminDashboard() {
     }
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("adminToken");
+    window.location.href = "/admin/login";
+  };
+
   return (
     <div className="min-h-screen bg-muted/30">
-      <div className="flex">
-        <AdminSidebar />
+      <div className="flex flex-col lg:flex-row">
+        <div className="lg:hidden">
+          <AdminSidebar />
+        </div>
+        <div className="hidden lg:block">
+          <AdminSidebar />
+        </div>
         
-        <div className="flex-1 p-8">
+        <div className="flex-1 p-3 sm:p-6 lg:p-8">
           {/* Header */}
-          <div className="mb-8">
-            <div className="flex justify-between items-center">
+          <div className="mb-6 sm:mb-8">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
               <div>
-                <h1 className="text-3xl font-bold arabic-text">لوحة التحكم</h1>
-                <p className="text-muted-foreground arabic-text">سنتر المستودع للساعات والعطور</p>
+                <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold arabic-text">لوحة التحكم</h1>
+                <p className="text-sm sm:text-base text-muted-foreground arabic-text">سنتر المستودع للساعات والعطور</p>
               </div>
-              <div className="flex items-center gap-4">
-                <div className="text-right">
-                  <p className="text-sm text-muted-foreground">مرحباً,</p>
-                  <p className="font-semibold arabic-text">المدير العام</p>
+              <div className="flex items-center gap-3 sm:gap-4">
+                <Button 
+                  onClick={handleLogout}
+                  variant="outline" 
+                  size="sm"
+                  className="text-xs sm:text-sm arabic-text"
+                >
+                  تسجيل الخروج
+                </Button>
+                <div className="flex items-center gap-2 sm:gap-3">
+                  <div className="text-right">
+                    <p className="text-xs sm:text-sm text-muted-foreground">مرحباً,</p>
+                    <p className="text-sm sm:text-base font-semibold arabic-text">المدير العام</p>
+                  </div>
+                  <img 
+                    src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100" 
+                    alt="صورة المدير" 
+                    className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-full object-cover"
+                  />
                 </div>
-                <img 
-                  src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100" 
-                  alt="صورة المدير" 
-                  className="w-12 h-12 rounded-full object-cover"
-                />
               </div>
             </div>
           </div>
 
           {/* Stats Cards */}
-          <div className="grid md:grid-cols-4 gap-6 mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
             <StatsCard
               title="إجمالي المبيعات"
               value={stats?.totalSales ? `${stats.totalSales} د.ع` : "0 د.ع"}
@@ -142,18 +162,18 @@ export default function AdminDashboard() {
           </div>
 
           {/* Charts and Analytics */}
-          <div className="grid lg:grid-cols-2 gap-8 mb-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-8 mb-6 sm:mb-8">
             {/* Sales Chart */}
             <Card>
               <CardHeader>
-                <CardTitle className="arabic-text">تحليل المبيعات</CardTitle>
+                <CardTitle className="text-base sm:text-lg arabic-text">تحليل المبيعات</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="h-64 bg-muted/50 rounded-lg flex items-center justify-center">
+                <div className="h-48 sm:h-56 lg:h-64 bg-muted/50 rounded-lg flex items-center justify-center">
                   <div className="text-center text-muted-foreground">
-                    <TrendingUp className="w-12 h-12 mx-auto mb-4" />
-                    <p className="arabic-text">رسم بياني للمبيعات الشهرية</p>
-                    <p className="text-sm arabic-text">سيتم تطوير الرسوم البيانية قريباً</p>
+                    <TrendingUp className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 mx-auto mb-3 sm:mb-4" />
+                    <p className="text-sm sm:text-base arabic-text">رسم بياني للمبيعات الشهرية</p>
+                    <p className="text-xs sm:text-sm arabic-text">سيتم تطوير الرسوم البيانية قريباً</p>
                   </div>
                 </div>
               </CardContent>
@@ -162,26 +182,26 @@ export default function AdminDashboard() {
             {/* Customer Activity */}
             <Card>
               <CardHeader>
-                <CardTitle className="arabic-text">نشاط العملاء المباشر</CardTitle>
+                <CardTitle className="text-base sm:text-lg arabic-text">نشاط العملاء المباشر</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
+                <div className="space-y-3 sm:space-y-4">
                   {recentActivity.length === 0 ? (
-                    <div className="text-center py-8 text-muted-foreground">
-                      <Activity className="w-8 h-8 mx-auto mb-2" />
-                      <p className="arabic-text">لا توجد أنشطة حديثة</p>
+                    <div className="text-center py-6 sm:py-8 text-muted-foreground">
+                      <Activity className="w-6 h-6 sm:w-8 sm:h-8 mx-auto mb-2" />
+                      <p className="text-sm sm:text-base arabic-text">لا توجد أنشطة حديثة</p>
                     </div>
                   ) : (
                     recentActivity.slice(0, 5).map((activity) => (
-                      <div key={activity.id} className="flex items-center gap-4 p-3 bg-muted/50 rounded-lg">
-                        <div className={`w-10 h-10 ${getActivityColor(activity.action)} rounded-full flex items-center justify-center`}>
+                      <div key={activity.id} className="flex items-center gap-2 sm:gap-3 lg:gap-4 p-2 sm:p-3 bg-muted/50 rounded-lg">
+                        <div className={`w-8 h-8 sm:w-10 sm:h-10 ${getActivityColor(activity.action)} rounded-full flex items-center justify-center`}>
                           {getActivityIcon(activity.action)}
                         </div>
-                        <div className="flex-1">
-                          <p className="font-medium arabic-text">جلسة: {activity.sessionId.slice(0, 8)}...</p>
-                          <p className="text-sm text-muted-foreground arabic-text">{getActivityText(activity.action)}</p>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm sm:text-base font-medium arabic-text truncate">جلسة: {activity.sessionId.slice(0, 8)}...</p>
+                          <p className="text-xs sm:text-sm text-muted-foreground arabic-text">{getActivityText(activity.action)}</p>
                         </div>
-                        <span className="text-sm text-muted-foreground">
+                        <span className="text-xs sm:text-sm text-muted-foreground hidden sm:block">
                           {activity.timestamp ? new Date(activity.timestamp).toLocaleString('ar-EG') : ''}
                         </span>
                       </div>
@@ -195,45 +215,45 @@ export default function AdminDashboard() {
           {/* Quick Actions */}
           <Card>
             <CardHeader>
-              <CardTitle className="arabic-text">إجراءات سريعة</CardTitle>
+              <CardTitle className="text-base sm:text-lg arabic-text">إجراءات سريعة</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid md:grid-cols-4 gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                 <Link href="/admin/products">
                   <Button 
                     variant="outline" 
-                    className="h-24 flex-col gap-3 w-full hover:bg-primary/5 hover:border-primary"
+                    className="h-20 sm:h-24 flex-col gap-2 sm:gap-3 w-full hover:bg-primary/5 hover:border-primary"
                   >
-                    <Plus className="w-6 h-6" />
-                    <span className="font-medium arabic-text">إضافة منتج</span>
+                    <Plus className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6" />
+                    <span className="text-xs sm:text-sm font-medium arabic-text">إضافة منتج</span>
                   </Button>
                 </Link>
                 
                 <Link href="/admin/settings">
                   <Button 
                     variant="outline" 
-                    className="h-24 flex-col gap-3 w-full hover:bg-primary/5 hover:border-primary"
+                    className="h-20 sm:h-24 flex-col gap-2 sm:gap-3 w-full hover:bg-primary/5 hover:border-primary"
                   >
-                    <Palette className="w-6 h-6" />
-                    <span className="font-medium arabic-text">تخصيص المتجر</span>
+                    <Palette className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6" />
+                    <span className="text-xs sm:text-sm font-medium arabic-text">تخصيص المتجر</span>
                   </Button>
                 </Link>
                 
                 <Button 
                   variant="outline" 
-                  className="h-24 flex-col gap-3 w-full hover:bg-primary/5 hover:border-primary"
+                  className="h-20 sm:h-24 flex-col gap-2 sm:gap-3 w-full hover:bg-primary/5 hover:border-primary"
                 >
-                  <PieChart className="w-6 h-6" />
-                  <span className="font-medium arabic-text">التقارير</span>
+                  <PieChart className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6" />
+                  <span className="text-xs sm:text-sm font-medium arabic-text">التقارير</span>
                 </Button>
                 
                 <Link href="/admin/orders">
                   <Button 
                     variant="outline" 
-                    className="h-24 flex-col gap-3 w-full hover:bg-primary/5 hover:border-primary"
+                    className="h-20 sm:h-24 flex-col gap-2 sm:gap-3 w-full hover:bg-primary/5 hover:border-primary"
                   >
-                    <ClipboardList className="w-6 h-6" />
-                    <span className="font-medium arabic-text">إدارة الطلبات</span>
+                    <ClipboardList className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6" />
+                    <span className="text-xs sm:text-sm font-medium arabic-text">إدارة الطلبات</span>
                   </Button>
                 </Link>
               </div>
