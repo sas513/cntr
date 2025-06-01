@@ -125,9 +125,11 @@ export default function Header() {
                   </Button>
                 </Link>
                 
-                <Button variant="ghost" size="sm" className="hover:bg-muted">
-                  <User className="w-5 h-5 text-muted-foreground" />
-                </Button>
+                <Link href="/admin/login">
+                  <Button variant="ghost" size="sm" className="hover:bg-muted" title="تسجيل دخول الإدارة">
+                    <User className="w-5 h-5 text-muted-foreground" />
+                  </Button>
+                </Link>
                 
                 {/* Mobile Menu */}
                 <Sheet>
@@ -176,6 +178,13 @@ export default function Header() {
                             جميع المنتجات
                           </Button>
                         </Link>
+                        <div className="border-t pt-2 mt-2">
+                          <Link href="/admin/login">
+                            <Button variant="outline" className="w-full justify-start arabic-text">
+                              تسجيل دخول الإدارة
+                            </Button>
+                          </Link>
+                        </div>
                       </nav>
                       
                       {/* Contact Info */}
