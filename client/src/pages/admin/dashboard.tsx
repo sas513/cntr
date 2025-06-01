@@ -83,12 +83,7 @@ export default function AdminDashboard() {
   return (
     <div className="min-h-screen bg-muted/30">
       <div className="flex flex-col lg:flex-row">
-        <div className="lg:hidden">
-          <AdminSidebar />
-        </div>
-        <div className="hidden lg:block">
-          <AdminSidebar />
-        </div>
+        <AdminSidebar />
         
         <div className="flex-1 p-3 sm:p-6 lg:p-8">
           {/* Header */}
