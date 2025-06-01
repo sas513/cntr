@@ -118,35 +118,35 @@ export default function Products() {
 
         {/* Products Grid */}
         {isLoading ? (
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
             {[...Array(8)].map((_, i) => (
               <div key={i} className="animate-pulse">
-                <div className="bg-muted h-64 rounded-lg mb-4"></div>
+                <div className="bg-muted h-48 sm:h-56 md:h-64 rounded-lg mb-3 sm:mb-4"></div>
                 <div className="space-y-2">
-                  <div className="bg-muted h-4 rounded w-3/4"></div>
-                  <div className="bg-muted h-4 rounded w-1/2"></div>
-                  <div className="bg-muted h-8 rounded"></div>
+                  <div className="bg-muted h-3 sm:h-4 rounded w-3/4"></div>
+                  <div className="bg-muted h-3 sm:h-4 rounded w-1/2"></div>
+                  <div className="bg-muted h-6 sm:h-8 rounded"></div>
                 </div>
               </div>
             ))}
           </div>
         ) : sortedProducts.length === 0 ? (
-          <div className="text-center py-16">
-            <Filter className="w-16 h-16 mx-auto text-muted-foreground mb-4" />
-            <h3 className="text-xl font-semibold mb-2 arabic-text">لا توجد منتجات</h3>
-            <p className="text-muted-foreground arabic-text">جرب تغيير معايير البحث أو الفلترة</p>
+          <div className="text-center py-12 sm:py-16">
+            <Filter className="w-12 h-12 sm:w-16 sm:h-16 mx-auto text-muted-foreground mb-4" />
+            <h3 className="text-lg sm:text-xl font-semibold mb-2 arabic-text">لا توجد منتجات</h3>
+            <p className="text-sm sm:text-base text-muted-foreground arabic-text">جرب تغيير معايير البحث أو الفلترة</p>
             <Button 
               onClick={() => {
                 setSearchQuery("");
                 setSelectedCategory("all");
               }}
-              className="mt-4"
+              className="mt-4 text-sm sm:text-base"
             >
               مسح الفلاتر
             </Button>
           </div>
         ) : (
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
             {sortedProducts.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
