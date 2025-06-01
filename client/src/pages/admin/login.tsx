@@ -28,7 +28,7 @@ export default function AdminLogin() {
       const response = await apiRequest("POST", "/api/admin/login", data);
       return response;
     },
-    onSuccess: (data) => {
+    onSuccess: (data: any) => {
       // Store admin session token
       localStorage.setItem("adminToken", data.token);
       // Redirect to admin dashboard
