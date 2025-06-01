@@ -1,4 +1,4 @@
-import { pgTable, text, serial, integer, boolean, timestamp, decimal, jsonb } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, boolean, timestamp, decimal, jsonb, varchar, index } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -84,6 +84,26 @@ export const customerActivity = pgTable("customer_activity", {
   timestamp: timestamp("timestamp").defaultNow(),
 });
 
+// Session storage table for admin authentication
+export const sessions = pgTable(
+  "sessions",
+  {
+    sid: varchar("sid").primaryKey(),
+    sess: jsonb("sess").notNull(),
+    expire: timestamp("expire").notNull(),
+  },
+  (table) => [index("IDX_session_expire").on(table.expire)],
+);
+
+// Admin sessions table for tracking admin logins
+export const adminSessions = pgTable("admin_sessions", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").notNull().references(() => users.id),
+  sessionToken: text("session_token").notNull().unique(),
+  expiresAt: timestamp("expires_at").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
 // Zod schemas
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
@@ -167,3 +187,18 @@ export type InsertStoreSetting = z.infer<typeof insertStoreSettingSchema>;
 
 export type CustomerActivity = typeof customerActivity.$inferSelect;
 export type InsertCustomerActivity = z.infer<typeof insertCustomerActivitySchema>;
+
+export const insertAdminSessionSchema = createInsertSchema(adminSessions).pick({
+  userId: true,
+  sessionToken: true,
+  expiresAt: true,
+});
+
+export const loginSchema = z.object({
+  username: z.string().min(1, "اسم المستخدم مطلوب"),
+  password: z.string().min(1, "كلمة المرور مطلوبة"),
+});
+
+export type AdminSession = typeof adminSessions.$inferSelect;
+export type InsertAdminSession = z.infer<typeof insertAdminSessionSchema>;
+export type LoginData = z.infer<typeof loginSchema>;
