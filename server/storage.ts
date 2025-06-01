@@ -15,6 +15,12 @@ export interface IStorage {
   getUserByUsername(username: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
 
+  // Admin authentication
+  authenticateAdmin(username: string, password: string): Promise<User | null>;
+  createAdminSession(userId: number): Promise<AdminSession>;
+  getAdminSession(sessionToken: string): Promise<AdminSession | undefined>;
+  deleteAdminSession(sessionToken: string): Promise<boolean>;
+
   // Categories
   getCategories(): Promise<Category[]>;
   getCategory(id: number): Promise<Category | undefined>;
@@ -455,4 +461,9 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new MemStorage();
+// Switch to DatabaseStorage for real data
+import { DatabaseStorage } from "./database-storage";
+export const storage = new DatabaseStorage();
+
+// Keep MemStorage as backup for development
+// export const storage = new MemStorage();
