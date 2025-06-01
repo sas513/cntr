@@ -1,11 +1,37 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertProductSchema, insertOrderSchema, insertCustomerActivitySchema, insertStoreSettingSchema } from "@shared/schema";
+import { generateToken, requireAdmin, type AuthRequest } from "./auth";
+import { loginSchema, insertProductSchema, insertOrderSchema, insertCustomerActivitySchema, insertStoreSettingSchema } from "@shared/schema";
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   
+  // Admin authentication routes
+  app.post('/api/admin/login', async (req, res) => {
+    try {
+      const { username, password } = loginSchema.parse(req.body);
+      
+      const admin = await storage.authenticateAdmin(username, password);
+      if (!admin) {
+        return res.status(401).json({ message: "اسم المستخدم أو كلمة المرور غير صحيحة" });
+      }
+
+      const token = generateToken(admin.id, admin.username);
+      res.json({ token, user: { id: admin.id, username: admin.username, role: admin.role } });
+    } catch (error) {
+      res.status(400).json({ message: "بيانات غير صحيحة" });
+    }
+  });
+
+  app.post('/api/admin/logout', requireAdmin, async (req: AuthRequest, res) => {
+    res.json({ message: "تم تسجيل الخروج بنجاح" });
+  });
+
+  app.get('/api/admin/verify', requireAdmin, async (req: AuthRequest, res) => {
+    res.json({ user: req.admin });
+  });
+
   // Categories
   app.get("/api/categories", async (req, res) => {
     try {
