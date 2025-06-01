@@ -202,6 +202,7 @@ export class MemStorage implements IStorage {
     const user: User = { 
       ...insertUser, 
       id, 
+      role: insertUser.role || "customer",
       createdAt: new Date() 
     };
     this.users.set(id, user);
@@ -219,7 +220,13 @@ export class MemStorage implements IStorage {
 
   async createCategory(insertCategory: InsertCategory): Promise<Category> {
     const id = this.currentCategoryId++;
-    const category: Category = { ...insertCategory, id };
+    const category: Category = { 
+      ...insertCategory, 
+      id,
+      description: insertCategory.description || null,
+      descriptionAr: insertCategory.descriptionAr || null,
+      isActive: insertCategory.isActive ?? true
+    };
     this.categories.set(id, category);
     return category;
   }
@@ -271,6 +278,14 @@ export class MemStorage implements IStorage {
     const product: Product = { 
       ...insertProduct, 
       id, 
+      description: insertProduct.description || null,
+      descriptionAr: insertProduct.descriptionAr || null,
+      originalPrice: insertProduct.originalPrice || null,
+      isActive: insertProduct.isActive ?? true,
+      categoryId: insertProduct.categoryId || null,
+
+      images: insertProduct.images || null,
+      tags: insertProduct.tags || null,
       createdAt: new Date() 
     };
     this.products.set(id, product);
@@ -316,6 +331,8 @@ export class MemStorage implements IStorage {
       const item: CartItem = { 
         ...insertItem, 
         id, 
+        productId: insertItem.productId || null,
+        quantity: insertItem.quantity || 1,
         addedAt: new Date() 
       };
       this.cartItems.set(id, item);

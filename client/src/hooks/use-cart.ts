@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 import type { Product } from "@shared/schema";
 
 interface CartItem {
@@ -93,7 +93,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     totalAmount,
   };
 
-  return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
+  return React.createElement(CartContext.Provider, { value }, children);
 }
 
 export function useCart() {
