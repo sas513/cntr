@@ -18,6 +18,9 @@ export default function Footer() {
   const phone2 = getSetting("store_phone2") || "07810125388";
   const address = getSetting("store_address") || "الرمادي المستودع قرب مول الستي سنتر";
   const email = getSetting("store_email") || "info@centermustaudaa.com";
+  const facebookUrl = getSetting("facebook_url") || "";
+  const instagramUrl = getSetting("instagram_url") || "";
+  const whatsappNumber = getSetting("whatsapp_number") || phone1;
 
   return (
     <footer className="bg-primary text-white py-16">
@@ -125,24 +128,46 @@ export default function Footer() {
           <div>
             <h4 className="text-lg font-semibold mb-6 arabic-text">تابعنا</h4>
             <div className="flex gap-4 mb-6">
-              <Button 
-                size="sm" 
-                className="w-10 h-10 bg-blue-600 hover:bg-blue-700 rounded-full p-0"
+              {facebookUrl && (
+                <a 
+                  href={facebookUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Button 
+                    size="sm" 
+                    className="w-10 h-10 bg-blue-600 hover:bg-blue-700 rounded-full p-0"
+                  >
+                    <Facebook className="w-4 h-4" />
+                  </Button>
+                </a>
+              )}
+              {instagramUrl && (
+                <a 
+                  href={instagramUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Button 
+                    size="sm" 
+                    className="w-10 h-10 bg-pink-600 hover:bg-pink-700 rounded-full p-0"
+                  >
+                    <Instagram className="w-4 h-4" />
+                  </Button>
+                </a>
+              )}
+              <a 
+                href={`https://wa.me/964${whatsappNumber.replace(/^0/, '')}`}
+                target="_blank"
+                rel="noopener noreferrer"
               >
-                <Facebook className="w-4 h-4" />
-              </Button>
-              <Button 
-                size="sm" 
-                className="w-10 h-10 bg-pink-600 hover:bg-pink-700 rounded-full p-0"
-              >
-                <Instagram className="w-4 h-4" />
-              </Button>
-              <Button 
-                size="sm" 
-                className="w-10 h-10 bg-green-600 hover:bg-green-700 rounded-full p-0"
-              >
-                <MessageCircle className="w-4 h-4" />
-              </Button>
+                <Button 
+                  size="sm" 
+                  className="w-10 h-10 bg-green-600 hover:bg-green-700 rounded-full p-0"
+                >
+                  <MessageCircle className="w-4 h-4" />
+                </Button>
+              </a>
             </div>
             
             <div className="space-y-3">
