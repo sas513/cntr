@@ -16,7 +16,10 @@ import {
   Plus,
   Palette,
   PieChart,
-  ClipboardList
+  ClipboardList,
+  Calendar,
+  Globe,
+  MapPin
 } from "lucide-react";
 import { Link } from "wouter";
 import type { CustomerActivity, Order } from "@shared/schema";
