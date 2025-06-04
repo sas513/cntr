@@ -30,7 +30,7 @@ export default function Footer() {
           <div>
             <h3 className="text-2xl font-bold mb-6 arabic-text">{storeName}</h3>
             <p className="text-gray-300 mb-4 arabic-text">
-              وجهتك الأولى للساعات والعطور الفاخرة في العراق
+              {getSetting("footer_text") || "وجهتك الأولى للساعات والعطور الفاخرة في العراق"}
             </p>
             <div className="space-y-2 text-gray-300">
               <div className="flex items-center gap-2">

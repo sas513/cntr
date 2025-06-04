@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import ProductCard from "@/components/product-card";
 import { Gem, Clock, Truck, Shield, Headphones, RotateCcw, Star } from "lucide-react";
 import { Link } from "wouter";
-import type { Product, Category } from "@shared/schema";
+import type { Product, Category, StoreSetting } from "@shared/schema";
 
 export default function Home() {
   const { data: featuredProducts = [], isLoading: productsLoading } = useQuery<Product[]>({
@@ -16,8 +16,22 @@ export default function Home() {
     queryKey: ["/api/categories"],
   });
 
+  const { data: settings = [] } = useQuery<StoreSetting[]>({
+    queryKey: ["/api/settings"],
+  });
+
+  const getSetting = (key: string) => 
+    settings.find(s => s.key === key)?.value || "";
+
   const watchesCategory = categories.find(cat => cat.slug === "watches");
   const perfumesCategory = categories.find(cat => cat.slug === "perfumes");
+  
+  const heroTitle = getSetting("homepage_hero_title") || "أفخر تشكيلة من الساعات والعطور";
+  const heroSubtitle = getSetting("homepage_hero_subtitle") || "اكتشف مجموعتنا الحصرية من أرقى الساعات والعطور العالمية بأفضل الأسعار";
+  const heroImage = getSetting("hero_image") || "https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080";
+  const freeShippingThreshold = getSetting("free_shipping_threshold");
+  const deliveryTime = getSetting("delivery_time") || "1-3 أيام عمل";
+  const warrantyPeriod = getSetting("warranty_period") || "12";
 
   return (
     <div className="min-h-screen">
@@ -27,17 +41,17 @@ export default function Home() {
         <div 
           className="absolute inset-0 bg-cover bg-center opacity-30"
           style={{
-            backgroundImage: 'url("https://images.unsplash.com/photo-1522312346375-d1a52e2b99b3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080")'
+            backgroundImage: `url("${heroImage}")`
           }}
         ></div>
         
         <div className="relative container mx-auto px-3 sm:px-4 py-12 sm:py-16 md:py-20">
           <div className="max-w-2xl animate-fade-in text-center sm:text-right">
             <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 leading-tight arabic-text">
-              أفخر تشكيلة من الساعات والعطور
+              {heroTitle}
             </h1>
             <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 opacity-90 arabic-text">
-              اكتشف مجموعتنا الحصرية من أرقى الساعات والعطور العالمية بأفضل الأسعار
+              {heroSubtitle}
             </p>
             <div className="flex gap-3 sm:gap-4 flex-col sm:flex-row justify-center sm:justify-start">
               <Link href="/products">
@@ -70,7 +84,9 @@ export default function Home() {
                 <Truck className="w-6 h-6 sm:w-8 sm:h-8 text-primary group-hover:text-white" />
               </div>
               <h3 className="text-sm sm:text-lg font-semibold mb-1 sm:mb-2 arabic-text">شحن سريع</h3>
-              <p className="text-xs sm:text-base text-muted-foreground arabic-text">توصيل مجاني لجميع أنحاء العراق</p>
+              <p className="text-xs sm:text-base text-muted-foreground arabic-text">
+                {deliveryTime} {freeShippingThreshold && `- شحن مجاني فوق ${parseInt(freeShippingThreshold).toLocaleString()} د.ع`}
+              </p>
             </div>
             
             <div className="text-center group">
@@ -78,15 +94,17 @@ export default function Home() {
                 <Shield className="w-6 h-6 sm:w-8 sm:h-8 text-primary group-hover:text-white" />
               </div>
               <h3 className="text-sm sm:text-lg font-semibold mb-1 sm:mb-2 arabic-text">ضمان الجودة</h3>
-              <p className="text-xs sm:text-base text-muted-foreground arabic-text">منتجات أصلية مع ضمان شامل</p>
+              <p className="text-xs sm:text-base text-muted-foreground arabic-text">منتجات أصلية مع ضمان {warrantyPeriod} أشهر</p>
             </div>
             
             <div className="text-center group">
               <div className="bg-primary/10 w-16 h-16 sm:w-20 sm:h-20 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4 group-hover:bg-primary group-hover:text-white transition-all">
                 <Headphones className="w-6 h-6 sm:w-8 sm:h-8 text-primary group-hover:text-white" />
               </div>
-              <h3 className="text-sm sm:text-lg font-semibold mb-1 sm:mb-2 arabic-text">دعم 24/7</h3>
-              <p className="text-xs sm:text-base text-muted-foreground arabic-text">خدمة عملاء متاحة على مدار الساعة</p>
+              <h3 className="text-sm sm:text-lg font-semibold mb-1 sm:mb-2 arabic-text">دعم العملاء</h3>
+              <p className="text-xs sm:text-base text-muted-foreground arabic-text">
+                {getSetting("working_hours") || "خدمة عملاء متاحة على مدار الساعة"}
+              </p>
             </div>
             
             <div className="text-center group">
@@ -94,7 +112,9 @@ export default function Home() {
                 <RotateCcw className="w-6 h-6 sm:w-8 sm:h-8 text-primary group-hover:text-white" />
               </div>
               <h3 className="text-sm sm:text-lg font-semibold mb-1 sm:mb-2 arabic-text">إرجاع مجاني</h3>
-              <p className="text-xs sm:text-base text-muted-foreground arabic-text">إمكانية الإرجاع خلال 30 يوم</p>
+              <p className="text-xs sm:text-base text-muted-foreground arabic-text">
+                إمكانية الإرجاع خلال {getSetting("return_period") || "7"} أيام
+              </p>
             </div>
           </div>
         </div>
