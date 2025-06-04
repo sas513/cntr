@@ -15,7 +15,7 @@ import {
   ArrowUpIcon,
   ArrowDownIcon
 } from "lucide-react";
-import type { Order, Product, CustomerActivity } from "@shared/schema";
+import type { Order, Product, CustomerActivity, StoreSetting } from "@shared/schema";
 
 export default function AdminReports() {
   const { data: orders = [] } = useQuery<Order[]>({
@@ -30,9 +30,17 @@ export default function AdminReports() {
     queryKey: ["/api/analytics/activity"],
   });
 
+  const { data: settings = [] } = useQuery<StoreSetting[]>({
+    queryKey: ["/api/settings"],
+  });
+
+  const getSetting = (key: string) => 
+    settings.find(s => s.key === key)?.value || "";
+
   // حساب الإحصائيات
   const totalSalesIQD = orders.reduce((sum, order) => sum + parseFloat(order.totalAmount), 0);
-  const totalSalesUSD = totalSalesIQD / 1500; // سعر الصرف التقريبي
+  const exchangeRate = parseFloat(getSetting("usd_exchange_rate")) || 1500;
+  const totalSalesUSD = totalSalesIQD / exchangeRate;
   const totalOrders = orders.length;
   const totalProducts = products.length;
   const avgOrderValue = totalOrders > 0 ? totalSalesIQD / totalOrders : 0;
@@ -98,7 +106,14 @@ export default function AdminReports() {
           {/* Header */}
           <div>
             <h1 className="text-2xl sm:text-3xl font-bold mb-2 arabic-text">التقارير والإحصائيات</h1>
-            <p className="text-muted-foreground arabic-text">تقارير مفصلة عن أداء المتجر والمبيعات</p>
+            <div className="flex items-center justify-between">
+              <p className="text-muted-foreground arabic-text">تقارير مفصلة عن أداء المتجر والمبيعات</p>
+              <div className="bg-primary/10 px-3 py-1 rounded-lg">
+                <span className="text-sm text-primary font-medium arabic-text">
+                  سعر الصرف: 1 USD = {exchangeRate.toLocaleString()} د.ع
+                </span>
+              </div>
+            </div>
           </div>
 
           {/* الإحصائيات الرئيسية */}
@@ -153,7 +168,7 @@ export default function AdminReports() {
                     {avgOrderValue.toLocaleString()} د.ع
                   </div>
                   <div className="text-sm text-purple-600">
-                    ${(avgOrderValue / 1500).toFixed(2)} USD
+                    ${(avgOrderValue / exchangeRate).toFixed(2)} USD
                   </div>
                 </div>
               </CardContent>

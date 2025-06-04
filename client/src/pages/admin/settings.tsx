@@ -292,6 +292,27 @@ export default function AdminSettings() {
                       placeholder="https://example.com/hero.jpg"
                     />
                   </div>
+
+                  <Separator />
+
+                  <div>
+                    <Label htmlFor="usd_exchange_rate" className="arabic-text">سعر صرف الدولار الأمريكي</Label>
+                    <div className="flex items-center gap-2">
+                      <Input
+                        id="usd_exchange_rate"
+                        type="number"
+                        step="0.01"
+                        value={getSetting("usd_exchange_rate") || "1500"}
+                        onChange={(e) => handleInputChange("usd_exchange_rate", e.target.value)}
+                        placeholder="1500"
+                        className="flex-1"
+                      />
+                      <span className="text-sm text-muted-foreground arabic-text">دينار عراقي</span>
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-1 arabic-text">
+                      كم دينار عراقي يساوي دولار أمريكي واحد
+                    </p>
+                  </div>
                 </CardContent>
               </Card>
             </TabsContent>
