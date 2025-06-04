@@ -8,6 +8,7 @@ import ThemeProvider from "@/components/theme-provider";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
 import FloatingCartButton from "@/components/floating-cart-button";
+import { useVisitorTracking } from "./hooks/use-visitor-tracking";
 import Home from "@/pages/home";
 import Products from "@/pages/products";
 import ProductDetail from "@/pages/product-detail";
@@ -27,6 +28,9 @@ import AdminReports from "@/pages/admin/reports";
 import NotFound from "@/pages/not-found";
 
 function Router() {
+  // Track visitor when app loads
+  useVisitorTracking();
+  
   return (
     <Switch>
       <Route path="/" component={Home} />

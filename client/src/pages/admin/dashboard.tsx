@@ -53,6 +53,14 @@ export default function AdminDashboard() {
   // الطلبات قيد الانتظار
   const pendingOrders = orders.filter(order => order.status === 'pending');
 
+  const { data: visitorStats } = useQuery<{
+    totalVisitors: number;
+    todayVisitors: number;
+    countryCounts: Array<{ country: string; count: number }>;
+  }>({
+    queryKey: ["/api/analytics/visitors"],
+  });
+
   const getActivityIcon = (action: string) => {
     switch (action) {
       case "add_to_cart":

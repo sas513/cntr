@@ -1,19 +1,22 @@
 import { useEffect } from 'react';
-import { apiRequest } from '@/lib/queryClient';
 
 export function useVisitorTracking() {
   useEffect(() => {
     const trackVisitor = async () => {
       try {
-        await apiRequest('/api/analytics/visitor', {
+        const response = await fetch('/api/analytics/visitor', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
         });
+        
+        if (response.ok) {
+          console.log('Visitor tracking initialized');
+        }
       } catch (error) {
         // Silently handle tracking errors
-        console.log('Visitor tracking initialized');
+        console.log('Visitor tracking failed');
       }
     };
 
