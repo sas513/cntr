@@ -234,13 +234,15 @@ export default function AdminDashboard() {
                   </Button>
                 </Link>
                 
-                <Button 
-                  variant="outline" 
-                  className="h-20 sm:h-24 flex-col gap-2 sm:gap-3 w-full hover:bg-primary/5 hover:border-primary"
-                >
-                  <PieChart className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6" />
-                  <span className="text-xs sm:text-sm font-medium arabic-text">التقارير</span>
-                </Button>
+                <Link href="/admin/reports">
+                  <Button 
+                    variant="outline" 
+                    className="h-20 sm:h-24 flex-col gap-2 sm:gap-3 w-full hover:bg-primary/5 hover:border-primary"
+                  >
+                    <PieChart className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6" />
+                    <span className="text-xs sm:text-sm font-medium arabic-text">التقارير</span>
+                  </Button>
+                </Link>
                 
                 <Link href="/admin/orders">
                   <Button 
