@@ -306,6 +306,48 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Visitor tracking routes
+  app.post('/api/analytics/visitor', async (req, res) => {
+    try {
+      const sessionId = req.sessionID || 'anonymous-' + Date.now();
+      const ipAddress = req.ip || req.connection.remoteAddress || 'unknown';
+      const userAgent = req.get('User-Agent') || 'unknown';
+
+      // Simple country detection based on IP patterns
+      let country = 'غير معروف';
+      let city = 'غير معروف';
+      
+      // For local/internal IPs, assume Iraq
+      if (ipAddress.includes('192.168') || ipAddress.includes('127.0') || ipAddress.includes('10.') || ipAddress === 'unknown') {
+        country = 'العراق';
+        city = 'الرمادي';
+      }
+
+      const visitor = await storage.trackVisitor({
+        sessionId,
+        ipAddress,
+        country,
+        city,
+        userAgent,
+      });
+
+      res.json(visitor);
+    } catch (error) {
+      console.error('Error tracking visitor:', error);
+      res.status(500).json({ message: 'Failed to track visitor' });
+    }
+  });
+
+  app.get('/api/analytics/visitors', requireAdmin, async (req, res) => {
+    try {
+      const visitorStats = await storage.getVisitorStats();
+      res.json(visitorStats);
+    } catch (error) {
+      console.error('Error fetching visitor stats:', error);
+      res.status(500).json({ message: 'Failed to fetch visitor stats' });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

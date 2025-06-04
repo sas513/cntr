@@ -24,6 +24,9 @@ import {
   type AdminSession,
   type InsertAdminSession,
   type LoginData,
+  visitorStats,
+  type VisitorStats,
+  type InsertVisitorStats,
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, like, or, and, sql } from "drizzle-orm";
@@ -364,6 +367,89 @@ export class DatabaseStorage implements IStorage {
       totalOrders: ordersResult.count,
       totalProducts: productsResult.count,
       totalCustomers: customersResult.count,
+    };
+  }
+
+  // Visitor tracking
+  async trackVisitor(visitor: InsertVisitorStats): Promise<VisitorStats> {
+    const [existingVisitor] = await db
+      .select()
+      .from(visitorStats)
+      .where(eq(visitorStats.sessionId, visitor.sessionId));
+
+    if (existingVisitor) {
+      // Update existing visitor
+      const [updated] = await db
+        .update(visitorStats)
+        .set({
+          lastVisit: new Date(),
+          pageViews: sql`${visitorStats.pageViews} + 1`,
+        })
+        .where(eq(visitorStats.sessionId, visitor.sessionId))
+        .returning();
+      return updated;
+    } else {
+      // Create new visitor
+      const [created] = await db
+        .insert(visitorStats)
+        .values(visitor)
+        .returning();
+      return created;
+    }
+  }
+
+  async updateVisitorStats(sessionId: string, pageViews: number): Promise<void> {
+    await db
+      .update(visitorStats)
+      .set({
+        lastVisit: new Date(),
+        pageViews: pageViews,
+      })
+      .where(eq(visitorStats.sessionId, sessionId));
+  }
+
+  async getVisitorStats(): Promise<{
+    totalVisitors: number;
+    todayVisitors: number;
+    countryCounts: Array<{ country: string; count: number }>;
+  }> {
+    // Total visitors
+    const [totalResult] = await db
+      .select({
+        count: sql<number>`COUNT(*)`,
+      })
+      .from(visitorStats);
+
+    // Today's visitors
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    const [todayResult] = await db
+      .select({
+        count: sql<number>`COUNT(*)`,
+      })
+      .from(visitorStats)
+      .where(sql`${visitorStats.firstVisit} >= ${today}`);
+
+    // Country counts
+    const countryResults = await db
+      .select({
+        country: visitorStats.country,
+        count: sql<number>`COUNT(*)`,
+      })
+      .from(visitorStats)
+      .where(sql`${visitorStats.country} IS NOT NULL`)
+      .groupBy(visitorStats.country)
+      .orderBy(sql`COUNT(*) DESC`)
+      .limit(10);
+
+    return {
+      totalVisitors: totalResult.count,
+      todayVisitors: todayResult.count,
+      countryCounts: countryResults.map(r => ({
+        country: r.country || 'Unknown',
+        count: r.count,
+      })),
     };
   }
 }
