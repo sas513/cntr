@@ -11,6 +11,11 @@ import Home from "@/pages/home";
 import Products from "@/pages/products";
 import ProductDetail from "@/pages/product-detail";
 import Cart from "@/pages/cart";
+import About from "@/pages/about";
+import PrivacyPolicy from "@/pages/privacy-policy";
+import TermsConditions from "@/pages/terms-conditions";
+import ReturnPolicy from "@/pages/return-policy";
+import ShippingPolicy from "@/pages/shipping-policy";
 import AdminLogin from "@/pages/admin/login";
 import AdminDashboard from "@/pages/admin/dashboard";
 import AdminProducts from "@/pages/admin/products";
@@ -26,6 +31,11 @@ function Router() {
       <Route path="/products" component={Products} />
       <Route path="/product/:id" component={ProductDetail} />
       <Route path="/cart" component={Cart} />
+      <Route path="/about" component={About} />
+      <Route path="/privacy-policy" component={PrivacyPolicy} />
+      <Route path="/terms-conditions" component={TermsConditions} />
+      <Route path="/return-policy" component={ReturnPolicy} />
+      <Route path="/shipping-policy" component={ShippingPolicy} />
       
       {/* Admin Routes */}
       <Route path="/admin/login" component={AdminLogin} />

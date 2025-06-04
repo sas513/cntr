@@ -97,29 +97,39 @@ export default function Footer() {
             <h4 className="text-lg font-semibold mb-6 arabic-text">خدمة العملاء</h4>
             <ul className="space-y-3 text-gray-300">
               <li>
-                <Button variant="link" className="text-gray-300 hover:text-white p-0 h-auto font-normal arabic-text">
-                  سياسة الإرجاع
-                </Button>
+                <Link href="/return-policy">
+                  <Button variant="link" className="text-gray-300 hover:text-white p-0 h-auto font-normal arabic-text">
+                    سياسة الإرجاع
+                  </Button>
+                </Link>
               </li>
               <li>
-                <Button variant="link" className="text-gray-300 hover:text-white p-0 h-auto font-normal arabic-text">
-                  الشحن والتوصيل
-                </Button>
+                <Link href="/shipping-policy">
+                  <Button variant="link" className="text-gray-300 hover:text-white p-0 h-auto font-normal arabic-text">
+                    الشحن والتوصيل
+                  </Button>
+                </Link>
               </li>
               <li>
-                <Button variant="link" className="text-gray-300 hover:text-white p-0 h-auto font-normal arabic-text">
-                  طرق الدفع
-                </Button>
+                <Link href="/about">
+                  <Button variant="link" className="text-gray-300 hover:text-white p-0 h-auto font-normal arabic-text">
+                    من نحن
+                  </Button>
+                </Link>
               </li>
               <li>
-                <Button variant="link" className="text-gray-300 hover:text-white p-0 h-auto font-normal arabic-text">
-                  تتبع الطلب
-                </Button>
+                <Link href="/privacy-policy">
+                  <Button variant="link" className="text-gray-300 hover:text-white p-0 h-auto font-normal arabic-text">
+                    سياسة الخصوصية
+                  </Button>
+                </Link>
               </li>
               <li>
-                <Button variant="link" className="text-gray-300 hover:text-white p-0 h-auto font-normal arabic-text">
-                  اتصل بنا
-                </Button>
+                <Link href="/terms-conditions">
+                  <Button variant="link" className="text-gray-300 hover:text-white p-0 h-auto font-normal arabic-text">
+                    الشروط والأحكام
+                  </Button>
+                </Link>
               </li>
             </ul>
           </div>
