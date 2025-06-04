@@ -84,6 +84,18 @@ export const customerActivity = pgTable("customer_activity", {
   timestamp: timestamp("timestamp").defaultNow(),
 });
 
+export const visitorStats = pgTable("visitor_stats", {
+  id: serial("id").primaryKey(),
+  sessionId: text("session_id").notNull().unique(),
+  ipAddress: text("ip_address"),
+  country: text("country"),
+  city: text("city"),
+  userAgent: text("user_agent"),
+  firstVisit: timestamp("first_visit").defaultNow(),
+  lastVisit: timestamp("last_visit").defaultNow(),
+  pageViews: integer("page_views").default(1),
+});
+
 // Session storage table for admin authentication
 export const sessions = pgTable(
   "sessions",
@@ -166,6 +178,15 @@ export const insertCustomerActivitySchema = createInsertSchema(customerActivity)
   metadata: true,
 });
 
+export const insertVisitorStatsSchema = createInsertSchema(visitorStats).pick({
+  sessionId: true,
+  ipAddress: true,
+  country: true,
+  city: true,
+  userAgent: true,
+  pageViews: true,
+});
+
 // Types
 export type User = typeof users.$inferSelect;
 export type InsertUser = z.infer<typeof insertUserSchema>;
@@ -187,6 +208,9 @@ export type InsertStoreSetting = z.infer<typeof insertStoreSettingSchema>;
 
 export type CustomerActivity = typeof customerActivity.$inferSelect;
 export type InsertCustomerActivity = z.infer<typeof insertCustomerActivitySchema>;
+
+export type VisitorStats = typeof visitorStats.$inferSelect;
+export type InsertVisitorStats = z.infer<typeof insertVisitorStatsSchema>;
 
 export const insertAdminSessionSchema = createInsertSchema(adminSessions).pick({
   userId: true,

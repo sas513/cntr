@@ -65,6 +65,15 @@ export interface IStorage {
     totalProducts: number;
     totalCustomers: number;
   }>;
+
+  // Visitor tracking
+  trackVisitor(visitor: InsertVisitorStats): Promise<VisitorStats>;
+  updateVisitorStats(sessionId: string, pageViews: number): Promise<void>;
+  getVisitorStats(): Promise<{
+    totalVisitors: number;
+    todayVisitors: number;
+    countryCounts: Array<{ country: string; count: number }>;
+  }>;
 }
 
 export class MemStorage implements IStorage {
