@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import AdminSidebar from "@/components/admin/sidebar";
 import StatsCard from "@/components/admin/stats-card";
 import { 
@@ -18,7 +19,7 @@ import {
   ClipboardList
 } from "lucide-react";
 import { Link } from "wouter";
-import type { CustomerActivity } from "@shared/schema";
+import type { CustomerActivity, Order } from "@shared/schema";
 
 interface Stats {
   totalSales: string;
@@ -35,6 +36,22 @@ export default function AdminDashboard() {
   const { data: recentActivity = [] } = useQuery<CustomerActivity[]>({
     queryKey: ["/api/analytics/activity"],
   });
+
+  const { data: orders = [] } = useQuery<Order[]>({
+    queryKey: ["/api/orders"],
+  });
+
+  // حساب الطلبات الجديدة (آخر 24 ساعة)
+  const newOrders = orders.filter(order => {
+    if (!order.createdAt) return false;
+    const orderDate = new Date(order.createdAt);
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    return orderDate >= yesterday;
+  });
+
+  // الطلبات قيد الانتظار
+  const pendingOrders = orders.filter(order => order.status === 'pending');
 
   const getActivityIcon = (action: string) => {
     switch (action) {
@@ -247,10 +264,24 @@ export default function AdminDashboard() {
                 <Link href="/admin/orders">
                   <Button 
                     variant="outline" 
-                    className="h-20 sm:h-24 flex-col gap-2 sm:gap-3 w-full hover:bg-primary/5 hover:border-primary"
+                    className="h-20 sm:h-24 flex-col gap-2 sm:gap-3 w-full hover:bg-primary/5 hover:border-primary relative"
                   >
-                    <ClipboardList className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6" />
+                    <div className="relative">
+                      <ClipboardList className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6" />
+                      {(newOrders.length > 0 || pendingOrders.length > 0) && (
+                        <Badge 
+                          className="absolute -top-2 -right-2 bg-red-500 text-white text-xs min-w-5 h-5 flex items-center justify-center p-0 animate-pulse"
+                        >
+                          {newOrders.length + pendingOrders.length}
+                        </Badge>
+                      )}
+                    </div>
                     <span className="text-xs sm:text-sm font-medium arabic-text">إدارة الطلبات</span>
+                    {newOrders.length > 0 && (
+                      <span className="text-xs text-red-500 font-bold arabic-text">
+                        {newOrders.length} طلب جديد
+                      </span>
+                    )}
                   </Button>
                 </Link>
               </div>
