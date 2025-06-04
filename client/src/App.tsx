@@ -7,6 +7,7 @@ import { CartProvider } from "./hooks/use-cart";
 import ThemeProvider from "@/components/theme-provider";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
+import FloatingCartButton from "@/components/floating-cart-button";
 import Home from "@/pages/home";
 import Products from "@/pages/products";
 import ProductDetail from "@/pages/product-detail";
@@ -63,6 +64,7 @@ function App() {
                 <Router />
               </main>
               <Footer />
+              <FloatingCartButton />
               <Toaster />
             </div>
           </CartProvider>

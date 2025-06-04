@@ -115,10 +115,16 @@ export default function Header() {
                 </Button>
                 
                 <Link href="/cart">
-                  <Button variant="ghost" size="sm" className="relative hover:bg-muted">
-                    <ShoppingCart className="w-5 h-5 text-muted-foreground" />
+                  <Button 
+                    variant="ghost" 
+                    size="lg" 
+                    className={`relative hover:bg-primary/10 transition-all duration-200 ${
+                      totalItems > 0 ? 'bg-primary/5 border border-primary/20' : ''
+                    }`}
+                  >
+                    <ShoppingCart className={`w-7 h-7 ${totalItems > 0 ? 'text-primary' : 'text-muted-foreground'}`} />
                     {totalItems > 0 && (
-                      <Badge className="absolute -top-1 -right-1 bg-accent text-white text-xs rounded-full h-5 w-5 flex items-center justify-center p-0">
+                      <Badge className="absolute -top-2 -right-2 bg-accent text-white text-sm font-bold rounded-full h-7 w-7 flex items-center justify-center p-0 shadow-lg animate-pulse">
                         {totalItems}
                       </Badge>
                     )}
@@ -178,7 +184,25 @@ export default function Header() {
                             جميع المنتجات
                           </Button>
                         </Link>
-                        <div className="border-t pt-2 mt-2">
+                        <div className="border-t pt-2 mt-2 space-y-2">
+                          <Link href="/cart">
+                            <Button 
+                              variant="outline" 
+                              className={`w-full justify-between arabic-text ${
+                                totalItems > 0 ? 'border-primary text-primary bg-primary/5' : ''
+                              }`}
+                            >
+                              <div className="flex items-center gap-2">
+                                <ShoppingCart className="w-5 h-5" />
+                                السلة
+                              </div>
+                              {totalItems > 0 && (
+                                <Badge className="bg-accent text-white">
+                                  {totalItems}
+                                </Badge>
+                              )}
+                            </Button>
+                          </Link>
                           <Link href="/admin/login">
                             <Button variant="outline" className="w-full justify-start arabic-text">
                               تسجيل دخول الإدارة
