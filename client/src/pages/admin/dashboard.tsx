@@ -181,6 +181,69 @@ export default function AdminDashboard() {
             />
           </div>
 
+          {/* Visitor Analytics Section */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
+            <Card className="bg-gradient-to-br from-cyan-50 to-cyan-100 border-cyan-200">
+              <CardHeader className="flex flex-row items-center justify-between pb-2">
+                <CardTitle className="text-sm font-medium text-cyan-700 arabic-text">إجمالي الزوار</CardTitle>
+                <Eye className="w-4 h-4 text-cyan-600" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold text-cyan-900">{visitorStats?.totalVisitors || 0}</div>
+                <p className="text-xs text-cyan-600 arabic-text">منذ بداية التشغيل</p>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-gradient-to-br from-indigo-50 to-indigo-100 border-indigo-200">
+              <CardHeader className="flex flex-row items-center justify-between pb-2">
+                <CardTitle className="text-sm font-medium text-indigo-700 arabic-text">زوار اليوم</CardTitle>
+                <Calendar className="w-4 h-4 text-indigo-600" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold text-indigo-900">{visitorStats?.todayVisitors || 0}</div>
+                <p className="text-xs text-indigo-600 arabic-text">زائر جديد اليوم</p>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-gradient-to-br from-teal-50 to-teal-100 border-teal-200">
+              <CardHeader className="flex flex-row items-center justify-between pb-2">
+                <CardTitle className="text-sm font-medium text-teal-700 arabic-text">الدول</CardTitle>
+                <Globe className="w-4 h-4 text-teal-600" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold text-teal-900">{visitorStats?.countryCounts?.length || 0}</div>
+                <p className="text-xs text-teal-600 arabic-text">دولة مختلفة</p>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Country Breakdown */}
+          {visitorStats?.countryCounts && visitorStats.countryCounts.length > 0 && (
+            <Card className="mb-6 sm:mb-8">
+              <CardHeader>
+                <CardTitle className="text-base sm:text-lg arabic-text flex items-center gap-2">
+                  <MapPin className="w-5 h-5" />
+                  توزيع الزوار حسب البلدان
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {visitorStats.countryCounts.map((country, index) => (
+                    <div key={index} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+                      <div className="flex items-center gap-3">
+                        <div className="w-2 h-2 bg-primary rounded-full"></div>
+                        <span className="font-medium arabic-text">{country.country}</span>
+                      </div>
+                      <Badge variant="secondary" className="arabic-text">
+                        {country.count} زائر
+                      </Badge>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
           {/* Charts and Analytics */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 lg:gap-8 mb-6 sm:mb-8">
             {/* Sales Chart */}
