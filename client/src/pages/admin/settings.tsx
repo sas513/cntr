@@ -6,10 +6,11 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
+import { Textarea } from "@/components/ui/textarea";
 import AdminSidebar from "@/components/admin/sidebar";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import { Save, Store, Palette, Phone, MapPin, Mail } from "lucide-react";
+import { Save, Store, Palette, Phone, MapPin, Mail, FileText, Shield, Truck } from "lucide-react";
 import type { StoreSetting } from "@shared/schema";
 
 export default function AdminSettings() {
@@ -114,10 +115,12 @@ export default function AdminSettings() {
           </div>
 
           <Tabs defaultValue="store" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-3">
+            <TabsList className="grid w-full grid-cols-5">
               <TabsTrigger value="store" className="arabic-text">معلومات المتجر</TabsTrigger>
               <TabsTrigger value="appearance" className="arabic-text">المظهر والألوان</TabsTrigger>
               <TabsTrigger value="contact" className="arabic-text">معلومات التواصل</TabsTrigger>
+              <TabsTrigger value="policies" className="arabic-text">السياسات والأحكام</TabsTrigger>
+              <TabsTrigger value="content" className="arabic-text">محتوى الموقع</TabsTrigger>
             </TabsList>
 
             {/* Store Information */}
@@ -391,6 +394,206 @@ export default function AdminSettings() {
                           value={getSetting("youtube_url")}
                           onChange={(e) => handleInputChange("youtube_url", e.target.value)}
                           placeholder="https://youtube.com/yourchannel"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            {/* Policies and Terms */}
+            <TabsContent value="policies" className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 arabic-text">
+                    <Shield className="w-5 h-5" />
+                    السياسات والأحكام
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <div>
+                    <Label htmlFor="return_policy" className="arabic-text">سياسة الاسترجاع والاستبدال</Label>
+                    <Textarea
+                      id="return_policy"
+                      value={getSetting("return_policy")}
+                      onChange={(e) => handleInputChange("return_policy", e.target.value)}
+                      placeholder="اكتب سياسة الاسترجاع والاستبدال هنا..."
+                      rows={6}
+                      className="resize-none"
+                    />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="shipping_policy" className="arabic-text">سياسة الشحن والتوصيل</Label>
+                    <Textarea
+                      id="shipping_policy"
+                      value={getSetting("shipping_policy")}
+                      onChange={(e) => handleInputChange("shipping_policy", e.target.value)}
+                      placeholder="اكتب سياسة الشحن والتوصيل هنا..."
+                      rows={6}
+                      className="resize-none"
+                    />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="privacy_policy" className="arabic-text">سياسة الخصوصية</Label>
+                    <Textarea
+                      id="privacy_policy"
+                      value={getSetting("privacy_policy")}
+                      onChange={(e) => handleInputChange("privacy_policy", e.target.value)}
+                      placeholder="اكتب سياسة الخصوصية هنا..."
+                      rows={6}
+                      className="resize-none"
+                    />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="terms_conditions" className="arabic-text">الشروط والأحكام</Label>
+                    <Textarea
+                      id="terms_conditions"
+                      value={getSetting("terms_conditions")}
+                      onChange={(e) => handleInputChange("terms_conditions", e.target.value)}
+                      placeholder="اكتب الشروط والأحكام هنا..."
+                      rows={6}
+                      className="resize-none"
+                    />
+                  </div>
+
+                  <Separator />
+
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="warranty_period" className="arabic-text">فترة الضمان (بالأشهر)</Label>
+                      <Input
+                        id="warranty_period"
+                        type="number"
+                        value={getSetting("warranty_period")}
+                        onChange={(e) => handleInputChange("warranty_period", e.target.value)}
+                        placeholder="12"
+                      />
+                    </div>
+
+                    <div>
+                      <Label htmlFor="return_period" className="arabic-text">فترة الإرجاع (بالأيام)</Label>
+                      <Input
+                        id="return_period"
+                        type="number"
+                        value={getSetting("return_period")}
+                        onChange={(e) => handleInputChange("return_period", e.target.value)}
+                        placeholder="7"
+                      />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            {/* Website Content */}
+            <TabsContent value="content" className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 arabic-text">
+                    <FileText className="w-5 h-5" />
+                    محتوى الموقع
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <div>
+                    <Label htmlFor="homepage_hero_title" className="arabic-text">عنوان الصفحة الرئيسية</Label>
+                    <Input
+                      id="homepage_hero_title"
+                      value={getSetting("homepage_hero_title")}
+                      onChange={(e) => handleInputChange("homepage_hero_title", e.target.value)}
+                      placeholder="اكتشف أفضل الساعات والعطور"
+                    />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="homepage_hero_subtitle" className="arabic-text">الوصف التفصيلي للصفحة الرئيسية</Label>
+                    <Textarea
+                      id="homepage_hero_subtitle"
+                      value={getSetting("homepage_hero_subtitle")}
+                      onChange={(e) => handleInputChange("homepage_hero_subtitle", e.target.value)}
+                      placeholder="مجموعة حصرية من أرقى الساعات والعطور العالمية..."
+                      rows={4}
+                      className="resize-none"
+                    />
+                  </div>
+
+                  <Separator />
+
+                  <div>
+                    <Label htmlFor="about_us" className="arabic-text">معلومات عن المتجر</Label>
+                    <Textarea
+                      id="about_us"
+                      value={getSetting("about_us")}
+                      onChange={(e) => handleInputChange("about_us", e.target.value)}
+                      placeholder="اكتب معلومات مفصلة عن المتجر وتاريخه وخدماته..."
+                      rows={8}
+                      className="resize-none"
+                    />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="footer_text" className="arabic-text">نص التذييل</Label>
+                    <Textarea
+                      id="footer_text"
+                      value={getSetting("footer_text")}
+                      onChange={(e) => handleInputChange("footer_text", e.target.value)}
+                      placeholder="وجهتك الأولى للساعات والعطور الفاخرة في العراق"
+                      rows={3}
+                      className="resize-none"
+                    />
+                  </div>
+
+                  <Separator />
+
+                  <div className="space-y-4">
+                    <Label className="text-base font-semibold arabic-text">إعدادات التسوق</Label>
+                    
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor="min_order_amount" className="arabic-text">أقل مبلغ للطلب (د.ع)</Label>
+                        <Input
+                          id="min_order_amount"
+                          type="number"
+                          value={getSetting("min_order_amount")}
+                          onChange={(e) => handleInputChange("min_order_amount", e.target.value)}
+                          placeholder="50000"
+                        />
+                      </div>
+
+                      <div>
+                        <Label htmlFor="free_shipping_threshold" className="arabic-text">الشحن المجاني فوق (د.ع)</Label>
+                        <Input
+                          id="free_shipping_threshold"
+                          type="number"
+                          value={getSetting("free_shipping_threshold")}
+                          onChange={(e) => handleInputChange("free_shipping_threshold", e.target.value)}
+                          placeholder="100000"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor="delivery_time" className="arabic-text">مدة التوصيل</Label>
+                        <Input
+                          id="delivery_time"
+                          value={getSetting("delivery_time")}
+                          onChange={(e) => handleInputChange("delivery_time", e.target.value)}
+                          placeholder="1-3 أيام عمل"
+                        />
+                      </div>
+
+                      <div>
+                        <Label htmlFor="working_hours" className="arabic-text">ساعات العمل</Label>
+                        <Input
+                          id="working_hours"
+                          value={getSetting("working_hours")}
+                          onChange={(e) => handleInputChange("working_hours", e.target.value)}
+                          placeholder="9:00 ص - 10:00 م"
                         />
                       </div>
                     </div>
