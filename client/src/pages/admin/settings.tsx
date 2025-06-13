@@ -79,7 +79,10 @@ export default function AdminSettings() {
     setIsTestingBot(true);
     try {
       // First save the current settings
-      await saveAllSettings();
+      const promises = Object.entries(formData).map(([key, value]) =>
+        updateSettingMutation.mutateAsync({ key, value })
+      );
+      await Promise.all(promises);
       
       // Then test the bot
       const response = await fetch("/api/telegram/test", {
