@@ -78,20 +78,26 @@ export default function AdminSettings() {
   const testTelegramBot = async () => {
     setIsTestingBot(true);
     try {
-      const response = await apiRequest("/api/telegram/test", {
+      // First save the current settings
+      await saveAllSettings();
+      
+      // Then test the bot
+      const response = await fetch("/api/telegram/test", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
       });
       
-      if (response.success) {
+      const result = await response.json();
+      
+      if (result.success) {
         toast({
           title: "نجح الاختبار",
           description: "تم إرسال رسالة اختبار بنجاح إلى Telegram",
         });
       } else {
-        throw new Error(response.message || "فشل في إرسال الرسالة");
+        throw new Error(result.message || "فشل في إرسال الرسالة");
       }
     } catch (error) {
       toast({

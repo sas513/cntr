@@ -1,41 +1,52 @@
 import TelegramBot from 'node-telegram-bot-api';
 import type { Order } from '@shared/schema';
+import { storage } from './storage';
 
 class TelegramService {
   private bot: TelegramBot | null = null;
   private chatId: string | null = null;
 
   constructor() {
-    this.initializeBot();
+    // Initialize from database settings when needed
   }
 
-  private initializeBot() {
-    const token = process.env.TELEGRAM_BOT_TOKEN;
-    const chatId = process.env.TELEGRAM_CHAT_ID;
-
-    if (!token || !chatId) {
-      console.log('Telegram bot not configured - missing TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID');
-      return;
-    }
-
+  private async initializeBot() {
     try {
+      // Get settings from database
+      const botTokenSetting = await storage.getStoreSetting('telegram_bot_token');
+      const chatIdSetting = await storage.getStoreSetting('telegram_chat_id');
+
+      const token = botTokenSetting?.value;
+      const chatId = chatIdSetting?.value;
+
+      if (!token || !chatId) {
+        console.log('Telegram bot not configured - missing bot token or chat ID in settings');
+        return false;
+      }
+
       this.bot = new TelegramBot(token, { polling: false });
       this.chatId = chatId;
-      console.log('Telegram bot initialized successfully');
+      console.log('Telegram bot initialized successfully from database settings');
+      return true;
     } catch (error) {
       console.error('Failed to initialize Telegram bot:', error);
+      return false;
     }
   }
 
   async sendOrderNotification(order: Order) {
+    // Initialize bot if not already done
     if (!this.bot || !this.chatId) {
-      console.log('Telegram bot not configured - skipping notification');
-      return;
+      const initialized = await this.initializeBot();
+      if (!initialized) {
+        console.log('Telegram bot not configured - skipping notification');
+        return;
+      }
     }
 
     try {
       const message = this.formatOrderMessage(order);
-      await this.bot.sendMessage(this.chatId, message, { parse_mode: 'HTML' });
+      await this.bot!.sendMessage(this.chatId!, message, { parse_mode: 'HTML' });
       console.log(`Order notification sent to Telegram for order #${order.id}`);
     } catch (error) {
       console.error('Failed to send Telegram notification:', error);
@@ -80,12 +91,14 @@ ${itemsList}
   }
 
   async sendTestMessage() {
-    if (!this.bot || !this.chatId) {
-      throw new Error('Telegram bot not configured');
+    // Initialize bot with fresh settings
+    const initialized = await this.initializeBot();
+    if (!initialized) {
+      throw new Error('Telegram bot not configured - missing bot token or chat ID');
     }
 
     try {
-      await this.bot.sendMessage(this.chatId, 
+      await this.bot!.sendMessage(this.chatId!, 
         '✅ تم تفعيل بوت إشعارات سنتر المستودع للساعات والعطور بنجاح!'
       );
       return true;
