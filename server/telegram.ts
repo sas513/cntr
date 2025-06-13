@@ -22,6 +22,11 @@ export class TelegramService {
     this.chatId = process.env.TELEGRAM_CHAT_ID || '';
   }
 
+  updateCredentials(botToken: string, chatId: string) {
+    this.botToken = botToken;
+    this.chatId = chatId;
+  }
+
   private formatOrderMessage(order: TelegramMessage): string {
     const itemsList = order.items.map(item => 
       `• ${item.nameAr} (${item.name})\n  الكمية: ${item.quantity} - السعر: ${item.price} د.ع`
