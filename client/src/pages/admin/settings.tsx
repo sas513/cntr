@@ -313,6 +313,52 @@ export default function AdminSettings() {
                       كم دينار عراقي يساوي دولار أمريكي واحد
                     </p>
                   </div>
+
+                  <Separator />
+
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold arabic-text">إعدادات Telegram</h3>
+                    
+                    <div>
+                      <Label htmlFor="telegram_bot_token" className="arabic-text">رمز البوت (Bot Token)</Label>
+                      <Input
+                        id="telegram_bot_token"
+                        type="password"
+                        value={getSetting("telegram_bot_token")}
+                        onChange={(e) => handleInputChange("telegram_bot_token", e.target.value)}
+                        placeholder="123456789:AABBCCddEEffGGhhIIjjKKllMMnnOOppQQrr"
+                      />
+                      <p className="text-xs text-muted-foreground mt-1 arabic-text">
+                        الرمز الذي تحصل عليه من @BotFather في Telegram
+                      </p>
+                    </div>
+
+                    <div>
+                      <Label htmlFor="telegram_chat_id" className="arabic-text">معرف المحادثة (Chat ID)</Label>
+                      <Input
+                        id="telegram_chat_id"
+                        value={getSetting("telegram_chat_id")}
+                        onChange={(e) => handleInputChange("telegram_chat_id", e.target.value)}
+                        placeholder="-1001234567890"
+                      />
+                      <p className="text-xs text-muted-foreground mt-1 arabic-text">
+                        معرف المحادثة أو المجموعة التي ستستقبل الإشعارات
+                      </p>
+                    </div>
+
+                    <div className="flex items-center space-x-2">
+                      <input
+                        type="checkbox"
+                        id="telegram_notifications_enabled"
+                        checked={getSetting("telegram_notifications_enabled") === "true"}
+                        onChange={(e) => handleInputChange("telegram_notifications_enabled", e.target.checked.toString())}
+                        className="rounded border-gray-300"
+                      />
+                      <Label htmlFor="telegram_notifications_enabled" className="arabic-text">
+                        تفعيل إشعارات Telegram للطلبات الجديدة
+                      </Label>
+                    </div>
+                  </div>
                 </CardContent>
               </Card>
             </TabsContent>

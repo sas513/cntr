@@ -171,6 +171,19 @@ export const insertStoreSettingSchema = createInsertSchema(storeSettings).pick({
   value: true,
 });
 
+export const telegramNotificationSchema = z.object({
+  orderId: z.number(),
+  customerName: z.string(),
+  customerPhone: z.string(),
+  totalAmount: z.string(),
+  items: z.array(z.object({
+    name: z.string(),
+    nameAr: z.string(),
+    quantity: z.number(),
+    price: z.string(),
+  })),
+});
+
 export const insertCustomerActivitySchema = createInsertSchema(customerActivity).pick({
   sessionId: true,
   action: true,

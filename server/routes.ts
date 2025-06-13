@@ -2,6 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { generateToken, requireAdmin, type AuthRequest } from "./auth";
+import { telegramService } from "./telegram";
 import { loginSchema, insertProductSchema, insertOrderSchema, insertCustomerActivitySchema, insertStoreSettingSchema } from "@shared/schema";
 import { z } from "zod";
 
@@ -216,6 +217,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
         action: "place_order",
         metadata: { orderId: order.id, totalAmount: validatedData.totalAmount }
       });
+
+      // Send Telegram notification if enabled
+      try {
+        const telegramEnabled = await storage.getStoreSetting("telegram_notifications_enabled");
+        if (telegramEnabled?.value === "true") {
+          await telegramService.sendOrderNotification({
+            orderId: order.id,
+            customerName: order.customerName,
+            customerPhone: order.customerPhone,
+            totalAmount: order.totalAmount,
+            items: order.items,
+          });
+        }
+      } catch (telegramError) {
+        console.error('Failed to send Telegram notification:', telegramError);
+        // Don't fail the order creation if Telegram fails
+      }
       
       res.status(201).json(order);
     } catch (error) {
