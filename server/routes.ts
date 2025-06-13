@@ -2,7 +2,6 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { generateToken, requireAdmin, type AuthRequest } from "./auth";
-import { telegramService } from "./telegram";
 import { loginSchema, insertProductSchema, insertOrderSchema, insertCustomerActivitySchema, insertStoreSettingSchema } from "@shared/schema";
 import { z } from "zod";
 
@@ -217,29 +216,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
         action: "place_order",
         metadata: { orderId: order.id, totalAmount: validatedData.totalAmount }
       });
-
-      // Send Telegram notification if enabled
-      try {
-        const telegramEnabled = await storage.getStoreSetting("telegram_notifications_enabled");
-        if (telegramEnabled?.value === "true") {
-          const botToken = await storage.getStoreSetting("telegram_bot_token");
-          const chatId = await storage.getStoreSetting("telegram_chat_id");
-          
-          if (botToken?.value && chatId?.value) {
-            telegramService.updateCredentials(botToken.value, chatId.value);
-            await telegramService.sendOrderNotification({
-              orderId: order.id,
-              customerName: order.customerName,
-              customerPhone: order.customerPhone,
-              totalAmount: order.totalAmount,
-              items: order.items,
-            });
-          }
-        }
-      } catch (telegramError) {
-        console.error('Failed to send Telegram notification:', telegramError);
-        // Don't fail the order creation if Telegram fails
-      }
       
       res.status(201).json(order);
     } catch (error) {
@@ -294,56 +270,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(setting);
     } catch (error) {
       res.status(500).json({ message: "Failed to update setting" });
-    }
-  });
-
-  // Test Telegram connection
-  app.post("/api/admin/test-telegram", requireAdmin, async (req, res) => {
-    try {
-      const botToken = await storage.getStoreSetting("telegram_bot_token");
-      const chatId = await storage.getStoreSetting("telegram_chat_id");
-      
-      if (!botToken?.value || !chatId?.value) {
-        return res.status(400).json({ 
-          success: false, 
-          message: "Bot token and chat ID are required" 
-        });
-      }
-
-      telegramService.updateCredentials(botToken.value, chatId.value);
-      const isConnected = await telegramService.testConnection();
-      
-      if (isConnected) {
-        // Send test message
-        const testResult = await telegramService.sendOrderNotification({
-          orderId: 0,
-          customerName: "عميل تجريبي",
-          customerPhone: "07800000000",
-          totalAmount: "50000",
-          items: [{
-            name: "Test Product",
-            nameAr: "منتج تجريبي",
-            quantity: 1,
-            price: "50000"
-          }]
-        });
-
-        res.json({
-          success: testResult,
-          message: testResult ? "تم الاتصال بـ Telegram بنجاح!" : "فشل في إرسال رسالة الاختبار"
-        });
-      } else {
-        res.json({
-          success: false,
-          message: "فشل في الاتصال ببوت Telegram"
-        });
-      }
-    } catch (error) {
-      console.error('Telegram test error:', error);
-      res.status(500).json({
-        success: false,
-        message: "خطأ في اختبار اتصال Telegram"
-      });
     }
   });
 
