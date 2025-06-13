@@ -166,6 +166,71 @@ export default function AdminSettings() {
 
             {/* Store Information */}
             <TabsContent value="store" className="space-y-6">
+              {/* Telegram Bot Settings - First Priority */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg font-bold arabic-text flex items-center gap-2">
+                    <MessageSquare className="w-5 h-5" />
+                    إعدادات بوت Telegram
+                  </CardTitle>
+                  <p className="text-sm text-muted-foreground arabic-text">
+                    إعداد بوت Telegram لاستقبال إشعارات الطلبات الجديدة
+                  </p>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <Label htmlFor="telegram_bot_token" className="arabic-text">رمز بوت Telegram</Label>
+                    <Input
+                      id="telegram_bot_token"
+                      type="password"
+                      value={getSetting("telegram_bot_token")}
+                      onChange={(e) => handleInputChange("telegram_bot_token", e.target.value)}
+                      placeholder="Bot Token من BotFather"
+                      className="font-mono"
+                    />
+                    <p className="text-xs text-muted-foreground mt-1 arabic-text">
+                      احصل على الرمز من @BotFather في Telegram
+                    </p>
+                  </div>
+
+                  <div>
+                    <Label htmlFor="telegram_chat_id" className="arabic-text">معرف المحادثة</Label>
+                    <Input
+                      id="telegram_chat_id"
+                      value={getSetting("telegram_chat_id")}
+                      onChange={(e) => handleInputChange("telegram_chat_id", e.target.value)}
+                      placeholder="Chat ID أو User ID"
+                      className="font-mono"
+                    />
+                    <p className="text-xs text-muted-foreground mt-1 arabic-text">
+                      معرف المحادثة الذي سيتم إرسال الإشعارات إليه
+                    </p>
+                  </div>
+
+                  <div className="flex gap-2">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={testTelegramBot}
+                      disabled={!getSetting("telegram_bot_token") || !getSetting("telegram_chat_id") || isTestingBot}
+                      className="arabic-text"
+                    >
+                      {isTestingBot ? (
+                        <>
+                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                          جاري الاختبار...
+                        </>
+                      ) : (
+                        <>
+                          <Send className="w-4 h-4 mr-2" />
+                          اختبار البوت
+                        </>
+                      )}
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2 arabic-text">
@@ -357,70 +422,7 @@ export default function AdminSettings() {
                 </CardContent>
               </Card>
 
-              {/* Telegram Bot Settings */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-lg font-bold arabic-text flex items-center gap-2">
-                    <MessageSquare className="w-5 h-5" />
-                    إعدادات بوت Telegram
-                  </CardTitle>
-                  <p className="text-sm text-muted-foreground arabic-text">
-                    إعداد بوت Telegram لاستقبال إشعارات الطلبات الجديدة
-                  </p>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div>
-                    <Label htmlFor="telegram_bot_token" className="arabic-text">رمز بوت Telegram</Label>
-                    <Input
-                      id="telegram_bot_token"
-                      type="password"
-                      value={getSetting("telegram_bot_token")}
-                      onChange={(e) => handleInputChange("telegram_bot_token", e.target.value)}
-                      placeholder="Bot Token من BotFather"
-                      className="font-mono"
-                    />
-                    <p className="text-xs text-muted-foreground mt-1 arabic-text">
-                      احصل على الرمز من @BotFather في Telegram
-                    </p>
-                  </div>
 
-                  <div>
-                    <Label htmlFor="telegram_chat_id" className="arabic-text">معرف المحادثة</Label>
-                    <Input
-                      id="telegram_chat_id"
-                      value={getSetting("telegram_chat_id")}
-                      onChange={(e) => handleInputChange("telegram_chat_id", e.target.value)}
-                      placeholder="Chat ID أو User ID"
-                      className="font-mono"
-                    />
-                    <p className="text-xs text-muted-foreground mt-1 arabic-text">
-                      معرف المحادثة الذي سيتم إرسال الإشعارات إليه
-                    </p>
-                  </div>
-
-                  <div className="flex gap-2">
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={testTelegramBot}
-                      disabled={!getSetting("telegram_bot_token") || !getSetting("telegram_chat_id") || isTestingBot}
-                      className="arabic-text"
-                    >
-                      {isTestingBot ? (
-                        <>
-                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                          جاري الاختبار...
-                        </>
-                      ) : (
-                        <>
-                          <Send className="w-4 h-4 mr-2" />
-                          اختبار البوت
-                        </>
-                      )}
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
             </TabsContent>
 
             {/* Contact Information */}
