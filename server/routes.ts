@@ -318,7 +318,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Visitor tracking routes
   app.post('/api/analytics/visitor', async (req, res) => {
     try {
-      const sessionId = req.sessionID || 'anonymous-' + Date.now();
+      const sessionId = (req as any).sessionID || 'anonymous-' + Date.now();
       const ipAddress = req.ip || req.connection.remoteAddress || 'unknown';
       const userAgent = req.get('User-Agent') || 'unknown';
 
@@ -354,6 +354,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error('Error fetching visitor stats:', error);
       res.status(500).json({ message: 'Failed to fetch visitor stats' });
+    }
+  });
+
+  // Telegram Bot test endpoint
+  app.post('/api/telegram/test', requireAdmin, async (req, res) => {
+    try {
+      await telegramService.sendTestMessage();
+      res.json({ success: true, message: 'Test message sent successfully' });
+    } catch (error) {
+      console.error('Failed to send test message:', error);
+      res.status(500).json({ success: false, message: 'Failed to send test message' });
     }
   });
 

@@ -10,11 +10,12 @@ import { Textarea } from "@/components/ui/textarea";
 import AdminSidebar from "@/components/admin/sidebar";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import { Save, Store, Palette, Phone, MapPin, Mail, FileText, Shield, Truck } from "lucide-react";
+import { Save, Store, Palette, Phone, MapPin, Mail, FileText, Shield, Truck, MessageSquare, Send, Loader2 } from "lucide-react";
 import type { StoreSetting } from "@shared/schema";
 
 export default function AdminSettings() {
   const [isDirty, setIsDirty] = useState(false);
+  const [isTestingBot, setIsTestingBot] = useState(false);
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -72,6 +73,37 @@ export default function AdminSettings() {
   };
 
   const getSetting = (key: string) => formData[key] || "";
+
+  // Test Telegram Bot function
+  const testTelegramBot = async () => {
+    setIsTestingBot(true);
+    try {
+      const response = await apiRequest("/api/telegram/test", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      
+      if (response.success) {
+        toast({
+          title: "نجح الاختبار",
+          description: "تم إرسال رسالة اختبار بنجاح إلى Telegram",
+        });
+      } else {
+        throw new Error(response.message || "فشل في إرسال الرسالة");
+      }
+    } catch (error) {
+      toast({
+        title: "فشل الاختبار",
+        description: "تعذر إرسال رسالة اختبار. تحقق من الإعدادات.",
+        variant: "destructive",
+      });
+      console.error("Telegram test error:", error);
+    } finally {
+      setIsTestingBot(false);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -312,6 +344,71 @@ export default function AdminSettings() {
                     <p className="text-xs text-muted-foreground mt-1 arabic-text">
                       كم دينار عراقي يساوي دولار أمريكي واحد
                     </p>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Telegram Bot Settings */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg font-bold arabic-text flex items-center gap-2">
+                    <MessageSquare className="w-5 h-5" />
+                    إعدادات بوت Telegram
+                  </CardTitle>
+                  <p className="text-sm text-muted-foreground arabic-text">
+                    إعداد بوت Telegram لاستقبال إشعارات الطلبات الجديدة
+                  </p>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <Label htmlFor="telegram_bot_token" className="arabic-text">رمز بوت Telegram</Label>
+                    <Input
+                      id="telegram_bot_token"
+                      type="password"
+                      value={getSetting("telegram_bot_token")}
+                      onChange={(e) => handleInputChange("telegram_bot_token", e.target.value)}
+                      placeholder="Bot Token من BotFather"
+                      className="font-mono"
+                    />
+                    <p className="text-xs text-muted-foreground mt-1 arabic-text">
+                      احصل على الرمز من @BotFather في Telegram
+                    </p>
+                  </div>
+
+                  <div>
+                    <Label htmlFor="telegram_chat_id" className="arabic-text">معرف المحادثة</Label>
+                    <Input
+                      id="telegram_chat_id"
+                      value={getSetting("telegram_chat_id")}
+                      onChange={(e) => handleInputChange("telegram_chat_id", e.target.value)}
+                      placeholder="Chat ID أو User ID"
+                      className="font-mono"
+                    />
+                    <p className="text-xs text-muted-foreground mt-1 arabic-text">
+                      معرف المحادثة الذي سيتم إرسال الإشعارات إليه
+                    </p>
+                  </div>
+
+                  <div className="flex gap-2">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={testTelegramBot}
+                      disabled={!getSetting("telegram_bot_token") || !getSetting("telegram_chat_id") || isTestingBot}
+                      className="arabic-text"
+                    >
+                      {isTestingBot ? (
+                        <>
+                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                          جاري الاختبار...
+                        </>
+                      ) : (
+                        <>
+                          <Send className="w-4 h-4 mr-2" />
+                          اختبار البوت
+                        </>
+                      )}
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
