@@ -2,6 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { generateToken, requireAdmin, type AuthRequest } from "./auth";
+import { telegramService } from "./telegram-service";
 import { loginSchema, insertProductSchema, insertOrderSchema, insertCustomerActivitySchema, insertStoreSettingSchema } from "@shared/schema";
 import { z } from "zod";
 
@@ -206,6 +207,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const validatedData = insertOrderSchema.parse(req.body);
       const order = await storage.createOrder(validatedData);
+      
+      // Send Telegram notification for new order
+      try {
+        await telegramService.sendOrderNotification(order);
+      } catch (telegramError) {
+        console.error('Failed to send Telegram notification:', telegramError);
+        // Don't fail the order creation if Telegram fails
+      }
       
       // Clear the cart after successful order
       await storage.clearCart(validatedData.sessionId);
