@@ -1,137 +1,83 @@
-# Watch & Perfume E-commerce Store
+# Arabic E-commerce Platform - سنتر المستودع للساعات والعطور
 
-## Overview
+## Project Overview
+A comprehensive Arabic e-commerce website for "سنتر المستودع للساعات والعطور" (Center Warehouse for Watches and Perfumes) featuring a modern professional interface for customers to shop watches and perfumes, plus a complete admin dashboard for store management.
 
-This is a full-stack e-commerce application for selling watches and perfumes, built with a modern tech stack. The application features a React frontend with TypeScript, an Express.js backend, PostgreSQL database with Drizzle ORM, and includes both customer-facing and admin interfaces. The store is designed for Arabic-speaking customers with bilingual support.
+## Recent Achievements (January 2025)
+✅ **Complete Telegram Bot Integration**
+- Automatic order notifications in Arabic sent to Telegram
+- Admin configuration panel for bot token and chat ID
+- Real-time test functionality to verify bot settings
+- Error handling with detailed Arabic messages
+- Integration with order creation workflow
 
-## System Architecture
+✅ **Advanced Analytics & Visitor Tracking**
+- Country-based visitor analytics with IP geolocation
+- Real-time visitor statistics and daily counts
+- Admin dashboard with visitor insights
+- Activity logging for customer behavior
 
-### Frontend Architecture
-- **Framework**: React 18 with TypeScript
-- **Build Tool**: Vite for fast development and optimized production builds
-- **UI Library**: Shadcn/ui components with Radix UI primitives
-- **Styling**: Tailwind CSS with custom Arabic typography support
-- **State Management**: TanStack React Query for server state management
-- **Routing**: Wouter for lightweight client-side routing
-- **Forms**: React Hook Form with Zod validation
+✅ **Dynamic Currency System**
+- Custom USD exchange rate management (default: 1500 IQD per USD)
+- Applied across all financial reports and displays
+- Admin configurable through settings panel
 
-### Backend Architecture
-- **Runtime**: Node.js with TypeScript
-- **Framework**: Express.js with middleware for authentication and logging
-- **Database**: PostgreSQL with Neon serverless connection
-- **ORM**: Drizzle ORM with TypeScript-first schema definitions
-- **Authentication**: JWT-based admin authentication
-- **External Services**: Telegram Bot API for order notifications
+## Current System Features
 
-### Deployment Strategy
-- **Platform**: Replit with autoscale deployment
-- **Build Process**: Vite builds frontend to `dist/public`, esbuild bundles server
-- **Database**: Neon PostgreSQL serverless database
-- **Environment**: Development and production configurations with proper NODE_ENV handling
+### Customer Features
+- Bilingual Arabic/English product browsing
+- Advanced cart system with session persistence
+- Real-time order tracking
+- Mobile-responsive design
+- Visitor analytics tracking
 
-## Key Components
+### Admin Features
+- Complete product and category management
+- Order management with status updates
+- Financial reporting with custom exchange rates
+- Telegram Bot notifications for new orders
+- Visitor analytics dashboard
+- Store customization (colors, branding, policies)
 
-### Database Schema
-- **Users**: Admin authentication with roles
-- **Categories**: Product categorization with Arabic/English names
-- **Products**: Detailed product information with multilingual support
-- **Cart Items**: Session-based shopping cart
-- **Orders**: Customer orders with status tracking
-- **Store Settings**: Configurable store parameters
-- **Customer Activity**: Analytics and behavior tracking
-- **Visitor Stats**: Website traffic monitoring
+## Technical Architecture
+- **Frontend**: React + TypeScript + Tailwind CSS
+- **Backend**: Express.js + Node.js
+- **Database**: PostgreSQL with Drizzle ORM
+- **Authentication**: JWT-based admin system
+- **Integrations**: Telegram Bot API
+- **Analytics**: Custom visitor tracking system
 
-### Authentication System
-- JWT-based admin authentication
-- Session-based customer cart management
-- Role-based access control for admin features
-- Protected admin routes with middleware
+## Admin Access
+- URL: `/admin`
+- Username: `admin`
+- Password: `hello`
 
-### E-commerce Features
-- Product catalog with categories and search
-- Shopping cart with session persistence
-- Order placement and management
-- Admin dashboard for inventory and order management
-- Customer activity tracking and analytics
-- Store configuration management
+## Telegram Bot Configuration
+**Location**: Admin Settings → معلومات المتجر → إعدادات بوت Telegram
 
-### UI/UX Design
-- Responsive design optimized for mobile and desktop
-- Arabic-first design with RTL support
-- Dark/light theme support
-- Modern component library with consistent styling
-- Accessibility features with proper ARIA labels
+**Required Settings**:
+1. **Bot Token**: Get from @BotFather on Telegram
+2. **Chat ID**: Your Telegram user/group ID for notifications
 
-## Data Flow
+**Features**:
+- Automatic Arabic notifications for new orders
+- Test functionality to verify configuration
+- Order details include customer info, products, and totals
 
-### Customer Journey
-1. **Product Discovery**: Browse categories, search products, view details
-2. **Cart Management**: Add/remove items, update quantities
-3. **Order Placement**: Provide customer information, confirm order
-4. **Order Tracking**: Receive confirmation, track status updates
-
-### Admin Workflow
-1. **Authentication**: Login to admin dashboard
-2. **Product Management**: Create, edit, delete products and categories
-3. **Order Processing**: View orders, update status, manage fulfillment
-4. **Analytics**: Monitor sales, customer activity, and store performance
-5. **Configuration**: Manage store settings, telegram notifications
-
-### Data Storage
-- **Session Management**: Browser localStorage for cart persistence
-- **Database Operations**: CRUD operations through Drizzle ORM
-- **File Storage**: Image URLs stored in database (external hosting assumed)
-- **Analytics**: Customer activities logged for reporting
-
-## External Dependencies
-
-### Core Dependencies
-- **@neondatabase/serverless**: PostgreSQL database connection
-- **drizzle-orm**: Type-safe database ORM
-- **@tanstack/react-query**: Server state management
-- **@radix-ui/react-***: Accessible UI component primitives
-- **tailwindcss**: Utility-first CSS framework
-- **node-telegram-bot-api**: Telegram notifications
-
-### Development Tools
-- **tsx**: TypeScript execution for development
-- **esbuild**: Fast JavaScript bundler for production
-- **vite**: Frontend build tool and dev server
-- **drizzle-kit**: Database migration and schema management
-
-### Authentication & Security
-- **jsonwebtoken**: JWT token management
-- **bcryptjs**: Password hashing
-- **zod**: Runtime type validation
-
-## Deployment Strategy
-
-### Development Environment
-- **Command**: `npm run dev` starts both frontend and backend
-- **Hot Reload**: Vite HMR for frontend, tsx for backend auto-restart
-- **Database**: Connects to Neon PostgreSQL via DATABASE_URL
-- **Port**: Application runs on port 5000
-
-### Production Build
-- **Frontend**: Vite builds React app to `dist/public`
-- **Backend**: esbuild bundles Express server to `dist/index.js`
-- **Database**: Drizzle migrations applied via `npm run db:push`
-- **Deployment**: Replit autoscale with proper NODE_ENV=production
-
-### Environment Configuration
-- **DATABASE_URL**: PostgreSQL connection string (required)
-- **JWT_SECRET**: Token signing secret (defaults provided for development)
-- **NODE_ENV**: Environment flag for production optimizations
-
-## Changelog
-
-```
-Changelog:
-- June 13, 2025. Initial setup
-```
+## Key Business Information
+- **Store Name**: سنتر المستودع للساعات والعطور
+- **Address**: الرمادي المستودع قرب مول الستي سنتر
+- **Phones**: 07813961800, 07810125388
+- **Specialties**: Watches (ساعات) and Perfumes (عطور)
 
 ## User Preferences
+- Communication in Arabic for business context
+- Focus on professional, modern design
+- Emphasis on mobile responsiveness
+- Real-time notifications and analytics priority
 
-```
-Preferred communication style: Simple, everyday language.
-```
+## Next Development Priorities
+1. Enhanced product search and filtering
+2. Customer wishlist functionality
+3. Advanced inventory management
+4. Multi-payment gateway integration

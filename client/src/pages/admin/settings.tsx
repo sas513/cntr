@@ -84,17 +84,8 @@ export default function AdminSettings() {
       );
       await Promise.all(promises);
       
-      // Then test the bot using fetch with proper auth
-      const token = localStorage.getItem('adminToken');
-      const response = await fetch("/api/telegram/test", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`,
-        },
-      });
-      
-      const testResult = await response.json();
+      // Then test the bot using apiRequest
+      const testResult = await apiRequest("/api/telegram/test", "POST");
       
       if (testResult.success) {
         toast({
