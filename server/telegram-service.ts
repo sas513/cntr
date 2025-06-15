@@ -19,9 +19,18 @@ class TelegramService {
       const token = botTokenSetting?.value;
       const chatId = chatIdSetting?.value;
 
+      console.log('Telegram settings check:', {
+        tokenExists: !!token,
+        chatIdExists: !!chatId,
+        tokenLength: token?.length || 0
+      });
+
       if (!token || !chatId) {
-        console.log('Telegram bot not configured - missing bot token or chat ID in settings');
-        return false;
+        throw new Error('إعدادات البوت غير مكتملة - يجب إدخال رمز البوت ومعرف المحادثة');
+      }
+
+      if (!token.includes(':')) {
+        throw new Error('رمز البوت غير صحيح - يجب أن يحتوي على : في الوسط');
       }
 
       this.bot = new TelegramBot(token, { polling: false });
@@ -30,7 +39,7 @@ class TelegramService {
       return true;
     } catch (error) {
       console.error('Failed to initialize Telegram bot:', error);
-      return false;
+      throw error;
     }
   }
 

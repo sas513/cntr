@@ -84,28 +84,38 @@ export default function AdminSettings() {
       );
       await Promise.all(promises);
       
-      // Then test the bot
+      // Then test the bot using fetch with proper auth
+      const token = localStorage.getItem('adminToken');
       const response = await fetch("/api/telegram/test", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
         },
       });
       
-      const result = await response.json();
+      const testResult = await response.json();
       
-      if (result.success) {
+      if (testResult.success) {
         toast({
           title: "نجح الاختبار",
           description: "تم إرسال رسالة اختبار بنجاح إلى Telegram",
         });
       } else {
-        throw new Error(result.message || "فشل في إرسال الرسالة");
+        throw new Error(testResult.message || "فشل في إرسال الرسالة");
       }
-    } catch (error) {
+    } catch (error: any) {
+      let errorMessage = "تعذر إرسال رسالة اختبار. تحقق من الإعدادات.";
+      
+      if (error.message) {
+        errorMessage = error.message;
+      } else if (typeof error === 'string') {
+        errorMessage = error;
+      }
+
       toast({
         title: "فشل الاختبار",
-        description: "تعذر إرسال رسالة اختبار. تحقق من الإعدادات.",
+        description: errorMessage,
         variant: "destructive",
       });
       console.error("Telegram test error:", error);

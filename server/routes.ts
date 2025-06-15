@@ -364,7 +364,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json({ success: true, message: 'Test message sent successfully' });
     } catch (error) {
       console.error('Failed to send test message:', error);
-      res.status(500).json({ success: false, message: 'Failed to send test message' });
+      
+      // Return more detailed error message
+      let errorMessage = 'Failed to send test message';
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+      
+      res.status(500).json({ 
+        success: false, 
+        message: errorMessage,
+        details: error instanceof Error ? error.message : 'Unknown error'
+      });
     }
   });
 
