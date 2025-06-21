@@ -38,6 +38,23 @@ interface Theme {
 
 const themes: Theme[] = [
   {
+    id: "default-original",
+    name: "Original Classic",
+    nameAr: "الثيم الأساسي",
+    description: "The original website theme - Classic blue design",
+    descriptionAr: "الثيم الأصلي للموقع - التصميم الأزرق الكلاسيكي",
+    colors: {
+      primary: "#1B365D",
+      secondary: "#F4A460",
+      accent: "#FF6B35",
+      background: "#F5F7FA",
+      text: "#1B365D"
+    },
+    icon: <Star className="w-6 h-6" />,
+    preview: "linear-gradient(135deg, #1B365D, #F4A460, #FF6B35)",
+    category: "أساسي"
+  },
+  {
     id: "royal-blue",
     name: "Royal Blue",
     nameAr: "الأزرق الملكي",
@@ -184,6 +201,7 @@ export default function ThemeGallery() {
   };
 
   const categories = [
+    { id: "أساسي", name: "أساسي", nameEn: "Original" },
     { id: "classic", name: "كلاسيكي", nameEn: "Classic" },
     { id: "luxury", name: "فاخر", nameEn: "Luxury" }, 
     { id: "warm", name: "دافئ", nameEn: "Warm" },
