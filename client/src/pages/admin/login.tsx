@@ -71,89 +71,83 @@ export default function AdminLogin() {
         }}></div>
         
         <div className="relative z-10">
-          {/* Main Title */}
-          <div className="mb-12">
-            <h1 className="text-5xl font-bold arabic-text mb-4 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+          <div className="mb-8">
+            <h1 className="text-4xl font-bold arabic-text mb-3 text-white">
               سنتر المستودع
             </h1>
-            <p className="text-xl arabic-text text-gray-300 mb-2">للساعات والعطور</p>
-            <p className="text-lg arabic-text text-gray-400">لوحة التحكم الإدارية المتقدمة</p>
+            <p className="text-lg arabic-text text-blue-300 mb-1">للساعات والعطور</p>
+            <p className="text-sm arabic-text text-blue-200">لوحة التحكم الإدارية المتقدمة</p>
           </div>
 
-          {/* Features Grid */}
-          <div className="grid grid-cols-1 gap-6">
-            <div className="space-y-4">
-              <h2 className="text-2xl font-semibold arabic-text text-blue-300 mb-6">الخدمات والميزات</h2>
-              
-              {/* Core Features */}
-              <div className="grid grid-cols-2 gap-4">
-                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20">
-                  <div className="flex items-center gap-3 mb-2">
-                    <Package className="w-6 h-6 text-blue-400" />
-                    <span className="font-medium arabic-text">إدارة المنتجات</span>
-                  </div>
-                  <p className="text-sm text-gray-300 arabic-text">إضافة وتعديل المنتجات والفئات</p>
+          <div className="space-y-5">
+            <h2 className="text-xl font-semibold arabic-text text-blue-300 mb-4">الخدمات والميزات</h2>
+            
+            <div className="grid grid-cols-2 gap-3">
+              <div className="bg-blue-500/20 backdrop-blur-sm rounded-lg p-3 border border-blue-400/30">
+                <div className="flex items-center gap-2 mb-1">
+                  <Package className="w-5 h-5 text-blue-300" />
+                  <span className="font-medium arabic-text text-blue-100 text-sm">إدارة المنتجات</span>
                 </div>
-
-                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20">
-                  <div className="flex items-center gap-3 mb-2">
-                    <ShoppingCart className="w-6 h-6 text-green-400" />
-                    <span className="font-medium arabic-text">إدارة الطلبات</span>
-                  </div>
-                  <p className="text-sm text-gray-300 arabic-text">متابعة ومعالجة طلبات العملاء</p>
-                </div>
-
-                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20">
-                  <div className="flex items-center gap-3 mb-2">
-                    <BarChart3 className="w-6 h-6 text-purple-400" />
-                    <span className="font-medium arabic-text">التقارير المالية</span>
-                  </div>
-                  <p className="text-sm text-gray-300 arabic-text">إحصائيات مفصلة ومتعددة العملات</p>
-                </div>
-
-                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20">
-                  <div className="flex items-center gap-3 mb-2">
-                    <Users className="w-6 h-6 text-yellow-400" />
-                    <span className="font-medium arabic-text">إدارة العملاء</span>
-                  </div>
-                  <p className="text-sm text-gray-300 arabic-text">متابعة العملاء وسجل النشاطات</p>
-                </div>
+                <p className="text-xs text-blue-200 arabic-text">إضافة وتعديل المنتجات والفئات</p>
               </div>
 
-              {/* Advanced Features */}
-              <div className="mt-6">
-                <h3 className="text-lg font-medium arabic-text text-purple-300 mb-4">الميزات المتقدمة</h3>
-                <div className="space-y-3">
-                  <div className="flex items-center gap-3">
-                    <MessageSquare className="w-5 h-5 text-blue-400" />
-                    <span className="arabic-text">إشعارات Telegram التلقائية</span>
-                    <Badge className="bg-green-500/20 text-green-300 border-green-500/30">متاح</Badge>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <Globe className="w-5 h-5 text-green-400" />
-                    <span className="arabic-text">تتبع الزوار بالدول</span>
-                    <Badge className="bg-green-500/20 text-green-300 border-green-500/30">فعال</Badge>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <Lock className="w-5 h-5 text-purple-400" />
-                    <span className="arabic-text">نظام حماية متعدد الطبقات</span>
-                    <Badge className="bg-green-500/20 text-green-300 border-green-500/30">آمن</Badge>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <Smartphone className="w-5 h-5 text-pink-400" />
-                    <span className="arabic-text">تصميم متجاوب للجوال</span>
-                    <Badge className="bg-green-500/20 text-green-300 border-green-500/30">محسن</Badge>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <Palette className="w-5 h-5 text-orange-400" />
-                    <span className="arabic-text">تخصيص الألوان والصور</span>
-                    <Badge className="bg-green-500/20 text-green-300 border-green-500/30">ديناميكي</Badge>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <TrendingUp className="w-5 h-5 text-red-400" />
-                    <span className="arabic-text">تحليلات الأداء المتقدمة</span>
-                    <Badge className="bg-green-500/20 text-green-300 border-green-500/30">شامل</Badge>
-                  </div>
+              <div className="bg-blue-500/20 backdrop-blur-sm rounded-lg p-3 border border-blue-400/30">
+                <div className="flex items-center gap-2 mb-1">
+                  <ShoppingCart className="w-5 h-5 text-blue-300" />
+                  <span className="font-medium arabic-text text-blue-100 text-sm">إدارة الطلبات</span>
+                </div>
+                <p className="text-xs text-blue-200 arabic-text">متابعة ومعالجة طلبات العملاء</p>
+              </div>
+
+              <div className="bg-blue-500/20 backdrop-blur-sm rounded-lg p-3 border border-blue-400/30">
+                <div className="flex items-center gap-2 mb-1">
+                  <BarChart3 className="w-5 h-5 text-blue-300" />
+                  <span className="font-medium arabic-text text-blue-100 text-sm">التقارير المالية</span>
+                </div>
+                <p className="text-xs text-blue-200 arabic-text">إحصائيات مفصلة ومتعددة العملات</p>
+              </div>
+
+              <div className="bg-blue-500/20 backdrop-blur-sm rounded-lg p-3 border border-blue-400/30">
+                <div className="flex items-center gap-2 mb-1">
+                  <Users className="w-5 h-5 text-blue-300" />
+                  <span className="font-medium arabic-text text-blue-100 text-sm">إدارة العملاء</span>
+                </div>
+                <p className="text-xs text-blue-200 arabic-text">متابعة العملاء وسجل النشاطات</p>
+              </div>
+            </div>
+
+            <div className="mt-4">
+              <h3 className="text-base font-medium arabic-text text-blue-300 mb-3">الميزات المتقدمة</h3>
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <MessageSquare className="w-4 h-4 text-blue-300" />
+                  <span className="arabic-text text-blue-100 text-sm">إشعارات Telegram التلقائية</span>
+                  <Badge className="bg-blue-400/30 text-blue-200 border-blue-400/50 text-xs">متاح</Badge>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Globe className="w-4 h-4 text-blue-300" />
+                  <span className="arabic-text text-blue-100 text-sm">تتبع الزوار بالدول</span>
+                  <Badge className="bg-blue-400/30 text-blue-200 border-blue-400/50 text-xs">فعال</Badge>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Lock className="w-4 h-4 text-blue-300" />
+                  <span className="arabic-text text-blue-100 text-sm">نظام حماية متعدد الطبقات</span>
+                  <Badge className="bg-blue-400/30 text-blue-200 border-blue-400/50 text-xs">آمن</Badge>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Smartphone className="w-4 h-4 text-blue-300" />
+                  <span className="arabic-text text-blue-100 text-sm">تصميم متجاوب للجوال</span>
+                  <Badge className="bg-blue-400/30 text-blue-200 border-blue-400/50 text-xs">محسن</Badge>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Palette className="w-4 h-4 text-blue-300" />
+                  <span className="arabic-text text-blue-100 text-sm">تخصيص الألوان والصور</span>
+                  <Badge className="bg-blue-400/30 text-blue-200 border-blue-400/50 text-xs">ديناميكي</Badge>
+                </div>
+                <div className="flex items-center gap-2">
+                  <TrendingUp className="w-4 h-4 text-blue-300" />
+                  <span className="arabic-text text-blue-100 text-sm">تحليلات الأداء المتقدمة</span>
+                  <Badge className="bg-blue-400/30 text-blue-200 border-blue-400/50 text-xs">شامل</Badge>
                 </div>
               </div>
             </div>
@@ -161,36 +155,35 @@ export default function AdminLogin() {
         </div>
       </div>
 
-      {/* Right Side - Login Form */}
-      <div className="w-full lg:w-1/2 xl:w-2/5 flex items-center justify-center p-8 bg-white/5 backdrop-blur-sm">
-        <Card className="w-full max-w-md bg-white/10 backdrop-blur-md border-white/20 shadow-2xl">
-          <CardHeader className="text-center space-y-4">
-            <div className="mx-auto w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-lg">
-              <Shield className="w-10 h-10 text-white" />
+      <div className="w-full lg:w-1/2 xl:w-2/5 flex items-center justify-center p-6 bg-blue-900/20 backdrop-blur-sm">
+        <Card className="w-full max-w-md bg-blue-500/20 backdrop-blur-md border-blue-400/30 shadow-2xl">
+          <CardHeader className="text-center space-y-3">
+            <div className="mx-auto w-16 h-16 bg-blue-500 rounded-full flex items-center justify-center shadow-lg">
+              <Shield className="w-8 h-8 text-white" />
             </div>
             <div>
-              <CardTitle className="text-3xl font-bold arabic-text text-white">تسجيل دخول الإدارة</CardTitle>
-              <p className="text-gray-300 arabic-text mt-2">
-                ادخل بيانات الإدارة للوصول إلى لوحة التحكم المتقدمة
+              <CardTitle className="text-2xl font-bold arabic-text text-white">تسجيل دخول الإدارة</CardTitle>
+              <p className="text-blue-200 arabic-text mt-1 text-sm">
+                ادخل بيانات الإدارة للوصول إلى لوحة التحكم
               </p>
             </div>
           </CardHeader>
           
           <CardContent>
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                 <FormField
                   control={form.control}
                   name="username"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="arabic-text text-white font-medium">اسم المستخدم</FormLabel>
+                      <FormLabel className="arabic-text text-blue-100 font-medium text-sm">اسم المستخدم</FormLabel>
                       <FormControl>
                         <Input
                           {...field}
                           placeholder="ادخل اسم المستخدم"
                           disabled={loginMutation.isPending}
-                          className="arabic-text bg-white/10 border-white/20 text-white placeholder:text-gray-400 focus:bg-white/20 transition-all"
+                          className="arabic-text bg-blue-500/20 border-blue-400/30 text-white placeholder:text-blue-300 focus:bg-blue-500/30 focus:border-blue-300 transition-all"
                         />
                       </FormControl>
                       <FormMessage />
@@ -203,7 +196,7 @@ export default function AdminLogin() {
                   name="password"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="arabic-text text-white font-medium">كلمة المرور</FormLabel>
+                      <FormLabel className="arabic-text text-blue-100 font-medium text-sm">كلمة المرور</FormLabel>
                       <FormControl>
                         <div className="relative">
                           <Input
@@ -211,17 +204,17 @@ export default function AdminLogin() {
                             type={showPassword ? "text" : "password"}
                             placeholder="ادخل كلمة المرور"
                             disabled={loginMutation.isPending}
-                            className="arabic-text bg-white/10 border-white/20 text-white placeholder:text-gray-400 focus:bg-white/20 transition-all pr-12"
+                            className="arabic-text bg-blue-500/20 border-blue-400/30 text-white placeholder:text-blue-300 focus:bg-blue-500/30 focus:border-blue-300 transition-all pr-10"
                           />
                           <button
                             type="button"
                             onClick={() => setShowPassword(!showPassword)}
-                            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
+                            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-blue-300 hover:text-white transition-colors"
                           >
                             {showPassword ? (
-                              <EyeOff className="w-5 h-5" />
+                              <EyeOff className="w-4 h-4" />
                             ) : (
-                              <Eye className="w-5 h-5" />
+                              <Eye className="w-4 h-4" />
                             )}
                           </button>
                         </div>
@@ -233,7 +226,7 @@ export default function AdminLogin() {
 
                 <Button 
                   type="submit" 
-                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium py-3 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl" 
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl" 
                   disabled={loginMutation.isPending}
                 >
                   {loginMutation.isPending ? (
@@ -248,15 +241,15 @@ export default function AdminLogin() {
               </form>
             </Form>
 
-            <div className="mt-8 text-center">
-              <p className="text-sm text-gray-400 arabic-text">
+            <div className="mt-6 text-center">
+              <p className="text-xs text-blue-200 arabic-text">
                 خاص بإدارة المتجر فقط - نظام محمي بالكامل
               </p>
-              <div className="flex justify-center mt-4 gap-2">
-                <Badge className="bg-green-500/20 text-green-300 border-green-500/30">
+              <div className="flex justify-center mt-3 gap-2">
+                <Badge className="bg-blue-400/30 text-blue-200 border-blue-400/50 text-xs">
                   آمن 100%
                 </Badge>
-                <Badge className="bg-blue-500/20 text-blue-300 border-blue-500/30">
+                <Badge className="bg-blue-400/30 text-blue-200 border-blue-400/50 text-xs">
                   مشفر
                 </Badge>
               </div>
