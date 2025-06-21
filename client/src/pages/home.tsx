@@ -60,7 +60,7 @@ export default function Home() {
                 </Button>
               </Link>
               <Link href="/offers">
-                <Button size="lg" variant="outline" className="w-full sm:w-auto border-white text-white hover:bg-white hover:text-primary">
+                <Button size="lg" variant="outline" className="w-full sm:w-auto border-white text-[#111112] hover:bg-white hover:text-primary">
                   العروض الخاصة
                 </Button>
               </Link>
