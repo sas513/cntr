@@ -95,8 +95,7 @@ A comprehensive Arabic e-commerce website for "سنتر المستودع للس�
 
 ## Admin Access
 - URL: `/admin/login`
-- Username: `admin`
-- Password: `hello`
+- يجب إنشاء حساب جديد عند أول استخدام
 
 ## Telegram Bot Configuration
 **Location**: Admin Settings → معلومات المتجر → إعدادات بوت Telegram
