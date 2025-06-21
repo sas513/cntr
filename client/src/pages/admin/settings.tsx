@@ -462,7 +462,7 @@ export default function AdminSettings() {
                   </div>
 
                   <div>
-                    <Label htmlFor="perfumes_category_image" className="arabic-text">صورة فئة العطور</Label>
+                    <Label htmlFor="perfumes_category_image" className="arabic-text">صورة فئة </Label>
                     <Input
                       id="perfumes_category_image"
                       value={getSetting("perfumes_category_image")}
