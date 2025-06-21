@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import ProductCard from "@/components/product-card";
+import CurrentTime from "@/components/current-time";
 import { Gem, Clock, Truck, Shield, Headphones, RotateCcw, Star } from "lucide-react";
 import { Link } from "wouter";
 import type { Product, Category, StoreSetting } from "@shared/schema";
@@ -46,6 +47,11 @@ export default function Home() {
         ></div>
         
         <div className="relative container mx-auto px-3 sm:px-4 py-12 sm:py-16 md:py-20">
+          {/* Current Time Display - Top Right */}
+          <div className="absolute top-4 right-4 z-10">
+            <CurrentTime />
+          </div>
+          
           <div className="max-w-2xl animate-fade-in text-center sm:text-right">
             <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 leading-tight arabic-text">
               {heroTitle}

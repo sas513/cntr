@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import AdminSidebar from "@/components/admin/sidebar";
 import StatsCard from "@/components/admin/stats-card";
+import CurrentTime from "@/components/current-time";
 import { 
   DollarSign, 
   ShoppingBag, 
@@ -117,9 +118,14 @@ export default function AdminDashboard() {
           {/* Header */}
           <div className="mb-6 sm:mb-8">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-              <div>
-                <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold arabic-text">لوحة التحكم</h1>
-                <p className="text-sm sm:text-base text-muted-foreground arabic-text">سنتر المستودع للساعات والعطور</p>
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                <div>
+                  <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold arabic-text">لوحة التحكم</h1>
+                  <p className="text-sm sm:text-base text-muted-foreground arabic-text">سنتر المستودع للساعات والعطور</p>
+                </div>
+                <div className="hidden sm:block">
+                  <CurrentTime />
+                </div>
               </div>
               <div className="flex items-center gap-3 sm:gap-4">
                 <Button 
