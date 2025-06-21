@@ -226,7 +226,7 @@ export default function Home() {
                 <p className="text-2xl mb-8 opacity-95 arabic-text font-medium leading-relaxed text-[#dfe4ed]">
                   "منتجات عالية الجودة وخدمة عملاء ممتازة. أنصح بشدة بالتسوق من هنا"
                 </p>
-                <div className="flex items-center justify-center gap-4">
+                <div className="flex items-center justify-center gap-4 text-[#dfe5f0]">
                   <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center text-white font-bold text-xl">
                     <span>أ</span>
                   </div>
