@@ -9,17 +9,40 @@ import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   
-  // Admin authentication routes (temporarily disabled rate limiting)
-  app.post('/api/admin/login', async (req, res) => {
+  // Admin authentication routes with extra rate limiting
+  app.post('/api/admin/login', 
+    customRateLimit(
+      15 * 60 * 1000, // 15 minutes
+      3, // Max 3 login attempts per window per IP
+      "تم تجاوز عدد محاولات تسجيل الدخول المسموح. حاول مرة أخرى بعد 15 دقيقة."
+    ),
+    async (req, res) => {
     try {
+      const clientIP = req.ip || req.connection.remoteAddress || 'unknown';
+      
+      // Check if IP is blocked
+      if (isBlocked(clientIP)) {
+        return res.status(429).json({ 
+          message: "تم حظر عنوان IP هذا مؤقتاً بسبب محاولات تسجيل دخول متعددة فاشلة. المحاولة مرة أخرى بعد 15 دقيقة." 
+        });
+      }
+
       const { username, password } = loginSchema.parse(req.body);
       
       const admin = await storage.authenticateAdmin(username, password);
       if (!admin) {
+        // Record failed attempt
+        recordFailedAttempt(clientIP);
         return res.status(401).json({ message: "اسم المستخدم أو كلمة المرور غير صحيحة" });
       }
+
+      // Clear failed attempts on successful login
+      clearFailedAttempts(clientIP);
       
       const token = generateToken(admin.id, admin.username);
+      
+      // Log successful login for security monitoring
+      console.log(`Admin login successful: ${admin.username} from IP: ${clientIP} at ${new Date().toISOString()}`);
       
       res.json({ token, user: { id: admin.id, username: admin.username, role: admin.role } });
     } catch (error) {
