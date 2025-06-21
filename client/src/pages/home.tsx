@@ -280,7 +280,7 @@ export default function Home() {
       </section>
       {/* Newsletter */}
       <section className="py-16 bg-gradient-to-r from-secondary to-accent text-white">
-        <div className="container mx-auto px-4 text-center">
+        <div className="container mx-auto px-4 text-center text-[#171616]">
           <h2 className="text-4xl font-bold mb-4 arabic-text">اشترك معنا الان </h2>
           <p className="text-xl mb-8 opacity-90 arabic-text">كن أول من يعلم بالمنتجات الجديدة والعروض الخاصة</p>
           <div className="max-w-md mx-auto">
