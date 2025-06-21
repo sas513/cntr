@@ -71,13 +71,6 @@ export function clearAllFailedAttempts(): void {
 
 export function requireAdmin(req: AuthRequest, res: Response, next: NextFunction) {
   const clientIP = req.ip || req.connection.remoteAddress || 'unknown';
-  
-  // Check if IP is blocked
-  if (isBlocked(clientIP)) {
-    return res.status(429).json({ 
-      message: "تم حظر عنوان IP هذا مؤقتاً بسبب محاولات تسجيل دخول متعددة فاشلة" 
-    });
-  }
 
   const authHeader = req.headers.authorization;
   const token = authHeader?.startsWith("Bearer ") ? authHeader.slice(7) : null;

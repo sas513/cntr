@@ -74,39 +74,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Admin authentication routes with extra rate limiting
-  app.post('/api/admin/login', 
-    customRateLimit(
-      15 * 60 * 1000, // 15 minutes
-      3, // Max 3 login attempts per window per IP
-      "تم تجاوز عدد محاولات تسجيل الدخول المسموح. حاول مرة أخرى بعد 15 دقيقة."
-    ),
-    async (req, res) => {
+  // Admin authentication routes  
+  app.post('/api/admin/login', async (req, res) => {
     try {
       const clientIP = req.ip || req.connection.remoteAddress || 'unknown';
       
-      // Check if IP is blocked
-      if (isBlocked(clientIP)) {
-        return res.status(429).json({ 
-          message: "تم حظر عنوان IP هذا مؤقتاً بسبب محاولات تسجيل دخول متعددة فاشلة. المحاولة مرة أخرى بعد 15 دقيقة." 
-        });
-      }
-
       const { username, password } = loginSchema.parse(req.body);
       
       const admin = await storage.authenticateAdmin(username, password);
       if (!admin) {
-        // Record failed attempt
-        recordFailedAttempt(clientIP);
         return res.status(401).json({ message: "اسم المستخدم أو كلمة المرور غير صحيحة" });
       }
 
-      // Clear failed attempts on successful login
+      // Clear any previous blocks on successful login
       clearFailedAttempts(clientIP);
       
       const token = generateToken(admin.id, admin.username);
       
-      // Log successful login for security monitoring
+      // Log successful login
       console.log(`Admin login successful: ${admin.username} from IP: ${clientIP} at ${new Date().toISOString()}`);
       
       res.json({ token, user: { id: admin.id, username: admin.username, role: admin.role } });
@@ -117,7 +102,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   app.post('/api/admin/logout', requireAdmin, async (req: AuthRequest, res) => {
-    res.json({ message: "تم تسجيل الخروج بنجاح" });
+    try {
+      const clientIP = req.ip || req.connection.remoteAddress || 'unknown';
+      
+      // Clear any IP blocks for this user on logout
+      clearFailedAttempts(clientIP);
+      
+      // Log successful logout
+      console.log(`Admin logout successful: ${req.admin?.username} from IP: ${clientIP} at ${new Date().toISOString()}`);
+      
+      res.json({ message: "تم تسجيل الخروج بنجاح" });
+    } catch (error) {
+      console.error('Logout error:', error);
+      res.status(500).json({ message: "حدث خطأ أثناء تسجيل الخروج" });
+    }
   });
 
   app.get('/api/admin/verify', requireAdmin, async (req: AuthRequest, res) => {
