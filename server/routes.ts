@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { generateToken, requireAdmin, type AuthRequest } from "./auth";
+import { generateToken, requireAdmin, isBlocked, recordFailedAttempt, clearFailedAttempts, type AuthRequest } from "./auth";
 import { telegramService } from "./telegram-service";
 import { loginSchema, insertProductSchema, insertOrderSchema, insertCustomerActivitySchema, insertStoreSettingSchema } from "@shared/schema";
 import { z } from "zod";
@@ -11,16 +11,35 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Admin authentication routes
   app.post('/api/admin/login', async (req, res) => {
     try {
+      const clientIP = req.ip || req.connection.remoteAddress || 'unknown';
+      
+      // Check if IP is blocked
+      if (isBlocked(clientIP)) {
+        return res.status(429).json({ 
+          message: "تم حظر عنوان IP هذا مؤقتاً بسبب محاولات تسجيل دخول متعددة فاشلة. المحاولة مرة أخرى بعد 15 دقيقة." 
+        });
+      }
+
       const { username, password } = loginSchema.parse(req.body);
       
       const admin = await storage.authenticateAdmin(username, password);
       if (!admin) {
+        // Record failed attempt
+        recordFailedAttempt(clientIP);
         return res.status(401).json({ message: "اسم المستخدم أو كلمة المرور غير صحيحة" });
       }
 
+      // Clear failed attempts on successful login
+      clearFailedAttempts(clientIP);
+      
       const token = generateToken(admin.id, admin.username);
+      
+      // Log successful login for security monitoring
+      console.log(`Admin login successful: ${admin.username} from IP: ${clientIP} at ${new Date().toISOString()}`);
+      
       res.json({ token, user: { id: admin.id, username: admin.username, role: admin.role } });
     } catch (error) {
+      console.error('Login error:', error);
       res.status(400).json({ message: "بيانات غير صحيحة" });
     }
   });
