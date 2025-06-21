@@ -133,7 +133,7 @@ export default function Home() {
             <Link href={`/products?category=${watchesCategory?.id}`}>
               <div className="relative group cursor-pointer overflow-hidden rounded-2xl shadow-lg">
                 <img 
-                  src="https://images.unsplash.com/photo-1524592094714-0f0654e20314?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600" 
+                  src={getSetting("watches_category_image") || "https://images.unsplash.com/photo-1524592094714-0f0654e20314?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600"} 
                   alt="مجموعة الساعات الفاخرة" 
                   className="w-full h-60 sm:h-72 md:h-80 object-cover group-hover:scale-110 transition-transform duration-500"
                 />
@@ -152,7 +152,7 @@ export default function Home() {
             <Link href={`/products?category=${perfumesCategory?.id}`}>
               <div className="relative group cursor-pointer overflow-hidden rounded-2xl shadow-lg">
                 <img 
-                  src="https://images.unsplash.com/photo-1541643600914-78b084683601?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600" 
+                  src={getSetting("perfumes_category_image") || "https://images.unsplash.com/photo-1541643600914-78b084683601?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600"} 
                   alt="مجموعة العطور الفاخرة" 
                   className="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-500"
                 />
@@ -222,19 +222,19 @@ export default function Home() {
                 name: "أحمد محمد",
                 location: "بغداد",
                 content: "منتجات عالية الجودة وخدمة عملاء ممتازة. أنصح بشدة بالتسوق من هنا",
-                image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100"
+                image: getSetting("customer1_image") || "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100"
               },
               {
                 name: "فاطمة علي",
                 location: "البصرة",
                 content: "تجربة تسوق رائعة، المنتجات أصلية والتوصيل سريع جداً",
-                image: "https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100"
+                image: getSetting("customer2_image") || "https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100"
               },
               {
                 name: "خالد حسن",
                 location: "أربيل",
                 content: "أسعار منافسة وجودة ممتازة، سأكون عميل دائم بإذن الله",
-                image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100"
+                image: getSetting("customer3_image") || "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100"
               }
             ].map((testimonial, index) => (
               <Card key={index} className="bg-white/10 backdrop-blur-lg border-white/20">

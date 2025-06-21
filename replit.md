@@ -35,6 +35,13 @@ A comprehensive Arabic e-commerce website for "سنتر المستودع للس�
 - Preserved admin account and store settings
 - Database ready for real customer data entry
 
+✅ **Dynamic Image Management System (January 21, 2025)**
+- Added "صور الموقع" tab in admin settings
+- All website images now manageable from admin panel
+- Includes category images, customer testimonials, and default product image
+- Dynamic integration with homepage and product pages
+- Default values set with current Unsplash images
+
 ## Current System Features
 
 ### Customer Features
