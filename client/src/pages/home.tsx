@@ -254,7 +254,7 @@ export default function Home() {
               }
             ].map((testimonial, index) => (
               <Card key={index} className="bg-white/10 backdrop-blur-lg border-white/20 hover:bg-white/15 transition-all duration-300">
-                <CardContent className="p-6">
+                <CardContent className="p-6 text-[#dfe3eb]">
                   <div className="flex justify-start text-yellow-400 text-lg mb-4">
                     {[...Array(5)].map((_, i) => (
                       <Star key={i} className="w-4 h-4 fill-current" />
