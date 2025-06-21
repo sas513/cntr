@@ -49,6 +49,19 @@ A comprehensive Arabic e-commerce website for "سنتر المستودع للس�
 - Admin access only available through direct URL: `/admin/login`
 - Clean customer experience without administrative distractions
 
+✅ **Enhanced Testimonials Design (January 21, 2025)**
+- Redesigned testimonials section with hierarchical layout
+- Hero testimonial prominently displayed with larger text and hover effects
+- Two supporting testimonials in balanced side-by-side layout
+- Added smooth transitions and interactive hover states
+- Improved visual flow and professional appearance
+
+✅ **Complete Special Offers Page (January 21, 2025)**
+- Created dedicated offers page with professional design
+- Automatic discount calculation and badge display
+- Linked "Special Offers" button to functional page
+- Responsive design with offer statistics and call-to-action sections
+
 ✅ **Fixed Account Creation Icon Visibility (January 21, 2025)**
 - Account creation button now permanently disappears after first user registration
 - Uses localStorage to maintain state across login/logout sessions

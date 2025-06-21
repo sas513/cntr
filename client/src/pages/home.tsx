@@ -218,14 +218,45 @@ export default function Home() {
             <p className="text-xl opacity-90 arabic-text">تجارب حقيقية من عملائنا الكرام</p>
           </div>
           
-          <div className="grid md:grid-cols-3 gap-8">
+          {/* Hero Testimonial */}
+          <div className="max-w-4xl mx-auto mb-12">
+            <Card className="bg-white/15 backdrop-blur-lg border-white/30 transform hover:scale-105 transition-all duration-300">
+              <CardContent className="p-8 text-center">
+                <div className="flex justify-center text-yellow-400 text-2xl mb-6">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-6 h-6 fill-current" />
+                  ))}
+                </div>
+                <p className="text-2xl mb-8 opacity-95 arabic-text font-medium leading-relaxed">
+                  "منتجات عالية الجودة وخدمة عملاء ممتازة. أنصح بشدة بالتسوق من هنا"
+                </p>
+                <div className="flex items-center justify-center gap-4">
+                  <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center text-white font-bold text-xl">
+                    {getSetting("customer1_image") ? (
+                      <img 
+                        src={getSetting("customer1_image")} 
+                        alt="أحمد محمد" 
+                        className="w-full h-full object-cover rounded-full"
+                        onError={(e) => {
+                          e.currentTarget.style.display = 'none';
+                        }}
+                      />
+                    ) : (
+                      <span>أ</span>
+                    )}
+                  </div>
+                  <div>
+                    <h4 className="text-lg font-bold arabic-text">أحمد محمد</h4>
+                    <p className="opacity-75 arabic-text">بغداد</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Side Testimonials */}
+          <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
             {[
-              {
-                name: "أحمد محمد",
-                location: "بغداد", 
-                content: "منتجات عالية الجودة وخدمة عملاء ممتازة. أنصح بشدة بالتسوق من هنا",
-                image: getSetting("customer1_image") || ""
-              },
               {
                 name: "فاطمة علي",
                 location: "البصرة",
@@ -234,21 +265,23 @@ export default function Home() {
               },
               {
                 name: "خالد حسن",
-                location: "أربيل",
+                location: "أربيل", 
                 content: "أسعار منافسة وجودة ممتازة، سأكون عميل دائم بإذن الله",
                 image: getSetting("customer3_image") || ""
               }
             ].map((testimonial, index) => (
-              <Card key={index} className="bg-white/10 backdrop-blur-lg border-white/20">
-                <CardContent className="p-6 text-center">
-                  <div className="flex justify-center text-yellow-400 text-xl mb-4">
+              <Card key={index} className="bg-white/10 backdrop-blur-lg border-white/20 hover:bg-white/15 transition-all duration-300">
+                <CardContent className="p-6">
+                  <div className="flex justify-start text-yellow-400 text-lg mb-4">
                     {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-5 h-5 fill-current" />
+                      <Star key={i} className="w-4 h-4 fill-current" />
                     ))}
                   </div>
-                  <p className="text-lg mb-6 opacity-90 arabic-text">"{testimonial.content}"</p>
-                  <div className="flex items-center justify-center gap-4">
-                    <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center text-white font-bold text-lg">
+                  <p className="text-base mb-6 opacity-90 arabic-text leading-relaxed">
+                    "{testimonial.content}"
+                  </p>
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white font-bold">
                       {testimonial.image ? (
                         <img 
                           src={testimonial.image} 
