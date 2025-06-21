@@ -25,6 +25,7 @@ import AdminOrders from "@/pages/admin/orders";
 import AdminCustomers from "@/pages/admin/customers";
 import AdminSettings from "@/pages/admin/settings";
 import AdminReports from "@/pages/admin/reports";
+import ThemeGallery from "@/pages/admin/theme-gallery";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -49,6 +50,7 @@ function Router() {
       <Route path="/admin/products" component={AdminProducts} />
       <Route path="/admin/orders" component={AdminOrders} />
       <Route path="/admin/customers" component={AdminCustomers} />
+      <Route path="/admin/themes" component={ThemeGallery} />
       <Route path="/admin/settings" component={AdminSettings} />
       <Route path="/admin/reports" component={AdminReports} />
       

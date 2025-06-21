@@ -7,7 +7,8 @@ import {
   Users, 
   Settings,
   Home,
-  LogOut 
+  LogOut,
+  Palette
 } from "lucide-react";
 import { Link, useLocation } from "wouter";
 
@@ -31,6 +32,11 @@ const navigationItems = [
     title: "العملاء",
     href: "/admin/customers",
     icon: Users,
+  },
+  {
+    title: "الثيمات والألوان",
+    href: "/admin/themes",
+    icon: Palette,
   },
   {
     title: "الإعدادات",

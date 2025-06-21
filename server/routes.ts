@@ -484,6 +484,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Admin theme application endpoint
+  app.post('/api/admin/settings', requireAdmin, async (req: AuthRequest, res) => {
+    try {
+      const { key, value } = req.body;
+      
+      if (!key || !value) {
+        return res.status(400).json({ message: "Key and value are required" });
+      }
+      
+      const setting = await storage.updateStoreSetting(key, value);
+      res.json(setting);
+    } catch (error) {
+      console.error('Error updating setting:', error);
+      res.status(500).json({ message: "Failed to update setting" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
