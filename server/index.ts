@@ -13,8 +13,8 @@ app.use(securityHeaders);
 
 // Apply rate limiting to all requests
 app.use(customRateLimit(
-  15 * 60 * 1000, // 15 minutes
-  200, // Max 200 requests per window per IP
+  5 * 60 * 1000, // 5 minutes window
+  1000, // Max 1000 requests per window per IP
   "تم تجاوز عدد الطلبات المسموح. حاول مرة أخرى لاحقاً."
 ));
 

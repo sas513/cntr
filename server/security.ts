@@ -3,6 +3,16 @@ import type { Request, Response, NextFunction } from "express";
 // Simple rate limiting implementation
 const requestCounts = new Map<string, { count: number; resetTime: number }>();
 
+// Clean up expired entries every 5 minutes
+setInterval(() => {
+  const now = Date.now();
+  for (const [ip, data] of requestCounts.entries()) {
+    if (now > data.resetTime) {
+      requestCounts.delete(ip);
+    }
+  }
+}, 5 * 60 * 1000);
+
 export function customRateLimit(windowMs: number, maxRequests: number, message: string) {
   return (req: Request, res: Response, next: NextFunction) => {
     const ip = req.ip || req.connection.remoteAddress || 'unknown';
@@ -22,6 +32,12 @@ export function customRateLimit(windowMs: number, maxRequests: number, message: 
     existing.count++;
     next();
   };
+}
+
+// Function to clear rate limiting for development
+export function clearRateLimit() {
+  requestCounts.clear();
+  console.log('Rate limiting cache cleared');
 }
 
 // Security headers middleware

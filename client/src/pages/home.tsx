@@ -253,7 +253,7 @@ export default function Home() {
                 content: "أسعار منافسة وجودة ممتازة، سأكون عميل دائم بإذن الله"
               }
             ].map((testimonial, index) => (
-              <Card key={index} className="bg-white/10 backdrop-blur-lg border-white/20 hover:bg-white/15 transition-all duration-300">
+              <Card key={index} className="rounded-lg border shadow-sm bg-white/10 backdrop-blur-lg border-white/20 hover:bg-white/15 transition-all duration-300 text-[#f0f1f2]">
                 <CardContent className="p-6 text-[#dfe3eb]">
                   <div className="flex justify-start text-yellow-400 text-lg mb-4">
                     {[...Array(5)].map((_, i) => (
@@ -281,7 +281,7 @@ export default function Home() {
       {/* Newsletter */}
       <section className="py-16 bg-gradient-to-r from-secondary to-accent text-white">
         <div className="container mx-auto px-4 text-center text-[#171616]">
-          <h2 className="text-4xl font-bold mb-4 arabic-text">اشترك معنا الان </h2>
+          <h2 className="font-bold arabic-text text-[31px] mt-[8px] mb-[8px] ml-[0px] mr-[0px] pt-[8px] pb-[8px]">اشترك معنا الان </h2>
           <p className="text-xl mb-8 opacity-90 arabic-text">كن أول من يعلم بالمنتجات الجديدة والعروض الخاصة</p>
           <div className="max-w-md mx-auto">
             <div className="flex gap-2">
