@@ -10,7 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import AdminSidebar from "@/components/admin/sidebar";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import { Save, Store, Palette, Phone, MapPin, Mail, FileText, Shield, Truck, MessageSquare, Send, Loader2 } from "lucide-react";
+import { Save, Store, Palette, Phone, MapPin, Mail, FileText, Shield, Truck, MessageSquare, Send, Loader2, Image, Users, Info } from "lucide-react";
 import type { StoreSetting } from "@shared/schema";
 
 export default function AdminSettings() {
@@ -165,8 +165,9 @@ export default function AdminSettings() {
           </div>
 
           <Tabs defaultValue="store" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-5">
+            <TabsList className="grid w-full grid-cols-6">
               <TabsTrigger value="store" className="arabic-text">معلومات المتجر</TabsTrigger>
+              <TabsTrigger value="images" className="arabic-text">صور الموقع</TabsTrigger>
               <TabsTrigger value="appearance" className="arabic-text">المظهر والألوان</TabsTrigger>
               <TabsTrigger value="contact" className="arabic-text">معلومات التواصل</TabsTrigger>
               <TabsTrigger value="policies" className="arabic-text">السياسات والأحكام</TabsTrigger>
@@ -432,6 +433,138 @@ export default function AdminSettings() {
               </Card>
 
 
+            </TabsContent>
+
+            {/* Images Settings */}
+            <TabsContent value="images" className="space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 arabic-text">
+                    <Image className="w-5 h-5" />
+                    صور الصفحة الرئيسية
+                  </CardTitle>
+                  <p className="text-sm text-muted-foreground arabic-text">
+                    صور الفئات والأقسام في الصفحة الرئيسية
+                  </p>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <div>
+                    <Label htmlFor="watches_category_image" className="arabic-text">صورة فئة الساعات</Label>
+                    <Input
+                      id="watches_category_image"
+                      value={getSetting("watches_category_image")}
+                      onChange={(e) => handleInputChange("watches_category_image", e.target.value)}
+                      placeholder="https://example.com/watches.jpg"
+                    />
+                    <p className="text-xs text-muted-foreground mt-1 arabic-text">
+                      الحجم المناسب: 800×600 بكسل
+                    </p>
+                  </div>
+
+                  <div>
+                    <Label htmlFor="perfumes_category_image" className="arabic-text">صورة فئة العطور</Label>
+                    <Input
+                      id="perfumes_category_image"
+                      value={getSetting("perfumes_category_image")}
+                      onChange={(e) => handleInputChange("perfumes_category_image", e.target.value)}
+                      placeholder="https://example.com/perfumes.jpg"
+                    />
+                    <p className="text-xs text-muted-foreground mt-1 arabic-text">
+                      الحجم المناسب: 800×600 بكسل
+                    </p>
+                  </div>
+
+                  <div>
+                    <Label htmlFor="default_product_image" className="arabic-text">الصورة الافتراضية للمنتجات</Label>
+                    <Input
+                      id="default_product_image"
+                      value={getSetting("default_product_image")}
+                      onChange={(e) => handleInputChange("default_product_image", e.target.value)}
+                      placeholder="https://example.com/default-product.jpg"
+                    />
+                    <p className="text-xs text-muted-foreground mt-1 arabic-text">
+                      تظهر عندما لا تكون هناك صورة للمنتج - الحجم المناسب: 300×300 بكسل
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 arabic-text">
+                    <Users className="w-5 h-5" />
+                    صور آراء العملاء
+                  </CardTitle>
+                  <p className="text-sm text-muted-foreground arabic-text">
+                    صور العملاء في قسم التقييمات
+                  </p>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <div className="grid md:grid-cols-3 gap-4">
+                    <div>
+                      <Label htmlFor="customer1_image" className="arabic-text">صورة العميل الأول</Label>
+                      <Input
+                        id="customer1_image"
+                        value={getSetting("customer1_image")}
+                        onChange={(e) => handleInputChange("customer1_image", e.target.value)}
+                        placeholder="https://example.com/customer1.jpg"
+                      />
+                    </div>
+                    
+                    <div>
+                      <Label htmlFor="customer2_image" className="arabic-text">صورة العميل الثاني</Label>
+                      <Input
+                        id="customer2_image"
+                        value={getSetting("customer2_image")}
+                        onChange={(e) => handleInputChange("customer2_image", e.target.value)}
+                        placeholder="https://example.com/customer2.jpg"
+                      />
+                    </div>
+                    
+                    <div>
+                      <Label htmlFor="customer3_image" className="arabic-text">صورة العميل الثالث</Label>
+                      <Input
+                        id="customer3_image"
+                        value={getSetting("customer3_image")}
+                        onChange={(e) => handleInputChange("customer3_image", e.target.value)}
+                        placeholder="https://example.com/customer3.jpg"
+                      />
+                    </div>
+                  </div>
+                  <p className="text-xs text-muted-foreground arabic-text">
+                    الحجم المناسب: 100×100 بكسل (مربعة) - ستظهر دائرية في الموقع
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 arabic-text">
+                    <Info className="w-5 h-5" />
+                    نصائح حول الصور
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3 text-sm text-muted-foreground arabic-text">
+                    <div className="flex items-start gap-2">
+                      <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></div>
+                      <p>استخدم صور عالية الجودة وواضحة</p>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></div>
+                      <p>تأكد من أن روابط الصور تعمل بشكل دائم</p>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></div>
+                      <p>يمكنك استخدام خدمات مثل Cloudinary أو ImageKit لاستضافة الصور</p>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0"></div>
+                      <p>للصور المحلية: ضعها في مجلد public/images واستخدم /images/اسم_الصورة.jpg</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             </TabsContent>
 
             {/* Contact Information */}
