@@ -39,7 +39,7 @@ export default function CurrentTime() {
   };
 
   return (
-    <div className="bg-gradient-to-br from-white/95 to-white/90 backdrop-blur-md rounded-xl p-4 shadow-xl border border-white/30 hover:shadow-2xl transition-all duration-300">
+    <div className="relative bg-gradient-to-br from-white/95 to-white/90 backdrop-blur-md rounded-xl p-4 shadow-xl border border-white/30 hover:shadow-2xl transition-all duration-300">
       <div className="flex items-center gap-3">
         <div className="bg-gradient-to-br from-primary to-primary/80 p-2.5 rounded-full shadow-lg">
           <Clock className="w-5 h-5 text-white" />
