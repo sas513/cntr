@@ -223,7 +223,7 @@ export default function Home() {
                     <Star key={i} className="w-6 h-6 fill-current" />
                   ))}
                 </div>
-                <p className="text-2xl mb-8 opacity-95 arabic-text font-medium leading-relaxed">
+                <p className="text-2xl mb-8 opacity-95 arabic-text font-medium leading-relaxed text-[#dfe4ed]">
                   "منتجات عالية الجودة وخدمة عملاء ممتازة. أنصح بشدة بالتسوق من هنا"
                 </p>
                 <div className="flex items-center justify-center gap-4">
@@ -290,7 +290,7 @@ export default function Home() {
                 placeholder="أدخل بريدك الإلكتروني" 
                 className="flex-1 px-4 py-3 rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-white"
               />
-              <Button className="bg-primary hover:bg-primary/90 px-6 py-3">
+              <Button className="bg-[#070708] hover:bg-primary/90 px-6 py-3">
                 اشتراك
               </Button>
             </div>
