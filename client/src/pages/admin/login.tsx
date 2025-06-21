@@ -72,9 +72,7 @@ export default function AdminLogin() {
         
         <div className="relative z-10">
           <div className="mb-8">
-            <h1 className="text-4xl font-bold arabic-text mb-3 text-blue-100">
-              سنتر المستودع
-            </h1>
+            <h1 className="text-4xl font-bold arabic-text mb-3 text-blue-100">Hi</h1>
             <p className="text-lg arabic-text text-blue-200 mb-1">للساعات والعطور</p>
             <p className="text-sm arabic-text text-blue-300">لوحة التحكم الإدارية المتقدمة</p>
           </div>
@@ -154,7 +152,6 @@ export default function AdminLogin() {
           </div>
         </div>
       </div>
-
       <div className="w-full lg:w-1/2 xl:w-2/5 flex items-center justify-center p-6 bg-blue-900/20 backdrop-blur-sm">
         <Card className="w-full max-w-md bg-blue-500/20 backdrop-blur-md border-blue-400/30 shadow-2xl">
           <CardHeader className="text-center space-y-3">
