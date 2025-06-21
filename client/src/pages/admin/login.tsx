@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -22,19 +22,54 @@ import {
   Lock,
   Smartphone,
   TrendingUp,
-  Palette
+  Palette,
+  UserPlus
 } from "lucide-react";
 import { loginSchema, type LoginData } from "@shared/schema";
 
 export default function AdminLogin() {
   const [showPassword, setShowPassword] = useState(false);
+  const [isCreatingAccount, setIsCreatingAccount] = useState(false);
   const { toast } = useToast();
+
+  // Check if any users exist
+  const { data: hasUsers, refetch: refetchUsers } = useQuery({
+    queryKey: ['/api/admin/check-users'],
+    retry: false,
+    staleTime: 0,
+    refetchOnWindowFocus: false
+  });
 
   const form = useForm<LoginData>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
       username: "",
       password: "",
+    },
+  });
+
+  const createAccountMutation = useMutation({
+    mutationFn: async (data: LoginData) => {
+      const response = await apiRequest("POST", "/api/admin/create-first-user", data);
+      return response.json();
+    },
+    onSuccess: (data: any) => {
+      localStorage.setItem("adminToken", data.token);
+      refetchUsers();
+      toast({
+        title: "تم إنشاء الحساب بنجاح",
+        description: "مرحباً بك في النظام",
+      });
+      setTimeout(() => {
+        window.location.href = "/admin";
+      }, 1000);
+    },
+    onError: (error) => {
+      toast({
+        title: "خطأ في إنشاء الحساب",
+        description: error.message,
+        variant: "destructive",
+      });
     },
   });
 
@@ -220,20 +255,44 @@ export default function AdminLogin() {
                   )}
                 />
 
-                <Button 
-                  type="submit" 
-                  className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl" 
-                  disabled={loginMutation.isPending}
-                >
-                  {loginMutation.isPending ? (
-                    <div className="flex items-center gap-2">
-                      <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin"></div>
-                      جاري تسجيل الدخول...
-                    </div>
-                  ) : (
-                    "تسجيل الدخول"
-                  )}
-                </Button>
+                {hasUsers ? (
+                  <Button 
+                    type="submit" 
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl" 
+                    disabled={loginMutation.isPending}
+                  >
+                    {loginMutation.isPending ? (
+                      <div className="flex items-center gap-2">
+                        <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin"></div>
+                        جاري تسجيل الدخول...
+                      </div>
+                    ) : (
+                      "تسجيل الدخول"
+                    )}
+                  </Button>
+                ) : (
+                  <Button 
+                    type="submit" 
+                    onClick={(e) => {
+                      e.preventDefault();
+                      form.handleSubmit((data) => createAccountMutation.mutate(data))();
+                    }}
+                    className="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-2.5 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl" 
+                    disabled={createAccountMutation.isPending}
+                  >
+                    {createAccountMutation.isPending ? (
+                      <div className="flex items-center gap-2">
+                        <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin"></div>
+                        جاري إنشاء الحساب...
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-2">
+                        <UserPlus className="w-4 h-4" />
+                        إنشاء أول حساب
+                      </div>
+                    )}
+                  </Button>
+                )}
               </form>
             </Form>
 

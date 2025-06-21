@@ -6,9 +6,69 @@ import { customRateLimit, logSecurityEvent } from "./security";
 import { telegramService } from "./telegram-service";
 import { loginSchema, insertProductSchema, insertOrderSchema, insertCustomerActivitySchema, insertStoreSettingSchema } from "@shared/schema";
 import { z } from "zod";
+import bcrypt from "bcryptjs";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   
+  // Check if any users exist
+  app.get('/api/admin/check-users', async (req, res) => {
+    try {
+      const users = await storage.getUsers();
+      res.json(users.length > 0);
+    } catch (error) {
+      console.error('Error checking users:', error);
+      res.status(500).json({ message: 'خطأ في النظام' });
+    }
+  });
+
+  // Create first user (only when no users exist)
+  app.post('/api/admin/create-first-user', async (req, res) => {
+    try {
+      // Check if any users already exist
+      const existingUsers = await storage.getUsers();
+      if (existingUsers.length > 0) {
+        return res.status(400).json({ message: 'يوجد مستخدمين بالفعل في النظام' });
+      }
+
+      const { username, password } = req.body;
+      
+      if (!username || !password) {
+        return res.status(400).json({ message: 'اسم المستخدم وكلمة المرور مطلوبان' });
+      }
+
+      // Hash password
+      const hashedPassword = await bcrypt.hash(password, 10);
+      
+      // Create first user
+      const user = await storage.createUser({
+        username,
+        email: `${username}@system.local`,
+        password: hashedPassword,
+        role: 'admin'
+      });
+
+      // Generate token
+      const token = generateToken(user.id, user.username);
+      
+      // Create session
+      await storage.createAdminSession({
+        userId: user.id,
+        sessionToken: token,
+        expiresAt: new Date(Date.now() + 8 * 60 * 60 * 1000) // 8 hours
+      });
+
+      clearFailedAttempts(req.ip);
+      
+      res.json({ 
+        token,
+        message: 'تم إنشاء الحساب بنجاح'
+      });
+    } catch (error) {
+      console.error('Error creating first user:', error);
+      res.status(500).json({ message: 'خطأ في إنشاء الحساب' });
+    }
+  });
+
   // Admin authentication routes with extra rate limiting
   app.post('/api/admin/login', 
     customRateLimit(
