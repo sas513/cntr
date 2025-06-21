@@ -449,7 +449,7 @@ export default function AdminSettings() {
                 </CardHeader>
                 <CardContent className="space-y-6">
                   <div>
-                    <Label htmlFor="watches_category_image" className="arabic-text">صورة فئة الساعات</Label>
+                    <Label htmlFor="watches_category_image" className="arabic-text">صورة فئة </Label>
                     <Input
                       id="watches_category_image"
                       value={getSetting("watches_category_image")}
