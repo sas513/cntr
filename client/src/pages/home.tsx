@@ -220,21 +220,21 @@ export default function Home() {
             {[
               {
                 name: "أحمد محمد",
-                location: "بغداد",
+                location: "بغداد", 
                 content: "منتجات عالية الجودة وخدمة عملاء ممتازة. أنصح بشدة بالتسوق من هنا",
-                image: getSetting("customer1_image") || "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100"
+                image: getSetting("customer1_image") || ""
               },
               {
                 name: "فاطمة علي",
                 location: "البصرة",
                 content: "تجربة تسوق رائعة، المنتجات أصلية والتوصيل سريع جداً",
-                image: getSetting("customer2_image") || "https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100"
+                image: getSetting("customer2_image") || ""
               },
               {
                 name: "خالد حسن",
                 location: "أربيل",
                 content: "أسعار منافسة وجودة ممتازة، سأكون عميل دائم بإذن الله",
-                image: getSetting("customer3_image") || "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100"
+                image: getSetting("customer3_image") || ""
               }
             ].map((testimonial, index) => (
               <Card key={index} className="bg-white/10 backdrop-blur-lg border-white/20">
@@ -246,11 +246,20 @@ export default function Home() {
                   </div>
                   <p className="text-lg mb-6 opacity-90 arabic-text">"{testimonial.content}"</p>
                   <div className="flex items-center justify-center gap-4">
-                    <img 
-                      src={testimonial.image} 
-                      alt={testimonial.name} 
-                      className="w-12 h-12 rounded-full object-cover"
-                    />
+                    <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center text-white font-bold text-lg">
+                      {testimonial.image ? (
+                        <img 
+                          src={testimonial.image} 
+                          alt={testimonial.name} 
+                          className="w-full h-full object-cover rounded-full"
+                          onError={(e) => {
+                            e.currentTarget.style.display = 'none';
+                          }}
+                        />
+                      ) : (
+                        <span>{testimonial.name.charAt(0)}</span>
+                      )}
+                    </div>
                     <div>
                       <h4 className="font-semibold arabic-text">{testimonial.name}</h4>
                       <p className="text-sm opacity-75 arabic-text">{testimonial.location}</p>
