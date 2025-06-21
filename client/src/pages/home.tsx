@@ -59,9 +59,11 @@ export default function Home() {
                   تسوق الآن
                 </Button>
               </Link>
-              <Button size="lg" variant="outline" className="w-full sm:w-auto border-white text-white hover:bg-white hover:text-primary">
-                العروض الخاصة
-              </Button>
+              <Link href="/offers">
+                <Button size="lg" variant="outline" className="w-full sm:w-auto border-white text-white hover:bg-white hover:text-primary">
+                  العروض الخاصة
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
