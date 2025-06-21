@@ -32,13 +32,26 @@ export default function AdminLogin() {
   const [isCreatingAccount, setIsCreatingAccount] = useState(false);
   const { toast } = useToast();
 
-  // Check if any users exist
+  // Check if any users exist - with localStorage caching
+  const [hasUsersLocal, setHasUsersLocal] = useState(() => {
+    return localStorage.getItem('admin_users_exist') === 'true';
+  });
+  
   const { data: hasUsers, refetch: refetchUsers } = useQuery({
     queryKey: ['/api/admin/check-users'],
     retry: false,
-    staleTime: 0,
-    refetchOnWindowFocus: false
+    staleTime: Infinity, // Cache indefinitely
+    refetchOnWindowFocus: false,
+    enabled: !hasUsersLocal // Only fetch if not cached locally
   });
+
+  // Update local state when data is received
+  useEffect(() => {
+    if (hasUsers && !hasUsersLocal) {
+      localStorage.setItem('admin_users_exist', 'true');
+      setHasUsersLocal(true);
+    }
+  }, [hasUsers, hasUsersLocal]);
 
   const form = useForm<LoginData>({
     resolver: zodResolver(loginSchema),
@@ -55,6 +68,8 @@ export default function AdminLogin() {
     },
     onSuccess: (data: any) => {
       localStorage.setItem("adminToken", data.token);
+      localStorage.setItem('admin_users_exist', 'true');
+      setHasUsersLocal(true);
       refetchUsers();
       toast({
         title: "تم إنشاء الحساب بنجاح",
@@ -255,7 +270,7 @@ export default function AdminLogin() {
                   )}
                 />
 
-                {hasUsers ? (
+                {hasUsersLocal || hasUsers ? (
                   <Button 
                     type="submit" 
                     className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl" 
