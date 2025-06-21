@@ -94,9 +94,9 @@ A comprehensive Arabic e-commerce website for "سنتر المستودع للس�
 - **Analytics**: Custom visitor tracking system
 
 ## Admin Access
-- URL: `/admin`
-- Username: `owner`
-- Password: `hello`
+- URL: `/admin/login`
+- Username: `Taha512`
+- Password: [كما تم إنشاؤه]
 
 ## Telegram Bot Configuration
 **Location**: Admin Settings → معلومات المتجر → إعدادات بوت Telegram

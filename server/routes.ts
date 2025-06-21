@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { generateToken, requireAdmin, isBlocked, recordFailedAttempt, clearFailedAttempts, type AuthRequest } from "./auth";
+import { generateToken, requireAdmin, isBlocked, recordFailedAttempt, clearFailedAttempts, clearAllFailedAttempts, type AuthRequest } from "./auth";
 import { customRateLimit, logSecurityEvent } from "./security";
 import { telegramService } from "./telegram-service";
 import { loginSchema, insertProductSchema, insertOrderSchema, insertCustomerActivitySchema, insertStoreSettingSchema, users } from "@shared/schema";
@@ -50,7 +50,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Generate token
       const token = generateToken(user.id, user.username);
       
-      clearFailedAttempts(req.ip || 'unknown');
+      // Clear all IP blocks when first user is created successfully
+      clearAllFailedAttempts();
       
       res.json({ 
         token,
@@ -59,6 +60,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error('Error creating first user:', error);
       res.status(500).json({ message: 'خطأ في إنشاء الحساب' });
+    }
+  });
+
+  // Clear IP blocks endpoint (for troubleshooting)
+  app.post('/api/admin/clear-blocks', async (req, res) => {
+    try {
+      clearAllFailedAttempts();
+      res.json({ message: 'تم تنظيف قائمة IP المحظورة' });
+    } catch (error) {
+      console.error('Error clearing blocks:', error);
+      res.status(500).json({ message: 'خطأ في النظام' });
     }
   });
 

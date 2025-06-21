@@ -65,6 +65,10 @@ export function clearFailedAttempts(ip: string): void {
   failedAttempts.delete(ip);
 }
 
+export function clearAllFailedAttempts(): void {
+  failedAttempts.clear();
+}
+
 export function requireAdmin(req: AuthRequest, res: Response, next: NextFunction) {
   const clientIP = req.ip || req.connection.remoteAddress || 'unknown';
   
