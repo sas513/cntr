@@ -207,7 +207,7 @@ export default function Home() {
         </div>
       </section>
       {/* Testimonials */}
-      <section className="py-16 bg-primary text-white">
+      <section className="py-16 text-white bg-[#070708]">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="font-bold arabic-text text-[31px] mt-[8px] mb-[8px] ml-[0px] mr-[0px] pt-[8px] pb-[8px]">آراء عملائنا</h2>
