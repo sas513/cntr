@@ -72,8 +72,8 @@ export default function AdminLogin() {
         
         <div className="relative z-10">
           <div className="mb-8">
-            <h1 className="text-4xl font-bold arabic-text mb-3 text-blue-100">سنتر المستودع</h1>
-            <p className="text-lg arabic-text text-blue-200">للساعات والعطور</p>
+            <h1 className="text-4xl font-bold arabic-text mb-3 text-blue-100">متجرنا الإلكتروني</h1>
+            <p className="text-lg arabic-text text-blue-200">أفضل المنتجات بأعلى جودة</p>
           </div>
 
           <div className="space-y-5">
@@ -85,7 +85,7 @@ export default function AdminLogin() {
                   <Package className="w-5 h-5 text-blue-200" />
                   <span className="font-medium arabic-text text-blue-100 text-sm">المنتجات</span>
                 </div>
-                <p className="text-xs text-blue-300 arabic-text">مجموعة متنوعة من الساعات والعطور</p>
+                <p className="text-xs text-blue-300 arabic-text">مجموعة متنوعة من المنتجات المميزة</p>
               </div>
 
               <div className="bg-blue-600/20 backdrop-blur-sm rounded-lg p-3 border border-blue-500/30">
@@ -160,7 +160,7 @@ export default function AdminLogin() {
             <div>
               <CardTitle className="text-2xl font-bold arabic-text text-white">تسجيل الدخول</CardTitle>
               <p className="text-blue-200 arabic-text mt-1 text-sm">
-                مرحباً بك في سنتر المستودع
+                مرحباً بك في متجرنا
               </p>
             </div>
           </CardHeader>
