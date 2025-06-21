@@ -131,12 +131,6 @@ export default function Header() {
                   </Button>
                 </Link>
                 
-                <Link href="/admin/login">
-                  <Button variant="ghost" size="sm" className="hover:bg-muted" title="تسجيل دخول الإدارة">
-                    <User className="w-5 h-5 text-muted-foreground" />
-                  </Button>
-                </Link>
-                
                 {/* Mobile Menu */}
                 <Sheet>
                   <SheetTrigger asChild>
@@ -203,11 +197,7 @@ export default function Header() {
                               )}
                             </Button>
                           </Link>
-                          <Link href="/admin/login">
-                            <Button variant="outline" className="w-full justify-start arabic-text">
-                              تسجيل دخول الإدارة
-                            </Button>
-                          </Link>
+
                         </div>
                       </nav>
                       
