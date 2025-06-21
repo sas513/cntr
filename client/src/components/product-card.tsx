@@ -66,8 +66,8 @@ export default function ProductCard({ product }: ProductCardProps) {
     : 0;
 
   return (
-    <Card 
-      className="product-card overflow-hidden group cursor-pointer w-full"
+    <div 
+      className="mobile-card group cursor-pointer w-full overflow-hidden"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -75,41 +75,41 @@ export default function ProductCard({ product }: ProductCardProps) {
         <img
           src={product.images?.[0] || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300"}
           alt={product.nameAr}
-          className="w-full h-48 sm:h-56 md:h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+          className="w-full h-44 sm:h-52 md:h-60 object-cover group-hover:scale-105 transition-transform duration-300 rounded-xl"
         />
         
         {/* Badges */}
-        <div className="absolute top-4 right-4 space-y-2">
+        <div className="absolute top-3 right-3 space-y-2">
           {hasDiscount && (
-            <Badge className="bg-red-500 text-white">
+            <Badge className="bg-red-500 text-white rounded-lg text-xs">
               خصم {discountPercentage}%
             </Badge>
           )}
           {product.isFeatured && (
-            <Badge className="bg-blue-500 text-white">
+            <Badge className="bg-blue-500 text-white rounded-lg text-xs">
               مميز
             </Badge>
           )}
           {product.stock === 0 && (
-            <Badge variant="destructive">
+            <Badge variant="destructive" className="rounded-lg text-xs">
               نفدت الكمية
             </Badge>
           )}
         </div>
 
         {/* Wishlist Button */}
-        <div className={`absolute top-4 left-4 transition-opacity ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
-          <Button size="sm" variant="secondary" className="rounded-full p-2 bg-white/90 hover:bg-white">
+        <div className={`absolute top-3 left-3 transition-opacity ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
+          <Button size="sm" variant="secondary" className="rounded-xl p-2 bg-white/90 hover:bg-white backdrop-blur-sm">
             <Heart className="w-4 h-4" />
           </Button>
         </div>
 
         {/* Quick View Overlay */}
-        <div className={`absolute inset-0 bg-black/20 flex items-center justify-center transition-opacity ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
+        <div className={`absolute inset-0 bg-black/20 flex items-center justify-center transition-opacity rounded-xl ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
           <Link href={`/product/${product.id}`}>
             <Button 
               size="sm" 
-              className="bg-white text-primary hover:bg-gray-100 transform transition-all"
+              className="mobile-button bg-white text-primary hover:bg-gray-100 transform transition-all backdrop-blur-sm"
             >
               <Eye className="w-4 h-4 ml-2" />
               عرض سريع
@@ -118,7 +118,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         </div>
       </div>
 
-      <CardContent className="p-3 sm:p-4 md:p-6">
+      <div className="p-3 sm:p-4">
         <Link href={`/product/${product.id}`}>
           <h3 className="text-base sm:text-lg font-semibold mb-2 arabic-text hover:text-primary transition-colors line-clamp-2">
             {product.nameAr}
@@ -128,6 +128,8 @@ export default function ProductCard({ product }: ProductCardProps) {
         <p className="text-muted-foreground text-xs sm:text-sm mb-3 arabic-text line-clamp-2 hidden sm:block">
           {product.descriptionAr}
         </p>
+
+        <div className="mobile-friendly-divider my-3"></div>
 
         {/* Rating - Hidden on mobile to save space */}
         <div className="hidden sm:flex items-center gap-2 mb-3">
@@ -147,7 +149,7 @@ export default function ProductCard({ product }: ProductCardProps) {
             </span>
             <span className="text-xs sm:text-sm text-muted-foreground">د.ع</span>
             {hasDiscount && (
-              <span className="text-xs sm:text-sm text-muted-foreground line-through">
+              <span className="text-xs sm:text-sm text-muted-foreground line-through ml-2">
                 {parseFloat(product.originalPrice!).toLocaleString()}
               </span>
             )}
@@ -157,17 +159,17 @@ export default function ProductCard({ product }: ProductCardProps) {
         {/* Stock Status */}
         <div className="mb-3 sm:mb-4">
           {product.stock && product.stock > 0 ? (
-            <span className="text-green-600 text-xs sm:text-sm arabic-text">
+            <span className="text-green-600 text-xs sm:text-sm arabic-text bg-green-50 px-2 py-1 rounded-lg">
               متوفر ({product.stock} قطعة)
             </span>
           ) : (
-            <span className="text-red-600 text-xs sm:text-sm arabic-text">نفدت الكمية</span>
+            <span className="text-red-600 text-xs sm:text-sm arabic-text bg-red-50 px-2 py-1 rounded-lg">نفدت الكمية</span>
           )}
         </div>
 
         {/* Add to Cart Button */}
         <Button 
-          className="w-full text-xs sm:text-sm py-2 sm:py-3"
+          className="w-full mobile-button bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-xs sm:text-sm py-2 sm:py-3"
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -177,7 +179,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         >
           {addToCartMutation.isPending ? "جاري الإضافة..." : "أضف إلى السلة"}
         </Button>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }

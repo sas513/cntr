@@ -181,14 +181,75 @@ export default function Cart() {
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-4xl font-bold mb-8 arabic-text">سلة التسوق</h1>
+        <h1 className="text-3xl md:text-4xl font-bold mb-6 arabic-text">سلة التسوق</h1>
+        <div className="mobile-friendly-divider"></div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="grid lg:grid-cols-3 gap-6 md:gap-8">
           {/* Cart Items */}
           <div className="lg:col-span-2 space-y-4">
             {serverCartItems.map((item) => (
-              <Card key={item.id}>
-                <CardContent className="p-6">
+              <div key={item.id} className="mobile-card">
+                {/* Mobile Layout */}
+                <div className="block md:hidden">
+                  <div className="flex items-start gap-3 mb-4">
+                    <img
+                      src={item.product.images?.[0] || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&h=150"}
+                      alt={item.product.nameAr}
+                      className="w-16 h-16 object-cover rounded-xl flex-shrink-0"
+                    />
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-semibold text-base arabic-text truncate">{item.product.nameAr}</h3>
+                      <p className="text-sm text-muted-foreground arabic-text mt-1 line-clamp-2">
+                        {item.product.descriptionAr}
+                      </p>
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleRemoveItem(item.id)}
+                      className="text-destructive hover:text-destructive hover:bg-destructive/10 p-2"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  </div>
+                  
+                  <div className="mobile-friendly-divider my-3"></div>
+                  
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleUpdateQuantity(item.id, item.quantity - 1)}
+                        disabled={item.quantity <= 1}
+                        className="mobile-button h-8 w-8 p-0"
+                      >
+                        <Minus className="w-3 h-3" />
+                      </Button>
+                      <span className="w-10 text-center font-medium bg-muted rounded-lg py-1 text-sm">{item.quantity}</span>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleUpdateQuantity(item.id, item.quantity + 1)}
+                        className="mobile-button h-8 w-8 p-0"
+                      >
+                        <Plus className="w-3 h-3" />
+                      </Button>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-lg font-bold text-primary">
+                        {(parseFloat(item.product.price) * item.quantity).toLocaleString()}
+                        <span className="text-sm text-muted-foreground mr-1">د.ع</span>
+                      </div>
+                      <div className="text-xs text-muted-foreground">
+                        {parseFloat(item.product.price).toLocaleString()} د.ع للقطعة
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Desktop Layout */}
+                <div className="hidden md:block">
                   <div className="flex items-center gap-4">
                     <img
                       src={item.product.images?.[0] || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&h=150"}
@@ -247,35 +308,39 @@ export default function Cart() {
                       <Trash2 className="w-4 h-4" />
                     </Button>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </div>
             ))}
           </div>
 
           {/* Order Summary */}
           <div>
-            <Card className="sticky top-4">
-              <CardHeader>
-                <CardTitle className="arabic-text">ملخص الطلب</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex justify-between">
-                  <span className="arabic-text">المجموع الفرعي</span>
-                  <span>{totalAmount.toLocaleString()} د.ع</span>
+            <div className="mobile-card lg:sticky lg:top-4">
+              <div className="mb-4">
+                <h2 className="text-xl font-bold arabic-text">ملخص الطلب</h2>
+                <div className="mobile-friendly-divider"></div>
+              </div>
+              
+              <div className="space-y-3">
+                <div className="flex justify-between items-center py-2">
+                  <span className="arabic-text text-muted-foreground">المجموع الفرعي</span>
+                  <span className="font-medium">{totalAmount.toLocaleString()} د.ع</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="arabic-text">الشحن</span>
-                  <span className="text-green-600">مجاني</span>
+                <div className="flex justify-between items-center py-2">
+                  <span className="arabic-text text-muted-foreground">الشحن</span>
+                  <span className="text-green-600 font-medium">مجاني</span>
                 </div>
-                <Separator />
-                <div className="flex justify-between text-lg font-bold">
-                  <span className="arabic-text">المجموع الكلي</span>
-                  <span>{totalAmount.toLocaleString()} د.ع</span>
+                <div className="mobile-friendly-divider"></div>
+                <div className="flex justify-between items-center py-2">
+                  <span className="arabic-text text-lg font-bold">المجموع الكلي</span>
+                  <span className="text-xl font-bold text-primary">{totalAmount.toLocaleString()} د.ع</span>
                 </div>
+              </div>
 
+              <div className="mt-6">
                 {!isCheckingOut ? (
                   <Button 
-                    className="w-full" 
+                    className="w-full mobile-button bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800" 
                     size="lg"
                     onClick={() => setIsCheckingOut(true)}
                   >
@@ -283,83 +348,90 @@ export default function Cart() {
                   </Button>
                 ) : (
                   <div className="space-y-4">
-                    <Separator />
-                    <h3 className="font-semibold arabic-text">معلومات التوصيل</h3>
+                    <div className="mobile-friendly-divider"></div>
+                    <h3 className="font-semibold arabic-text text-lg">معلومات التوصيل</h3>
                     
-                    <div className="space-y-3">
+                    <div className="space-y-4">
                       <div>
-                        <Label htmlFor="name" className="arabic-text">الاسم الكامل *</Label>
+                        <Label htmlFor="name" className="arabic-text text-sm font-medium">الاسم الكامل *</Label>
                         <Input
                           id="name"
                           value={customerInfo.name}
                           onChange={(e) => setCustomerInfo(prev => ({ ...prev, name: e.target.value }))}
                           placeholder="أدخل اسمك الكامل"
+                          className="mobile-input mt-1"
                         />
                       </div>
                       
                       <div>
-                        <Label htmlFor="phone" className="arabic-text">رقم الهاتف *</Label>
+                        <Label htmlFor="phone" className="arabic-text text-sm font-medium">رقم الهاتف *</Label>
                         <Input
                           id="phone"
                           value={customerInfo.phone}
                           onChange={(e) => setCustomerInfo(prev => ({ ...prev, phone: e.target.value }))}
                           placeholder="07xxxxxxxxx"
+                          className="mobile-input mt-1"
+                          dir="ltr"
                         />
                       </div>
                       
                       <div>
-                        <Label htmlFor="email" className="arabic-text">البريد الإلكتروني</Label>
+                        <Label htmlFor="email" className="arabic-text text-sm font-medium">البريد الإلكتروني</Label>
                         <Input
                           id="email"
                           type="email"
                           value={customerInfo.email}
                           onChange={(e) => setCustomerInfo(prev => ({ ...prev, email: e.target.value }))}
                           placeholder="example@email.com"
+                          className="mobile-input mt-1"
+                          dir="ltr"
                         />
                       </div>
                       
                       <div>
-                        <Label htmlFor="city" className="arabic-text">المحافظة *</Label>
+                        <Label htmlFor="city" className="arabic-text text-sm font-medium">المحافظة *</Label>
                         <Input
                           id="city"
                           value={customerInfo.city}
                           onChange={(e) => setCustomerInfo(prev => ({ ...prev, city: e.target.value }))}
                           placeholder="اختر المحافظة"
+                          className="mobile-input mt-1"
                         />
                       </div>
                       
                       <div>
-                        <Label htmlFor="address" className="arabic-text">العنوان التفصيلي *</Label>
+                        <Label htmlFor="address" className="arabic-text text-sm font-medium">العنوان التفصيلي *</Label>
                         <Textarea
                           id="address"
                           value={customerInfo.address}
                           onChange={(e) => setCustomerInfo(prev => ({ ...prev, address: e.target.value }))}
                           placeholder="أدخل العنوان التفصيلي للتوصيل"
                           rows={3}
+                          className="mobile-input mt-1 resize-none"
                         />
                       </div>
                     </div>
 
-                    <div className="flex gap-2">
+                    <div className="flex flex-col sm:flex-row gap-3 pt-4">
                       <Button 
                         variant="outline" 
                         onClick={() => setIsCheckingOut(false)}
-                        className="flex-1"
+                        className="mobile-button flex-1 order-2 sm:order-1"
                       >
                         إلغاء
                       </Button>
                       <Button 
                         onClick={handleCheckout}
                         disabled={createOrderMutation.isPending}
-                        className="flex-1"
+                        className="mobile-button flex-1 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 order-1 sm:order-2"
                       >
                         {createOrderMutation.isPending ? "جاري الإرسال..." : "تأكيد الطلب"}
                       </Button>
                     </div>
                   </div>
                 )}
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -11,15 +11,14 @@ export default function FloatingCartButton() {
   if (totalItems === 0) return null;
 
   return (
-    <div className="fixed bottom-4 left-4 z-50 md:hidden">
+    <div className="mobile-cart-button">
       <Link href="/cart">
         <Button 
           size="lg"
-          className="bg-accent hover:bg-accent/90 text-white shadow-2xl rounded-full w-16 h-16 p-0 relative animate-bounce"
-          style={{ animationDuration: '2s', animationIterationCount: 'infinite' }}
+          className="w-14 h-14 p-0 relative bg-transparent border-0 hover:bg-transparent"
         >
-          <ShoppingCart className="w-8 h-8" />
-          <Badge className="absolute -top-2 -right-2 bg-red-500 text-white text-sm font-bold rounded-full h-8 w-8 flex items-center justify-center p-0 shadow-lg">
+          <ShoppingCart className="w-6 h-6 text-white" />
+          <Badge className="absolute -top-1 -right-1 bg-red-500 hover:bg-red-600 text-white text-xs font-bold rounded-full h-6 w-6 flex items-center justify-center p-0 shadow-lg border-2 border-white transition-all">
             {totalItems}
           </Badge>
         </Button>
