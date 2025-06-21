@@ -58,6 +58,10 @@ export class DatabaseStorage implements IStorage {
     return user;
   }
 
+  async getUsers(): Promise<User[]> {
+    return await db.select().from(users);
+  }
+
   // Admin authentication
   async authenticateAdmin(username: string, password: string): Promise<User | null> {
     const user = await this.getUserByUsername(username);

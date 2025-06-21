@@ -13,11 +13,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Check if any users exist
   app.get('/api/admin/check-users', async (req, res) => {
     try {
-      const users = await storage.getUsers();
-      res.json(users.length > 0);
+      // Simply check database directly
+      const result = await db.select().from(users).limit(1);
+      res.json(result.length > 0);
     } catch (error) {
       console.error('Error checking users:', error);
-      res.status(500).json({ message: 'خطأ في النظام' });
+      res.json(false); // If error, assume no users exist
     }
   });
 
@@ -25,7 +26,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post('/api/admin/create-first-user', async (req, res) => {
     try {
       // Check if any users already exist
-      const existingUsers = await storage.getUsers();
+      const existingUsers = await db.select().from(users).limit(1);
       if (existingUsers.length > 0) {
         return res.status(400).json({ message: 'يوجد مستخدمين بالفعل في النظام' });
       }
@@ -36,28 +37,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: 'اسم المستخدم وكلمة المرور مطلوبان' });
       }
 
-      // Hash password
+      // Hash password and create user directly
       const hashedPassword = await bcrypt.hash(password, 10);
-      
-      // Create first user
-      const user = await storage.createUser({
+      const [user] = await db.insert(users).values({
         username,
         email: `${username}@system.local`,
         password: hashedPassword,
         role: 'admin'
-      });
+      }).returning();
 
       // Generate token
       const token = generateToken(user.id, user.username);
       
-      // Create session
-      await storage.createAdminSession({
-        userId: user.id,
-        sessionToken: token,
-        expiresAt: new Date(Date.now() + 8 * 60 * 60 * 1000) // 8 hours
-      });
-
-      clearFailedAttempts(req.ip);
+      clearFailedAttempts(req.ip || 'unknown');
       
       res.json({ 
         token,
