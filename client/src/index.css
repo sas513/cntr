@@ -274,4 +274,51 @@
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
   }
+
+  /* ألوان ثابتة لا تتغير مع الثيمات */
+  .fixed-text-dark {
+    color: #111112 !important;
+  }
+
+  .fixed-text-light {
+    color: #f0f1f2 !important;
+  }
+
+  .fixed-text-content-light {
+    color: #dfe3eb !important;
+  }
+
+  .fixed-bg-dark {
+    background-color: #070708 !important;
+  }
+
+  .fixed-bg-section {
+    color: #171616 !important;
+  }
+
+  .fixed-newsletter-title {
+    font-weight: bold !important;
+    font-size: 31px !important;
+    margin-top: 8px !important;
+    margin-bottom: 8px !important;
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
+  }
+
+  .fixed-card-testimonial {
+    border-radius: 0.5rem !important;
+    border-width: 1px !important;
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1) !important;
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    backdrop-filter: blur(16px) !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+    transition: all 0.3s ease !important;
+    color: #f0f1f2 !important;
+  }
+
+  .fixed-card-testimonial:hover {
+    background-color: rgba(255, 255, 255, 0.15) !important;
+  }
 }
