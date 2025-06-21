@@ -61,93 +61,93 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex">
+    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-blue-900 flex">
       {/* Left Side - Features Showcase */}
       <div className="hidden lg:flex lg:w-1/2 xl:w-3/5 flex-col justify-center p-12 text-white relative overflow-hidden">
         {/* Background Pattern */}
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 to-purple-600/20"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 to-blue-700/20"></div>
         <div className="absolute inset-0 opacity-40 bg-repeat" style={{
           backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Ccircle cx='30' cy='30' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")"
         }}></div>
         
         <div className="relative z-10">
           <div className="mb-8">
-            <h1 className="text-4xl font-bold arabic-text mb-3 text-white">
+            <h1 className="text-4xl font-bold arabic-text mb-3 text-blue-100">
               سنتر المستودع
             </h1>
-            <p className="text-lg arabic-text text-blue-300 mb-1">للساعات والعطور</p>
-            <p className="text-sm arabic-text text-blue-200">لوحة التحكم الإدارية المتقدمة</p>
+            <p className="text-lg arabic-text text-blue-200 mb-1">للساعات والعطور</p>
+            <p className="text-sm arabic-text text-blue-300">لوحة التحكم الإدارية المتقدمة</p>
           </div>
 
           <div className="space-y-5">
-            <h2 className="text-xl font-semibold arabic-text text-blue-300 mb-4">الخدمات والميزات</h2>
+            <h2 className="text-xl font-semibold arabic-text text-blue-200 mb-4">الخدمات والميزات</h2>
             
             <div className="grid grid-cols-2 gap-3">
-              <div className="bg-blue-500/20 backdrop-blur-sm rounded-lg p-3 border border-blue-400/30">
+              <div className="bg-blue-600/20 backdrop-blur-sm rounded-lg p-3 border border-blue-500/30">
                 <div className="flex items-center gap-2 mb-1">
-                  <Package className="w-5 h-5 text-blue-300" />
+                  <Package className="w-5 h-5 text-blue-200" />
                   <span className="font-medium arabic-text text-blue-100 text-sm">إدارة المنتجات</span>
                 </div>
-                <p className="text-xs text-blue-200 arabic-text">إضافة وتعديل المنتجات والفئات</p>
+                <p className="text-xs text-blue-300 arabic-text">إضافة وتعديل المنتجات والفئات</p>
               </div>
 
-              <div className="bg-blue-500/20 backdrop-blur-sm rounded-lg p-3 border border-blue-400/30">
+              <div className="bg-blue-600/20 backdrop-blur-sm rounded-lg p-3 border border-blue-500/30">
                 <div className="flex items-center gap-2 mb-1">
-                  <ShoppingCart className="w-5 h-5 text-blue-300" />
+                  <ShoppingCart className="w-5 h-5 text-blue-200" />
                   <span className="font-medium arabic-text text-blue-100 text-sm">إدارة الطلبات</span>
                 </div>
-                <p className="text-xs text-blue-200 arabic-text">متابعة ومعالجة طلبات العملاء</p>
+                <p className="text-xs text-blue-300 arabic-text">متابعة ومعالجة طلبات العملاء</p>
               </div>
 
-              <div className="bg-blue-500/20 backdrop-blur-sm rounded-lg p-3 border border-blue-400/30">
+              <div className="bg-blue-600/20 backdrop-blur-sm rounded-lg p-3 border border-blue-500/30">
                 <div className="flex items-center gap-2 mb-1">
-                  <BarChart3 className="w-5 h-5 text-blue-300" />
+                  <BarChart3 className="w-5 h-5 text-blue-200" />
                   <span className="font-medium arabic-text text-blue-100 text-sm">التقارير المالية</span>
                 </div>
-                <p className="text-xs text-blue-200 arabic-text">إحصائيات مفصلة ومتعددة العملات</p>
+                <p className="text-xs text-blue-300 arabic-text">إحصائيات مفصلة ومتعددة العملات</p>
               </div>
 
-              <div className="bg-blue-500/20 backdrop-blur-sm rounded-lg p-3 border border-blue-400/30">
+              <div className="bg-blue-600/20 backdrop-blur-sm rounded-lg p-3 border border-blue-500/30">
                 <div className="flex items-center gap-2 mb-1">
-                  <Users className="w-5 h-5 text-blue-300" />
+                  <Users className="w-5 h-5 text-blue-200" />
                   <span className="font-medium arabic-text text-blue-100 text-sm">إدارة العملاء</span>
                 </div>
-                <p className="text-xs text-blue-200 arabic-text">متابعة العملاء وسجل النشاطات</p>
+                <p className="text-xs text-blue-300 arabic-text">متابعة العملاء وسجل النشاطات</p>
               </div>
             </div>
 
             <div className="mt-4">
-              <h3 className="text-base font-medium arabic-text text-blue-300 mb-3">الميزات المتقدمة</h3>
+              <h3 className="text-base font-medium arabic-text text-blue-200 mb-3">الميزات المتقدمة</h3>
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
-                  <MessageSquare className="w-4 h-4 text-blue-300" />
+                  <MessageSquare className="w-4 h-4 text-blue-200" />
                   <span className="arabic-text text-blue-100 text-sm">إشعارات Telegram التلقائية</span>
-                  <Badge className="bg-blue-400/30 text-blue-200 border-blue-400/50 text-xs">متاح</Badge>
+                  <Badge className="bg-blue-500/30 text-blue-200 border-blue-400/50 text-xs">متاح</Badge>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Globe className="w-4 h-4 text-blue-300" />
+                  <Globe className="w-4 h-4 text-blue-200" />
                   <span className="arabic-text text-blue-100 text-sm">تتبع الزوار بالدول</span>
-                  <Badge className="bg-blue-400/30 text-blue-200 border-blue-400/50 text-xs">فعال</Badge>
+                  <Badge className="bg-blue-500/30 text-blue-200 border-blue-400/50 text-xs">فعال</Badge>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Lock className="w-4 h-4 text-blue-300" />
+                  <Lock className="w-4 h-4 text-blue-200" />
                   <span className="arabic-text text-blue-100 text-sm">نظام حماية متعدد الطبقات</span>
-                  <Badge className="bg-blue-400/30 text-blue-200 border-blue-400/50 text-xs">آمن</Badge>
+                  <Badge className="bg-blue-500/30 text-blue-200 border-blue-400/50 text-xs">آمن</Badge>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Smartphone className="w-4 h-4 text-blue-300" />
+                  <Smartphone className="w-4 h-4 text-blue-200" />
                   <span className="arabic-text text-blue-100 text-sm">تصميم متجاوب للجوال</span>
-                  <Badge className="bg-blue-400/30 text-blue-200 border-blue-400/50 text-xs">محسن</Badge>
+                  <Badge className="bg-blue-500/30 text-blue-200 border-blue-400/50 text-xs">محسن</Badge>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Palette className="w-4 h-4 text-blue-300" />
+                  <Palette className="w-4 h-4 text-blue-200" />
                   <span className="arabic-text text-blue-100 text-sm">تخصيص الألوان والصور</span>
-                  <Badge className="bg-blue-400/30 text-blue-200 border-blue-400/50 text-xs">ديناميكي</Badge>
+                  <Badge className="bg-blue-500/30 text-blue-200 border-blue-400/50 text-xs">ديناميكي</Badge>
                 </div>
                 <div className="flex items-center gap-2">
-                  <TrendingUp className="w-4 h-4 text-blue-300" />
+                  <TrendingUp className="w-4 h-4 text-blue-200" />
                   <span className="arabic-text text-blue-100 text-sm">تحليلات الأداء المتقدمة</span>
-                  <Badge className="bg-blue-400/30 text-blue-200 border-blue-400/50 text-xs">شامل</Badge>
+                  <Badge className="bg-blue-500/30 text-blue-200 border-blue-400/50 text-xs">شامل</Badge>
                 </div>
               </div>
             </div>
