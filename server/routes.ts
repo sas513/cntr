@@ -4,9 +4,10 @@ import { storage } from "./storage";
 import { generateToken, requireAdmin, isBlocked, recordFailedAttempt, clearFailedAttempts, type AuthRequest } from "./auth";
 import { customRateLimit, logSecurityEvent } from "./security";
 import { telegramService } from "./telegram-service";
-import { loginSchema, insertProductSchema, insertOrderSchema, insertCustomerActivitySchema, insertStoreSettingSchema } from "@shared/schema";
+import { loginSchema, insertProductSchema, insertOrderSchema, insertCustomerActivitySchema, insertStoreSettingSchema, users } from "@shared/schema";
 import { z } from "zod";
 import bcrypt from "bcryptjs";
+import { db } from "./db";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   
