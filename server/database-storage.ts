@@ -188,18 +188,23 @@ export class DatabaseStorage implements IStorage {
 
   async deleteProduct(id: number): Promise<boolean> {
     try {
-      // Delete related data in the correct order to avoid foreign key constraint violations
-      
-      // 1. Delete cart items that reference this product
-      await db.delete(cartItems).where(eq(cartItems.productId, id));
-      
-      // 2. Delete customer activity records that reference this product (if productId is not null)
-      await db.delete(customerActivity).where(eq(customerActivity.productId, id));
-      
-      // 3. Finally delete the product itself
-      await db.delete(products).where(eq(products.id, id));
-      
-      return true;
+      // Use transaction to ensure atomicity
+      return await db.transaction(async (tx) => {
+        // 1. Delete cart items that reference this product
+        console.log(`Deleting cart items for product ${id}`);
+        await tx.delete(cartItems).where(eq(cartItems.productId, id));
+        
+        // 2. Delete customer activity records that reference this product
+        console.log(`Deleting activity records for product ${id}`);
+        await tx.delete(customerActivity).where(eq(customerActivity.productId, id));
+        
+        // 3. Finally delete the product itself
+        console.log(`Deleting product ${id}`);
+        const result = await tx.delete(products).where(eq(products.id, id));
+        
+        console.log(`Product ${id} deletion completed successfully`);
+        return true;
+      });
     } catch (error) {
       console.error('Error deleting product:', error);
       return false;
