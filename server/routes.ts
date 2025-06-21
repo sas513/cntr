@@ -107,18 +107,34 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.delete("/api/products/:id", async (req, res) => {
+  app.delete("/api/products/:id", requireAdmin, async (req, res) => {
     try {
       const id = parseInt(req.params.id);
-      const deleted = await storage.deleteProduct(id);
+      console.log(`Attempting to delete product with ID: ${id}`);
       
-      if (!deleted) {
+      // Check if product exists before deletion
+      const existingProduct = await storage.getProduct(id);
+      if (!existingProduct) {
+        console.log(`Product ${id} not found`);
         return res.status(404).json({ message: "Product not found" });
       }
       
+      console.log(`Product ${id} exists, proceeding with deletion`);
+      const deleted = await storage.deleteProduct(id);
+      
+      if (!deleted) {
+        console.log(`Failed to delete product ${id} from database`);
+        return res.status(500).json({ message: "Failed to delete product from database" });
+      }
+      
+      console.log(`Product ${id} deleted successfully`);
       res.json({ message: "Product deleted successfully" });
     } catch (error) {
-      res.status(500).json({ message: "Failed to delete product" });
+      console.error('Delete product error:', error);
+      res.status(500).json({ 
+        message: "Failed to delete product", 
+        error: error instanceof Error ? error.message : 'Unknown error'
+      });
     }
   });
 
