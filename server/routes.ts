@@ -2,14 +2,21 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { generateToken, requireAdmin, isBlocked, recordFailedAttempt, clearFailedAttempts, type AuthRequest } from "./auth";
+import { customRateLimit, logSecurityEvent } from "./security";
 import { telegramService } from "./telegram-service";
 import { loginSchema, insertProductSchema, insertOrderSchema, insertCustomerActivitySchema, insertStoreSettingSchema } from "@shared/schema";
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   
-  // Admin authentication routes
-  app.post('/api/admin/login', async (req, res) => {
+  // Admin authentication routes with extra rate limiting
+  app.post('/api/admin/login', 
+    customRateLimit(
+      15 * 60 * 1000, // 15 minutes
+      3, // Max 3 login attempts per window per IP
+      "تم تجاوز عدد محاولات تسجيل الدخول المسموح. حاول مرة أخرى بعد 15 دقيقة."
+    ),
+    async (req, res) => {
     try {
       const clientIP = req.ip || req.connection.remoteAddress || 'unknown';
       

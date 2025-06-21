@@ -1,26 +1,28 @@
 import type { Request, Response, NextFunction } from "express";
-import rateLimit from "express-rate-limit";
 
-// Rate limiting for different endpoints
-export const loginRateLimit = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 5, // Max 5 attempts per window per IP
-  message: {
-    message: "تم تجاوز عدد محاولات تسجيل الدخول المسموح. حاول مرة أخرى بعد 15 دقيقة."
-  },
-  standardHeaders: true,
-  legacyHeaders: false,
-});
+// Simple rate limiting implementation
+const requestCounts = new Map<string, { count: number; resetTime: number }>();
 
-export const apiRateLimit = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // Max 100 requests per window per IP
-  message: {
-    message: "تم تجاوز عدد الطلبات المسموح. حاول مرة أخرى لاحقاً."
-  },
-  standardHeaders: true,
-  legacyHeaders: false,
-});
+export function customRateLimit(windowMs: number, maxRequests: number, message: string) {
+  return (req: Request, res: Response, next: NextFunction) => {
+    const ip = req.ip || req.connection.remoteAddress || 'unknown';
+    const now = Date.now();
+    
+    const existing = requestCounts.get(ip);
+    
+    if (!existing || now > existing.resetTime) {
+      requestCounts.set(ip, { count: 1, resetTime: now + windowMs });
+      return next();
+    }
+    
+    if (existing.count >= maxRequests) {
+      return res.status(429).json({ message });
+    }
+    
+    existing.count++;
+    next();
+  };
+}
 
 // Security headers middleware
 export function securityHeaders(req: Request, res: Response, next: NextFunction) {

@@ -1,10 +1,51 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
+import { securityHeaders, sanitizeInput, detectSuspiciousActivity, logSecurityEvent, customRateLimit } from "./security";
 
 const app = express();
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+
+// Enable trust proxy for correct IP detection
+app.set('trust proxy', 1);
+
+// Apply security headers to all requests
+app.use(securityHeaders);
+
+// Apply rate limiting to all requests
+app.use(customRateLimit(
+  15 * 60 * 1000, // 15 minutes
+  200, // Max 200 requests per window per IP
+  "تم تجاوز عدد الطلبات المسموح. حاول مرة أخرى لاحقاً."
+));
+
+// Sanitize all input
+app.use(sanitizeInput);
+
+// Body parsing with size limits
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: false, limit: '10mb' }));
+
+// Security monitoring middleware
+app.use((req: Request, res: Response, next: NextFunction) => {
+  const clientIP = req.ip || req.connection.remoteAddress || 'unknown';
+  
+  // Detect suspicious activity
+  if (detectSuspiciousActivity(req)) {
+    logSecurityEvent('SUSPICIOUS_ACTIVITY', {
+      ip: clientIP,
+      url: req.url,
+      method: req.method,
+      userAgent: req.headers['user-agent'],
+      timestamp: new Date().toISOString()
+    });
+    
+    return res.status(403).json({ 
+      message: "تم رفض الطلب لأسباب أمنية" 
+    });
+  }
+  
+  next();
+});
 
 app.use((req, res, next) => {
   const start = Date.now();
