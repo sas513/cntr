@@ -72,45 +72,44 @@ export default function AdminLogin() {
         
         <div className="relative z-10">
           <div className="mb-8">
-            <h1 className="text-4xl font-bold arabic-text mb-3 text-blue-100">Hi</h1>
-            <p className="text-lg arabic-text text-blue-200 mb-1">للساعات والعطور</p>
-            <p className="text-sm arabic-text text-blue-300">لوحة التحكم الإدارية المتقدمة</p>
+            <h1 className="text-4xl font-bold arabic-text mb-3 text-blue-100">سنتر المستودع</h1>
+            <p className="text-lg arabic-text text-blue-200">للساعات والعطور</p>
           </div>
 
           <div className="space-y-5">
-            <h2 className="text-xl font-semibold arabic-text text-blue-200 mb-4">الخدمات والميزات</h2>
+            <h2 className="text-xl font-semibold arabic-text text-blue-200 mb-4">خدماتنا</h2>
             
             <div className="grid grid-cols-2 gap-3">
               <div className="bg-blue-600/20 backdrop-blur-sm rounded-lg p-3 border border-blue-500/30">
                 <div className="flex items-center gap-2 mb-1">
                   <Package className="w-5 h-5 text-blue-200" />
-                  <span className="font-medium arabic-text text-blue-100 text-sm">إدارة المنتجات</span>
+                  <span className="font-medium arabic-text text-blue-100 text-sm">المنتجات</span>
                 </div>
-                <p className="text-xs text-blue-300 arabic-text">إضافة وتعديل المنتجات والفئات</p>
+                <p className="text-xs text-blue-300 arabic-text">مجموعة متنوعة من الساعات والعطور</p>
               </div>
 
               <div className="bg-blue-600/20 backdrop-blur-sm rounded-lg p-3 border border-blue-500/30">
                 <div className="flex items-center gap-2 mb-1">
                   <ShoppingCart className="w-5 h-5 text-blue-200" />
-                  <span className="font-medium arabic-text text-blue-100 text-sm">إدارة الطلبات</span>
+                  <span className="font-medium arabic-text text-blue-100 text-sm">الطلبات</span>
                 </div>
-                <p className="text-xs text-blue-300 arabic-text">متابعة ومعالجة طلبات العملاء</p>
+                <p className="text-xs text-blue-300 arabic-text">خدمة توصيل سريعة وموثوقة</p>
               </div>
 
               <div className="bg-blue-600/20 backdrop-blur-sm rounded-lg p-3 border border-blue-500/30">
                 <div className="flex items-center gap-2 mb-1">
                   <BarChart3 className="w-5 h-5 text-blue-200" />
-                  <span className="font-medium arabic-text text-blue-100 text-sm">التقارير المالية</span>
+                  <span className="font-medium arabic-text text-blue-100 text-sm">الأسعار</span>
                 </div>
-                <p className="text-xs text-blue-300 arabic-text">إحصائيات مفصلة ومتعددة العملات</p>
+                <p className="text-xs text-blue-300 arabic-text">أسعار منافسة وعروض مميزة</p>
               </div>
 
               <div className="bg-blue-600/20 backdrop-blur-sm rounded-lg p-3 border border-blue-500/30">
                 <div className="flex items-center gap-2 mb-1">
                   <Users className="w-5 h-5 text-blue-200" />
-                  <span className="font-medium arabic-text text-blue-100 text-sm">إدارة العملاء</span>
+                  <span className="font-medium arabic-text text-blue-100 text-sm">خدمة العملاء</span>
                 </div>
-                <p className="text-xs text-blue-300 arabic-text">متابعة العملاء وسجل النشاطات</p>
+                <p className="text-xs text-blue-300 arabic-text">دعم متميز وخدمة عملاء راقية</p>
               </div>
             </div>
 
