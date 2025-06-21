@@ -114,37 +114,37 @@ export default function AdminLogin() {
             </div>
 
             <div className="mt-4">
-              <h3 className="text-base font-medium arabic-text text-blue-200 mb-3">الميزات المتقدمة</h3>
+              <h3 className="text-base font-medium arabic-text text-blue-200 mb-3">مميزاتنا</h3>
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <MessageSquare className="w-4 h-4 text-blue-200" />
-                  <span className="arabic-text text-blue-100 text-sm">إشعارات Telegram التلقائية</span>
+                  <span className="arabic-text text-blue-100 text-sm">تواصل سريع</span>
                   <Badge className="bg-blue-500/30 text-blue-200 border-blue-400/50 text-xs">متاح</Badge>
                 </div>
                 <div className="flex items-center gap-2">
                   <Globe className="w-4 h-4 text-blue-200" />
-                  <span className="arabic-text text-blue-100 text-sm">تتبع الزوار بالدول</span>
+                  <span className="arabic-text text-blue-100 text-sm">خدمة عالمية</span>
                   <Badge className="bg-blue-500/30 text-blue-200 border-blue-400/50 text-xs">فعال</Badge>
                 </div>
                 <div className="flex items-center gap-2">
                   <Lock className="w-4 h-4 text-blue-200" />
-                  <span className="arabic-text text-blue-100 text-sm">نظام حماية متعدد الطبقات</span>
+                  <span className="arabic-text text-blue-100 text-sm">معاملات آمنة</span>
                   <Badge className="bg-blue-500/30 text-blue-200 border-blue-400/50 text-xs">آمن</Badge>
                 </div>
                 <div className="flex items-center gap-2">
                   <Smartphone className="w-4 h-4 text-blue-200" />
-                  <span className="arabic-text text-blue-100 text-sm">تصميم متجاوب للجوال</span>
+                  <span className="arabic-text text-blue-100 text-sm">متوافق مع الجوال</span>
                   <Badge className="bg-blue-500/30 text-blue-200 border-blue-400/50 text-xs">محسن</Badge>
                 </div>
                 <div className="flex items-center gap-2">
                   <Palette className="w-4 h-4 text-blue-200" />
-                  <span className="arabic-text text-blue-100 text-sm">تخصيص الألوان والصور</span>
-                  <Badge className="bg-blue-500/30 text-blue-200 border-blue-400/50 text-xs">ديناميكي</Badge>
+                  <span className="arabic-text text-blue-100 text-sm">تصميم عصري</span>
+                  <Badge className="bg-blue-500/30 text-blue-200 border-blue-400/50 text-xs">أنيق</Badge>
                 </div>
                 <div className="flex items-center gap-2">
                   <TrendingUp className="w-4 h-4 text-blue-200" />
-                  <span className="arabic-text text-blue-100 text-sm">تحليلات الأداء المتقدمة</span>
-                  <Badge className="bg-blue-500/30 text-blue-200 border-blue-400/50 text-xs">شامل</Badge>
+                  <span className="arabic-text text-blue-100 text-sm">جودة عالية</span>
+                  <Badge className="bg-blue-500/30 text-blue-200 border-blue-400/50 text-xs">مميز</Badge>
                 </div>
               </div>
             </div>
@@ -158,9 +158,9 @@ export default function AdminLogin() {
               <Shield className="w-8 h-8 text-white" />
             </div>
             <div>
-              <CardTitle className="text-2xl font-bold arabic-text text-white">تسجيل دخول الإدارة</CardTitle>
+              <CardTitle className="text-2xl font-bold arabic-text text-white">تسجيل الدخول</CardTitle>
               <p className="text-blue-200 arabic-text mt-1 text-sm">
-                ادخل بيانات الإدارة للوصول إلى لوحة التحكم
+                مرحباً بك في سنتر المستودع
               </p>
             </div>
           </CardHeader>
@@ -239,14 +239,14 @@ export default function AdminLogin() {
 
             <div className="mt-6 text-center">
               <p className="text-xs text-blue-200 arabic-text">
-                خاص بإدارة المتجر فقط - نظام محمي بالكامل
+                مرحباً بك في متجرنا - نظام آمن وموثوق
               </p>
               <div className="flex justify-center mt-3 gap-2">
                 <Badge className="bg-blue-400/30 text-blue-200 border-blue-400/50 text-xs">
                   آمن 100%
                 </Badge>
                 <Badge className="bg-blue-400/30 text-blue-200 border-blue-400/50 text-xs">
-                  مشفر
+                  موثوق
                 </Badge>
               </div>
             </div>
