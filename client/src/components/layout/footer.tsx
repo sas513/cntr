@@ -23,7 +23,7 @@ export default function Footer() {
   const whatsappNumber = getSetting("whatsapp_number") || phone1;
 
   return (
-    <footer className="bg-primary text-white py-16">
+    <footer className="text-white py-16 bg-[#070708]">
       <div className="container mx-auto px-4">
         <div className="grid md:grid-cols-4 gap-8 mb-8">
           {/* Company Info */}
@@ -202,7 +202,6 @@ export default function Footer() {
           </p>
         </div>
       </div>
-
       {/* Floating WhatsApp Button */}
       <div className="fixed bottom-6 left-6 z-50">
         <a 

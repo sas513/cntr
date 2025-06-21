@@ -76,7 +76,6 @@ export default function Home() {
           <Clock className="w-12 h-12" />
         </div>
       </section>
-
       {/* Features Section */}
       <section className="py-12 sm:py-16 bg-white">
         <div className="container mx-auto px-3 sm:px-4">
@@ -121,7 +120,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
       {/* Categories Section */}
       <section className="py-12 sm:py-16 bg-muted/50">
         <div className="container mx-auto px-3 sm:px-4">
@@ -171,7 +169,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
       {/* Featured Products */}
       <section className="py-12 sm:py-16 bg-white">
         <div className="container mx-auto px-3 sm:px-4">
@@ -209,12 +206,11 @@ export default function Home() {
           </div>
         </div>
       </section>
-
       {/* Testimonials */}
       <section className="py-16 bg-primary text-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold mb-4 arabic-text">آراء عملائنا</h2>
+            <h2 className="font-bold arabic-text text-[31px] mt-[8px] mb-[8px] ml-[0px] mr-[0px] pt-[8px] pb-[8px]">آراء عملائنا</h2>
             <p className="text-xl opacity-90 arabic-text">تجارب حقيقية من عملائنا الكرام</p>
           </div>
           
@@ -282,11 +278,10 @@ export default function Home() {
           </div>
         </div>
       </section>
-
       {/* Newsletter */}
       <section className="py-16 bg-gradient-to-r from-secondary to-accent text-white">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-4xl font-bold mb-4 arabic-text">اشترك في نشرتنا الإخبارية</h2>
+          <h2 className="text-4xl font-bold mb-4 arabic-text">اشترك معنا الان </h2>
           <p className="text-xl mb-8 opacity-90 arabic-text">كن أول من يعلم بالمنتجات الجديدة والعروض الخاصة</p>
           <div className="max-w-md mx-auto">
             <div className="flex gap-2">
