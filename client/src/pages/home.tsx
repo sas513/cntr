@@ -232,18 +232,7 @@ export default function Home() {
                 </p>
                 <div className="flex items-center justify-center gap-4">
                   <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center text-white font-bold text-xl">
-                    {getSetting("customer1_image") ? (
-                      <img 
-                        src={getSetting("customer1_image")} 
-                        alt="أحمد محمد" 
-                        className="w-full h-full object-cover rounded-full"
-                        onError={(e) => {
-                          e.currentTarget.style.display = 'none';
-                        }}
-                      />
-                    ) : (
-                      <span>أ</span>
-                    )}
+                    <span>أ</span>
                   </div>
                   <div>
                     <h4 className="text-lg font-bold arabic-text">أحمد محمد</h4>
@@ -260,14 +249,12 @@ export default function Home() {
               {
                 name: "فاطمة علي",
                 location: "البصرة",
-                content: "تجربة تسوق رائعة، المنتجات أصلية والتوصيل سريع جداً",
-                image: getSetting("customer2_image") || ""
+                content: "تجربة تسوق رائعة، المنتجات أصلية والتوصيل سريع جداً"
               },
               {
                 name: "خالد حسن",
                 location: "أربيل", 
-                content: "أسعار منافسة وجودة ممتازة، سأكون عميل دائم بإذن الله",
-                image: getSetting("customer3_image") || ""
+                content: "أسعار منافسة وجودة ممتازة، سأكون عميل دائم بإذن الله"
               }
             ].map((testimonial, index) => (
               <Card key={index} className="bg-white/10 backdrop-blur-lg border-white/20 hover:bg-white/15 transition-all duration-300">
@@ -282,18 +269,7 @@ export default function Home() {
                   </p>
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center text-white font-bold">
-                      {testimonial.image ? (
-                        <img 
-                          src={testimonial.image} 
-                          alt={testimonial.name} 
-                          className="w-full h-full object-cover rounded-full"
-                          onError={(e) => {
-                            e.currentTarget.style.display = 'none';
-                          }}
-                        />
-                      ) : (
-                        <span>{testimonial.name.charAt(0)}</span>
-                      )}
+                      <span>{testimonial.name.charAt(0)}</span>
                     </div>
                     <div>
                       <h4 className="font-semibold arabic-text">{testimonial.name}</h4>
