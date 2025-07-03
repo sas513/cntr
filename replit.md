@@ -168,7 +168,7 @@ A comprehensive Arabic e-commerce website for "بابلون إكسبرس" (Babyl
 
 ## Key Business Information
 - **Store Name**: بابلون إكسبرس (Babylon Express)
-- **Address**: Iraq, Baghdad
+- **Address**: Iraq
 - **Phones**: 07800000000, 07811111111
 - **Email**: info@babylonexpress.com
 - **Specialties**: Multi-category marketplace (electronics, fashion, home, sports, beauty, toys, automotive, books)
