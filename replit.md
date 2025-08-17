@@ -1,7 +1,7 @@
-# Arabic E-commerce Platform - بابلون إكسبرس (Babylon Express)
+# Arabic E-commerce Platform - سنتر المستودع للساعات والعطور
 
 ## Project Overview
-A comprehensive Arabic e-commerce website for "بابلون إكسبرس" (Babylon Express) featuring a modern professional interface for customers to shop from a wide range of products like AliExpress, plus a complete admin dashboard for store management. Now transformed into a multi-category marketplace covering electronics, fashion, home & garden, sports, beauty, toys, automotive, and books & media.
+A comprehensive Arabic e-commerce website for "سنتر المستودع للساعات والعطور" (Center Warehouse for Watches and Perfumes) featuring a modern professional interface for customers to shop watches and perfumes, plus a complete admin dashboard for store management.
 
 ## Recent Achievements (January 2025)
 ✅ **Complete Telegram Bot Integration**
@@ -32,17 +32,6 @@ A comprehensive Arabic e-commerce website for "بابلون إكسبرس" (Babyl
 - Created "محفوظ" (Saved) category for preserved custom themes
 - Updated theme gallery to show saved theme as "الثيم الأساسي المحفوظ"
 - Allows user to return to customized colors after trying other themes
-
-✅ **Complete Store Transformation to Babylon Express (January 22, 2025)**
-- Rebranded from "سنتر المستودع للساعات والعطور" to "بابلون إكسبرس" (Babylon Express)
-- Updated all store settings: name (Arabic/English), hero content, contact info
-- Replaced specialized watch/perfume categories with 8 comprehensive categories:
-  - Electronics (الإلكترونيات), Fashion (الأزياء), Home & Garden (المنزل والحديقة)
-  - Sports & Outdoor (الرياضة والهواء الطلق), Beauty & Health (الجمال والصحة)
-  - Toys & Kids (الألعاب والأطفال), Automotive (السيارات), Books & Media (الكتب والوسائط)
-- Updated hero background image for marketplace feel
-- Set up comprehensive store policies and contact information
-- Transformed into AliExpress-style multi-category marketplace ready for diverse product catalog
 
 ✅ **Database Integrity & Product Management Fix (January 21, 2025)**
 - Fixed product deletion foreign key constraint issues
@@ -167,11 +156,10 @@ A comprehensive Arabic e-commerce website for "بابلون إكسبرس" (Babyl
 - Order details include customer info, products, and totals
 
 ## Key Business Information
-- **Store Name**: بابلون إكسبرس (Babylon Express)
-- **Address**: Iraq
-- **Phones**: 07800000000, 07811111111
-- **Email**: info@babylonexpress.com
-- **Specialties**: Multi-category marketplace (electronics, fashion, home, sports, beauty, toys, automotive, books)
+- **Store Name**: سنتر المستودع للساعات والعطور
+- **Address**: الرمادي المستودع قرب مول الستي سنتر
+- **Phones**: 07813961800, 07810125388
+- **Specialties**: Watches (ساعات) and Perfumes (عطور)
 
 ## User Preferences
 - Communication in Arabic for business context
