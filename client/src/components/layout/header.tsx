@@ -47,9 +47,9 @@ export default function Header() {
               <a href={`tel:${phone1}`} className="flex items-center gap-1 hover:text-primary transition-colors">
                 <Phone className="w-4 h-4 text-secondary" />
                 <span className="hidden sm:inline">{phone1}</span>
-                <span className="sm:hidden">{phone1.slice(-8)}</span>
+                <span className="sm:hidden text-xs">{phone1}</span>
               </a>
-              <a href={`tel:${phone2}`} className="hidden sm:flex items-center gap-1 hover:text-primary transition-colors">
+              <a href={`tel:${phone2}`} className="hidden md:flex items-center gap-1 hover:text-primary transition-colors">
                 <Phone className="w-4 h-4 text-secondary" />
                 {phone2}
               </a>
