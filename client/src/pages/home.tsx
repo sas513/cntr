@@ -6,7 +6,7 @@ import ProductCard from "@/components/product-card";
 import { Gem, Clock, Truck, Shield, Headphones, RotateCcw, Star } from "lucide-react";
 import { Link } from "wouter";
 import type { Product, Category, StoreSetting } from "@shared/schema";
-import heroBackgroundImage from "@assets/hero-background-new.png";
+import heroBackgroundImage from "@assets/hero-background-latest.png";
 
 // Preload the hero image to prevent flashing
 const img = new Image();
