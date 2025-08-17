@@ -49,9 +49,10 @@ export default function Header() {
                 <span className="hidden sm:inline">{phone1}</span>
                 <span className="sm:hidden text-xs">{phone1}</span>
               </a>
-              <a href={`tel:${phone2}`} className="hidden md:flex items-center gap-1 hover:text-primary transition-colors">
+              <a href={`tel:${phone2}`} className="flex items-center gap-1 hover:text-primary transition-colors">
                 <Phone className="w-4 h-4 text-secondary" />
-                {phone2}
+                <span className="hidden sm:inline">{phone2}</span>
+                <span className="sm:hidden text-xs">{phone2}</span>
               </a>
             </div>
             <div className="flex items-center gap-1">
