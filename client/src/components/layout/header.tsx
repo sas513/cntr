@@ -22,9 +22,11 @@ export default function Header() {
     settings.find(s => s.key === key)?.value || "";
 
   const storeName = getSetting("store_name") || "سنتر المستودع";
+  const storeNameShort = "سنتر المستودع"; // نسخة مختصرة للهاتف
   const phone1 = getSetting("store_phone1") || "07813961800";
   const phone2 = getSetting("store_phone2") || "07810125388";
-  const address = getSetting("store_address") || "الرمادي المستودع قرب مول الستي سنتر";
+  const address = getSetting("store_address") || "الأنبار";
+  const city = getSetting("store_city") || "الرمادي - قرب مول الستي سنتر";
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,19 +43,21 @@ export default function Header() {
         {/* Top Bar */}
         <div className="border-b border-gray-200 py-2">
           <div className="flex justify-between items-center text-sm text-muted-foreground">
-            <div className="flex items-center gap-4">
-              <span className="flex items-center gap-1">
+            <div className="flex items-center gap-2 md:gap-4">
+              <a href={`tel:${phone1}`} className="flex items-center gap-1 hover:text-primary transition-colors">
                 <Phone className="w-4 h-4 text-secondary" />
-                {phone1}
-              </span>
-              <span className="flex items-center gap-1">
+                <span className="hidden sm:inline">{phone1}</span>
+                <span className="sm:hidden">{phone1.slice(-8)}</span>
+              </a>
+              <a href={`tel:${phone2}`} className="hidden sm:flex items-center gap-1 hover:text-primary transition-colors">
                 <Phone className="w-4 h-4 text-secondary" />
                 {phone2}
-              </span>
+              </a>
             </div>
-            <div className="hidden md:flex items-center gap-1">
+            <div className="flex items-center gap-1">
               <MapPin className="w-4 h-4 text-secondary" />
-              <span className="arabic-text">{address}</span>
+              <span className="arabic-text hidden md:inline">{address} - {city}</span>
+              <span className="arabic-text md:hidden">{address}</span>
             </div>
           </div>
         </div>
@@ -63,8 +67,9 @@ export default function Header() {
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-8">
               <Link href="/">
-                <h1 className="text-2xl font-bold text-primary arabic-text hover:text-primary/80 transition-colors cursor-pointer">
-                  {storeName}
+                <h1 className="text-xl md:text-2xl font-bold text-primary arabic-text hover:text-primary/80 transition-colors cursor-pointer">
+                  <span className="hidden sm:inline">{storeName}</span>
+                  <span className="sm:hidden">{storeNameShort}</span>
                 </h1>
               </Link>
               
@@ -202,18 +207,22 @@ export default function Header() {
                       </nav>
                       
                       {/* Contact Info */}
-                      <div className="pt-4 border-t space-y-2 text-sm">
+                      <div className="pt-4 border-t space-y-3 text-sm">
                         <div className="flex items-center gap-2">
                           <Phone className="w-4 h-4 text-secondary" />
-                          <span>{phone1}</span>
+                          <a href={`tel:${phone1}`} className="hover:text-primary transition-colors">
+                            {phone1}
+                          </a>
                         </div>
                         <div className="flex items-center gap-2">
                           <Phone className="w-4 h-4 text-secondary" />
-                          <span>{phone2}</span>
+                          <a href={`tel:${phone2}`} className="hover:text-primary transition-colors">
+                            {phone2}
+                          </a>
                         </div>
                         <div className="flex items-center gap-2">
                           <MapPin className="w-4 h-4 text-secondary" />
-                          <span className="arabic-text">{address}</span>
+                          <span className="arabic-text">{address} - {city}</span>
                         </div>
                       </div>
                     </div>
