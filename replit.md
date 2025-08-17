@@ -33,16 +33,12 @@ A comprehensive Arabic e-commerce website for "بابلون إكسبرس" (Babyl
 - Updated theme gallery to show saved theme as "الثيم الأساسي المحفوظ"
 - Allows user to return to customized colors after trying other themes
 
-✅ **Complete Store Transformation to Babylon Express (January 22, 2025)**
-- Rebranded from "سنتر المستودع للساعات والعطور" to "بابلون إكسبرس" (Babylon Express)
-- Updated all store settings: name (Arabic/English), hero content, contact info
-- Replaced specialized watch/perfume categories with 8 comprehensive categories:
-  - Electronics (الإلكترونيات), Fashion (الأزياء), Home & Garden (المنزل والحديقة)
-  - Sports & Outdoor (الرياضة والهواء الطلق), Beauty & Health (الجمال والصحة)
-  - Toys & Kids (الألعاب والأطفال), Automotive (السيارات), Books & Media (الكتب والوسائط)
-- Updated hero background image for marketplace feel
-- Set up comprehensive store policies and contact information
-- Transformed into AliExpress-style multi-category marketplace ready for diverse product catalog
+✅ **Store Information Update (August 17, 2025)**
+- Reverted from "بابلون إكسبرس" back to original specialty store "سنتر المستودع للساعات والعطور"
+- Updated phone numbers: 07813961800, 07810125388
+- Updated address: الأنبار - الرمادي - قرب مول الستي سنتر
+- Focused back on watches and perfumes specialty
+- All store settings updated in database with accurate contact information
 
 ✅ **Database Integrity & Product Management Fix (January 21, 2025)**
 - Fixed product deletion foreign key constraint issues
@@ -167,11 +163,11 @@ A comprehensive Arabic e-commerce website for "بابلون إكسبرس" (Babyl
 - Order details include customer info, products, and totals
 
 ## Key Business Information
-- **Store Name**: بابلون إكسبرس (Babylon Express)
-- **Address**: Iraq
-- **Phones**: 07800000000, 07811111111
+- **Store Name**: سنتر المستودع للساعات والعطور (Center Al Mustada for Watches and Perfumes)
+- **Address**: الأنبار - الرمادي - قرب مول الستي سنتر (Anbar - Ramadi - Near City Center Mall)
+- **Phones**: 07813961800, 07810125388
 - **Email**: info@babylonexpress.com
-- **Specialties**: Multi-category marketplace (electronics, fashion, home, sports, beauty, toys, automotive, books)
+- **Specialties**: Watches and perfumes speciality store
 
 ## User Preferences
 - Communication in Arabic for business context
