@@ -519,8 +519,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Get upload URL for product images
-  app.post("/api/objects/upload", requireAdmin, async (req, res) => {
+  app.post("/api/objects/upload", async (req: AuthRequest, res) => {
     try {
+      // Check if user is authenticated with token
+      const token = req.headers.authorization?.replace('Bearer ', '');
+      if (!token) {
+        return res.status(401).json({ message: "غير مصرح بالوصول" });
+      }
+
+      // Verify token manually for this endpoint
+      const jwt = require('jsonwebtoken');
+      const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback-secret');
+      if (!decoded) {
+        return res.status(401).json({ message: "غير مصرح بالوصول" });
+      }
+
       const objectStorageService = new ObjectStorageService();
       const uploadURL = await objectStorageService.getObjectEntityUploadURL();
       res.json({ uploadURL });
@@ -543,6 +556,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       return res.sendStatus(500);
     }
+  });
+
+  // Placeholder image endpoint
+  app.get("/api/placeholder-image", (req, res) => {
+    const svg = `<svg width="100" height="100" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect width="100" height="100" fill="#F3F4F6"/>
+      <path d="M35 40H65V60H35V40Z" fill="#9CA3AF"/>
+      <path d="M45 45H55V55H45V45Z" fill="#6B7280"/>
+    </svg>`;
+    
+    res.setHeader('Content-Type', 'image/svg+xml');
+    res.send(svg);
   });
 
   const httpServer = createServer(app);

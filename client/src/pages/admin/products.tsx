@@ -438,21 +438,28 @@ export default function AdminProducts() {
                             onComplete={(result) => {
                               const uploadedFile = result.successful[0];
                               if (uploadedFile?.uploadURL) {
-                                const objectStorageService = {
-                                  normalizeObjectEntityPath: (url: string) => {
-                                    if (url.includes('storage.googleapis.com')) {
-                                      const urlPath = new URL(url).pathname;
-                                      const parts = urlPath.split('/');
-                                      if (parts.length >= 4) {
-                                        const entityId = parts.slice(3).join('/');
-                                        return `/objects/${entityId}`;
-                                      }
-                                    }
-                                    return url;
+                                try {
+                                  // تحويل رابط Google Storage إلى رابط محلي
+                                  const url = new URL(uploadedFile.uploadURL);
+                                  const pathParts = url.pathname.split('/');
+                                  
+                                  // البحث عن الجزء الخاص بـ uploads/
+                                  const uploadsIndex = pathParts.findIndex(part => part === 'uploads');
+                                  if (uploadsIndex !== -1 && uploadsIndex < pathParts.length - 1) {
+                                    const objectId = pathParts[uploadsIndex + 1];
+                                    const localImagePath = `/objects/uploads/${objectId}`;
+                                    updateImageField(index, localImagePath);
+                                    console.log('تم رفع الصورة بنجاح:', localImagePath);
+                                  } else {
+                                    // fallback إذا لم نجد uploads
+                                    const entityId = pathParts.slice(-1)[0];
+                                    const localImagePath = `/objects/uploads/${entityId}`;
+                                    updateImageField(index, localImagePath);
                                   }
-                                };
-                                const normalizedPath = objectStorageService.normalizeObjectEntityPath(uploadedFile.uploadURL);
-                                updateImageField(index, normalizedPath);
+                                } catch (error) {
+                                  console.error('خطأ في معالجة رابط الصورة:', error);
+                                  updateImageField(index, uploadedFile.uploadURL);
+                                }
                               }
                             }}
                             buttonClassName="bg-blue-600 hover:bg-blue-700 text-white w-full"
@@ -608,9 +615,12 @@ export default function AdminProducts() {
                         <TableRow key={product.id}>
                           <TableCell>
                             <img
-                              src={product.images?.[0] || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-4.0.3&auto=format&fit=crop&w=100&h=100"}
+                              src={product.images?.[0] || "/api/placeholder-image"}
                               alt={product.nameAr}
-                              className="w-12 h-12 object-cover rounded-lg"
+                              className="w-12 h-12 object-cover rounded-lg bg-gray-100"
+                              onError={(e) => {
+                                e.currentTarget.src = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0zNSA0MEg2NVY2MEgzNVY0MFoiIGZpbGw9IiM5Q0EzQUYiLz4KPHBhdGggZD0iTTQ1IDQ1SDU1VjU1SDQ1VjQ1WiIgZmlsbD0iIzZCNzI4MCIvPgo8L3N2Zz4K";
+                              }}
                             />
                           </TableCell>
                           <TableCell>
