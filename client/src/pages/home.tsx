@@ -150,7 +150,7 @@ export default function Home() {
                 <div className="absolute bottom-6 right-6 text-white">
                   <h3 className="text-3xl font-bold mb-2 arabic-text">الساعات</h3>
                   <p className="text-lg opacity-90 arabic-text">أحدث التصاميم العالمية</p>
-                  <Button className="mt-4 bg-secondary hover:bg-secondary/90 text-primary">
+                  <Button className="mt-4 bg-white hover:bg-gray-100 text-black font-medium">
                     تسوق الآن
                   </Button>
                 </div>
@@ -171,7 +171,7 @@ export default function Home() {
                 <div className="absolute bottom-6 right-6 text-white">
                   <h3 className="text-3xl font-bold mb-2 arabic-text">العطور</h3>
                   <p className="text-lg opacity-90 arabic-text">أرقى العطور العالمية</p>
-                  <Button className="mt-4 bg-secondary hover:bg-secondary/90 text-primary">
+                  <Button className="mt-4 bg-white hover:bg-gray-100 text-black font-medium">
                     تسوق الآن
                   </Button>
                 </div>
