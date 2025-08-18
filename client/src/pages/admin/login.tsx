@@ -95,7 +95,13 @@ export default function AdminLogin() {
     },
     onSuccess: (data: any) => {
       localStorage.setItem("adminToken", data.token);
-      window.location.href = "/admin";
+      toast({
+        title: "تم تسجيل الدخول بنجاح",
+        description: "مرحباً بك في لوحة الإدارة",
+      });
+      setTimeout(() => {
+        window.location.href = "/admin";
+      }, 1000);
     },
     onError: (error) => {
       toast({

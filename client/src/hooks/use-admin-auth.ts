@@ -29,7 +29,7 @@ export function useAdminAuth() {
 
   // Auto redirect to login if not authenticated
   useEffect(() => {
-    if (!isLoading && !token) {
+    if (!isLoading && !token && window.location.pathname.startsWith("/admin") && window.location.pathname !== "/admin/login") {
       setLocation("/admin/login");
     }
   }, [token, isLoading, setLocation]);
