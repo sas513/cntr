@@ -67,7 +67,7 @@ export default function Home() {
                 </Button>
               </Link>
               <Link href="/offers">
-                <Button size="lg" variant="outline" className="w-full sm:w-auto border-white bg-transparent text-white hover:bg-white hover:text-primary shadow-xl">
+                <Button size="lg" variant="outline" className="w-full sm:w-auto border-white bg-transparent text-white hover:bg-white hover:text-[#0c0c0d] shadow-xl">
                   العروض الخاصة
                 </Button>
               </Link>
@@ -150,7 +150,7 @@ export default function Home() {
                 <div className="absolute bottom-6 right-6 text-white">
                   <h3 className="text-3xl font-bold mb-2 arabic-text">الساعات</h3>
                   <p className="text-lg opacity-90 arabic-text">أحدث التصاميم العالمية</p>
-                  <Button className="mt-4 bg-secondary hover:bg-secondary/90 text-primary">
+                  <Button className="mt-4 bg-secondary hover:bg-secondary/90 text-[#0c0c0d]">
                     تسوق الآن
                   </Button>
                 </div>
@@ -171,7 +171,7 @@ export default function Home() {
                 <div className="absolute bottom-6 right-6 text-white">
                   <h3 className="text-3xl font-bold mb-2 arabic-text">العطور</h3>
                   <p className="text-lg opacity-90 arabic-text">أرقى العطور العالمية</p>
-                  <Button className="mt-4 bg-secondary hover:bg-secondary/90 text-primary">
+                  <Button className="mt-4 bg-secondary hover:bg-secondary/90 text-[#0c0c0d]">
                     تسوق الآن
                   </Button>
                 </div>
@@ -210,7 +210,7 @@ export default function Home() {
           
           <div className="text-center mt-8 sm:mt-12">
             <Link href="/products">
-              <Button size="lg" className="bg-secondary hover:bg-secondary/90 text-primary font-medium text-sm sm:text-base">
+              <Button size="lg" className="bg-secondary hover:bg-secondary/90 text-[#0c0c0d] font-medium text-sm sm:text-base">
                 عرض جميع المنتجات
               </Button>
             </Link>
