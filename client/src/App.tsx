@@ -29,24 +29,37 @@ import AdminReports from "@/pages/admin/reports";
 import ThemeGallery from "@/pages/admin/theme-gallery";
 import NotFound from "@/pages/not-found";
 
-function Router() {
-  // Track visitor when app loads
+function CustomerLayout() {
   useVisitorTracking();
   
   return (
+    <>
+      <Header />
+      <main>
+        <Switch>
+          <Route path="/" component={Home} />
+          <Route path="/products" component={Products} />
+          <Route path="/product/:id" component={ProductDetail} />
+          <Route path="/cart" component={Cart} />
+          <Route path="/offers" component={Offers} />
+          <Route path="/about" component={About} />
+          <Route path="/privacy-policy" component={PrivacyPolicy} />
+          <Route path="/terms-conditions" component={TermsConditions} />
+          <Route path="/return-policy" component={ReturnPolicy} />
+          <Route path="/shipping-policy" component={ShippingPolicy} />
+          <Route component={NotFound} />
+        </Switch>
+      </main>
+      <Footer />
+      <FloatingCartButton />
+    </>
+  );
+}
+
+function Router() {
+  return (
     <Switch>
-      <Route path="/" component={Home} />
-      <Route path="/products" component={Products} />
-      <Route path="/product/:id" component={ProductDetail} />
-      <Route path="/cart" component={Cart} />
-      <Route path="/offers" component={Offers} />
-      <Route path="/about" component={About} />
-      <Route path="/privacy-policy" component={PrivacyPolicy} />
-      <Route path="/terms-conditions" component={TermsConditions} />
-      <Route path="/return-policy" component={ReturnPolicy} />
-      <Route path="/shipping-policy" component={ShippingPolicy} />
-      
-      {/* Admin Routes */}
+      {/* Admin Routes - No Header/Footer */}
       <Route path="/admin/login" component={AdminLogin} />
       <Route path="/admin" component={AdminDashboard} />
       <Route path="/admin/products" component={AdminProducts} />
@@ -56,8 +69,8 @@ function Router() {
       <Route path="/admin/settings" component={AdminSettings} />
       <Route path="/admin/reports" component={AdminReports} />
       
-      {/* Fallback to 404 */}
-      <Route component={NotFound} />
+      {/* Customer Routes - With Header/Footer */}
+      <Route component={CustomerLayout} />
     </Switch>
   );
 }
@@ -69,12 +82,7 @@ function App() {
         <TooltipProvider>
           <CartProvider>
             <div className="min-h-screen bg-background text-foreground" dir="rtl">
-              <Header />
-              <main>
-                <Router />
-              </main>
-              <Footer />
-              <FloatingCartButton />
+              <Router />
               <Toaster />
             </div>
           </CartProvider>
