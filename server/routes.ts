@@ -8,7 +8,7 @@ import { loginSchema, insertProductSchema, insertOrderSchema, insertCustomerActi
 import { z } from "zod";
 import bcrypt from "bcryptjs";
 import { db } from "./db";
-import { ObjectStorageService, ObjectNotFoundError } from "./objectStorage.js";
+import { ObjectStorageService, ObjectNotFoundError } from "./objectStorage";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   
@@ -519,21 +519,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Get upload URL for product images
-  app.post("/api/objects/upload", async (req: AuthRequest, res) => {
+  app.post("/api/objects/upload", requireAdmin, async (req: AuthRequest, res) => {
     try {
-      // Check if user is authenticated with token
-      const token = req.headers.authorization?.replace('Bearer ', '');
-      if (!token) {
-        return res.status(401).json({ message: "غير مصرح بالوصول" });
-      }
-
-      // Verify token manually for this endpoint
-      const jwt = require('jsonwebtoken');
-      const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback-secret');
-      if (!decoded) {
-        return res.status(401).json({ message: "غير مصرح بالوصول" });
-      }
-
       const objectStorageService = new ObjectStorageService();
       const uploadURL = await objectStorageService.getObjectEntityUploadURL();
       res.json({ uploadURL });

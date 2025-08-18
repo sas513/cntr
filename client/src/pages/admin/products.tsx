@@ -436,7 +436,7 @@ export default function AdminProducts() {
                               };
                             }}
                             onComplete={(result) => {
-                              const uploadedFile = result.successful[0];
+                              const uploadedFile = result.successful?.[0];
                               if (uploadedFile?.uploadURL) {
                                 try {
                                   // تحويل رابط Google Storage إلى رابط محلي
@@ -617,9 +617,10 @@ export default function AdminProducts() {
                             <img
                               src={product.images?.[0] || "/api/placeholder-image"}
                               alt={product.nameAr}
-                              className="w-12 h-12 object-cover rounded-lg bg-gray-100"
+                              className="w-12 h-12 object-cover rounded-lg bg-gray-100 border border-gray-200"
                               onError={(e) => {
-                                e.currentTarget.src = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0zNSA0MEg2NVY2MEgzNVY0MFoiIGZpbGw9IiM5Q0EzQUYiLz4KPHBhdGggZD0iTTQ1IDQ1SDU1VjU1SDQ1VjQ1WiIgZmlsbD0iIzZCNzI4MCIvPgo8L3N2Zz4K";
+                                // إذا فشلت الصورة، نستخدم placeholder منطقي
+                                e.currentTarget.src = "/api/placeholder-image";
                               }}
                             />
                           </TableCell>
