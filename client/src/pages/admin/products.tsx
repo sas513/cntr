@@ -257,7 +257,7 @@ export default function AdminProducts() {
             
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
               <DialogTrigger asChild>
-                <Button onClick={() => { resetForm(); setEditingProduct(null); }}>
+                <Button className="bg-white hover:bg-gray-100 text-black border border-gray-300" onClick={() => { resetForm(); setEditingProduct(null); }}>
                   <Plus className="w-4 h-4 ml-2" />
                   إضافة منتج جديد
                 </Button>
@@ -435,9 +435,9 @@ export default function AdminProducts() {
                           {formData.tags.length > 1 && (
                             <Button
                               type="button"
-                              variant="outline"
                               size="sm"
                               onClick={() => removeTagField(index)}
+                              className="bg-red-500 hover:bg-red-600 text-white"
                             >
                               حذف
                             </Button>
@@ -446,9 +446,9 @@ export default function AdminProducts() {
                       ))}
                       <Button
                         type="button"
-                        variant="outline"
                         size="sm"
                         onClick={addTagField}
+                        className="bg-white hover:bg-gray-100 text-black border border-gray-300"
                       >
                         إضافة علامة
                       </Button>
@@ -477,13 +477,17 @@ export default function AdminProducts() {
                   </div>
 
                   <div className="flex gap-2 pt-4">
-                    <Button type="submit" disabled={createProductMutation.isPending || updateProductMutation.isPending}>
+                    <Button 
+                      type="submit" 
+                      disabled={createProductMutation.isPending || updateProductMutation.isPending}
+                      className="bg-green-600 hover:bg-green-700 text-white"
+                    >
                       {editingProduct ? "تحديث المنتج" : "إضافة المنتج"}
                     </Button>
                     <Button 
                       type="button" 
-                      variant="outline" 
                       onClick={() => setIsDialogOpen(false)}
+                      className="bg-white hover:bg-gray-100 text-black border border-gray-300"
                     >
                       إلغاء
                     </Button>
@@ -599,17 +603,16 @@ export default function AdminProducts() {
                           <TableCell>
                             <div className="flex gap-2">
                               <Button
-                                variant="outline"
                                 size="sm"
                                 onClick={() => handleEdit(product)}
+                                className="bg-white hover:bg-gray-100 text-black border border-gray-300"
                               >
                                 <Edit className="w-4 h-4" />
                               </Button>
                               <Button
-                                variant="outline"
                                 size="sm"
                                 onClick={() => deleteProductMutation.mutate(product.id)}
-                                className="text-destructive hover:text-destructive"
+                                className="bg-red-500 hover:bg-red-600 text-white border border-red-500"
                               >
                                 <Trash2 className="w-4 h-4" />
                               </Button>

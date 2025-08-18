@@ -153,28 +153,28 @@ export default function AdminDashboard() {
             <CardContent>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <Link href="/admin/products/new">
-                  <Button variant="outline" className="w-full h-20 flex-col gap-2">
+                  <Button className="w-full h-20 flex-col gap-2 bg-white hover:bg-gray-100 text-black border border-gray-300">
                     <Plus className="w-6 h-6" />
                     <span className="arabic-text text-sm">إضافة منتج</span>
                   </Button>
                 </Link>
                 
                 <Link href="/admin/orders">
-                  <Button variant="outline" className="w-full h-20 flex-col gap-2">
+                  <Button className="w-full h-20 flex-col gap-2 bg-white hover:bg-gray-100 text-black border border-gray-300">
                     <ClipboardList className="w-6 h-6" />
                     <span className="arabic-text text-sm">عرض الطلبات</span>
                   </Button>
                 </Link>
                 
                 <Link href="/admin/theme-gallery">
-                  <Button variant="outline" className="w-full h-20 flex-col gap-2">
+                  <Button className="w-full h-20 flex-col gap-2 bg-white hover:bg-gray-100 text-black border border-gray-300">
                     <Palette className="w-6 h-6" />
                     <span className="arabic-text text-sm">تخصيص الموقع</span>
                   </Button>
                 </Link>
                 
                 <Link href="/admin/reports">
-                  <Button variant="outline" className="w-full h-20 flex-col gap-2">
+                  <Button className="w-full h-20 flex-col gap-2 bg-white hover:bg-gray-100 text-black border border-gray-300">
                     <PieChart className="w-6 h-6" />
                     <span className="arabic-text text-sm">التقارير</span>
                   </Button>
