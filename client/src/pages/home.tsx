@@ -37,38 +37,35 @@ export default function Home() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-r from-primary to-primary/80 text-white overflow-hidden">
-        <div className="absolute inset-0 bg-black/30"></div>
+      <section className="relative text-white overflow-hidden min-h-[600px]">
         <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-500"
+          className="absolute inset-0 hero-background"
           style={{
-            backgroundImage: `url("${heroImage}")`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center center',
-            opacity: 0.8
+            backgroundImage: `url("${heroImage}")`
           }}
           onError={(e) => {
             console.log('Hero image failed to load:', heroImage);
             e.currentTarget.style.backgroundImage = `url("${heroImagePath}")`;
           }}
         ></div>
+        <div className="absolute inset-0 bg-black/40"></div>
         
-        <div className="relative container mx-auto px-3 sm:px-4 py-12 sm:py-16 md:py-20">
+        <div className="relative container mx-auto px-3 sm:px-4 py-16 sm:py-20 md:py-24 flex items-center min-h-[600px]">
           <div className="max-w-2xl animate-fade-in text-center sm:text-right">
-            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 leading-tight arabic-text">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 leading-tight arabic-text text-white drop-shadow-2xl">
               {heroTitle}
             </h1>
-            <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 opacity-90 arabic-text">
+            <p className="text-base sm:text-lg md:text-xl mb-6 sm:mb-8 arabic-text text-white/95 drop-shadow-lg">
               {heroSubtitle}
             </p>
             <div className="flex gap-3 sm:gap-4 flex-col sm:flex-row justify-center sm:justify-start">
               <Link href="/products">
-                <Button size="lg" className="w-full sm:w-auto bg-secondary hover:bg-secondary/90 text-primary font-medium">
+                <Button size="lg" className="w-full sm:w-auto bg-white hover:bg-gray-100 text-primary font-medium shadow-xl">
                   تسوق الآن
                 </Button>
               </Link>
               <Link href="/offers">
-                <Button size="lg" variant="outline" className="w-full sm:w-auto border-white text-[#111112] hover:bg-white hover:text-primary">
+                <Button size="lg" variant="outline" className="w-full sm:w-auto border-white bg-transparent text-white hover:bg-white hover:text-primary shadow-xl">
                   العروض الخاصة
                 </Button>
               </Link>

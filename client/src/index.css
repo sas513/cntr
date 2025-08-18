@@ -4,6 +4,16 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Hero image loading improvements */
+.hero-background {
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
+
 :root {
   --background: 210 11% 98%; /* #F5F7FA */
   --foreground: 216 14% 15%; /* #1B365D */
