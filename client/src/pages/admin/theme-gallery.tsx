@@ -1,364 +1,329 @@
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { useMutation } from "@tanstack/react-query";
+import AdminSidebar from "@/components/admin/sidebar";
 import { useAdminAuth } from "@/hooks/use-admin-auth";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import { 
-  Palette, 
-  Check, 
-  Star, 
-  Sparkles, 
-  Crown, 
-  Gem,
-  Leaf,
-  Sun,
-  Moon,
-  Heart
-} from "lucide-react";
+import { Palette, Check, Sparkles } from "lucide-react";
+import type { StoreSetting } from "@shared/schema";
 
-interface Theme {
-  id: string;
-  name: string;
-  nameAr: string;
-  description: string;
-  descriptionAr: string;
-  colors: {
-    primary: string;
-    secondary: string;
-    accent: string;
-    background: string;
-    text: string;
-  };
-  icon: React.ReactNode;
-  preview: string;
-  category: string;
-}
-
-const themes: Theme[] = [
+const themes = [
   {
-    id: "default-original",
-    name: "Original Classic",
-    nameAr: "الثيم الأساسي المحفوظ",
-    description: "The saved current theme - Your customized colors",
-    descriptionAr: "الثيم المحفوظ بألوانك المخصصة - يمكنك العودة إليه في أي وقت",
+    id: "saved",
+    name: "الثيم الأساسي المحفوظ",
+    nameEn: "Saved Custom Theme",
+    description: "الثيم المخصص المحفوظ مع ألوانك المختارة",
+    category: "محفوظ",
     colors: {
-      primary: "#1B365D",
-      secondary: "#F4A460",
-      accent: "#FF6B35",
-      background: "#F5F7FA",
-      text: "#1B365D"
+      primary: "hsl(220, 90%, 50%)",
+      secondary: "hsl(220, 15%, 96%)",
+      accent: "hsl(220, 15%, 88%)",
+      background: "hsl(0, 0%, 100%)",
+      foreground: "hsl(220, 15%, 15%)",
     },
-    icon: <Star className="w-6 h-6" />,
-    preview: "الثيم المحفوظ بألوانك - للعودة إليه لاحقاً",
-    category: "محفوظ"
+    isSaved: true
   },
   {
     id: "royal-blue",
-    name: "Royal Blue",
-    nameAr: "الأزرق الملكي",
-    description: "Elegant and professional blue theme",
-    descriptionAr: "ثيم أزرق أنيق ومهني",
+    name: "الأزرق الملكي",
+    nameEn: "Royal Blue",
+    description: "لون أزرق أنيق ومهني للمتاجر الفاخرة",
+    category: "كلاسيكي",
     colors: {
-      primary: "#1e40af",
-      secondary: "#3b82f6", 
-      accent: "#60a5fa",
-      background: "#f8fafc",
-      text: "#1e293b"
-    },
-    icon: <Crown className="w-6 h-6" />,
-    preview: "من الأزرق الداكن إلى الفاتح - مظهر احترافي",
-    category: "classic"
+      primary: "hsl(220, 90%, 50%)",
+      secondary: "hsl(220, 15%, 96%)",
+      accent: "hsl(220, 15%, 88%)",
+      background: "hsl(0, 0%, 100%)",
+      foreground: "hsl(220, 15%, 15%)",
+    }
   },
   {
     id: "emerald-luxury",
-    name: "Emerald Luxury",
-    nameAr: "الزمرد الفاخر", 
-    description: "Luxurious green theme for premium stores",
-    descriptionAr: "ثيم أخضر فاخر للمتاجر المميزة",
+    name: "الزمرد الفاخر",
+    nameEn: "Emerald Luxury",
+    description: "لون أخضر فاخر يناسب المنتجات الطبيعية",
+    category: "فاخر",
     colors: {
-      primary: "#059669",
-      secondary: "#10b981",
-      accent: "#34d399", 
-      background: "#f0fdf4",
-      text: "#064e3b"
-    },
-    icon: <Gem className="w-6 h-6" />,
-    preview: "أخضر زمردي فاخر - للمتاجر الراقية",
-    category: "luxury"
+      primary: "hsl(158, 85%, 45%)",
+      secondary: "hsl(158, 15%, 96%)",
+      accent: "hsl(158, 15%, 88%)",
+      background: "hsl(0, 0%, 100%)",
+      foreground: "hsl(158, 15%, 15%)",
+    }
   },
   {
-    id: "sunset-warm",
-    name: "Sunset Warm",
-    nameAr: "دفء الغروب",
-    description: "Warm orange and red sunset colors",
-    descriptionAr: "ألوان دافئة برتقالية وحمراء كالغروب",
+    id: "sunset-warmth",
+    name: "دفء الغروب",
+    nameEn: "Sunset Warmth",
+    description: "ألوان برتقالية دافئة ومريحة للعين",
+    category: "دافئ",
     colors: {
-      primary: "#dc2626",
-      secondary: "#f97316",
-      accent: "#fb923c",
-      background: "#fef7f0", 
-      text: "#7c2d12"
-    },
-    icon: <Sun className="w-6 h-6" />,
-    preview: "ألوان الغروب الدافئة - جو حميمي",
-    category: "warm"
+      primary: "hsl(24, 95%, 53%)",
+      secondary: "hsl(24, 15%, 96%)",
+      accent: "hsl(24, 15%, 88%)",
+      background: "hsl(0, 0%, 100%)",
+      foreground: "hsl(24, 15%, 15%)",
+    }
   },
   {
-    id: "midnight-elegance", 
-    name: "Midnight Elegance",
-    nameAr: "أناقة منتصف الليل",
-    description: "Dark elegant theme with purple accents",
-    descriptionAr: "ثيم داكن أنيق بلمسات بنفسجية",
+    id: "midnight-elegance",
+    name: "أناقة منتصف الليل",
+    nameEn: "Midnight Elegance",
+    description: "تصميم داكن أنيق للمتاجر المتميزة",
+    category: "داكن",
     colors: {
-      primary: "#4c1d95",
-      secondary: "#6d28d9", 
-      accent: "#8b5cf6",
-      background: "#0f0f23",
-      text: "#e2e8f0"
-    },
-    icon: <Moon className="w-6 h-6" />,
-    preview: "ثيم داكن أنيق - للمتاجر العصرية",
-    category: "dark"
+      primary: "hsl(240, 85%, 65%)",
+      secondary: "hsl(240, 15%, 8%)",
+      accent: "hsl(240, 15%, 15%)",
+      background: "hsl(240, 10%, 5%)",
+      foreground: "hsl(240, 15%, 85%)",
+    }
   },
   {
     id: "rose-gold",
-    name: "Rose Gold",
-    nameAr: "الذهب الوردي",
-    description: "Feminine rose gold theme",
-    descriptionAr: "ثيم ذهبي وردي أنثوي",
+    name: "الذهب الوردي",
+    nameEn: "Rose Gold",
+    description: "لون وردي ذهبي أنثوي وجذاب",
+    category: "أنثوي",
     colors: {
-      primary: "#be185d",
-      secondary: "#ec4899",
-      accent: "#f9a8d4",
-      background: "#fdf2f8",
-      text: "#831843"
-    },
-    icon: <Heart className="w-6 h-6" />,
-    preview: "ذهبي وردي ناعم - للمتاجر النسائية", 
-    category: "feminine"
+      primary: "hsl(330, 85%, 65%)",
+      secondary: "hsl(330, 15%, 96%)",
+      accent: "hsl(330, 15%, 88%)",
+      background: "hsl(0, 0%, 100%)",
+      foreground: "hsl(330, 15%, 15%)",
+    }
   },
   {
-    id: "forest-natural",
-    name: "Forest Natural", 
-    nameAr: "الطبيعة الخضراء",
-    description: "Natural green forest theme",
-    descriptionAr: "ثيم أخضر طبيعي كالغابات",
+    id: "nature-green",
+    name: "الأخضر الطبيعي",
+    nameEn: "Nature Green",
+    description: "لون أخضر طبيعي يناسب المنتجات البيئية",
+    category: "طبيعي",
     colors: {
-      primary: "#166534",
-      secondary: "#16a34a",
-      accent: "#4ade80", 
-      background: "#f7fdf7",
-      text: "#14532d"
-    },
-    icon: <Leaf className="w-6 h-6" />,
-    preview: "أخضر طبيعي هادئ - للمنتجات الطبيعية",
-    category: "natural"
+      primary: "hsl(120, 85%, 45%)",
+      secondary: "hsl(120, 15%, 96%)",
+      accent: "hsl(120, 15%, 88%)",
+      background: "hsl(0, 0%, 100%)",
+      foreground: "hsl(120, 15%, 15%)",
+    }
   }
 ];
 
 export default function ThemeGallery() {
-  const { isLoading: authLoading, isAuthenticated } = useAdminAuth();
+  // Always call all hooks at the top level
+  const { admin, isLoading: authLoading, isAuthenticated } = useAdminAuth();
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+  const [appliedTheme, setAppliedTheme] = useState<string | null>(null);
 
+  const { data: settings = [] } = useQuery<StoreSetting[]>({
+    queryKey: ["/api/settings"],
+    enabled: isAuthenticated,
+  });
+
+  const applyThemeMutation = useMutation({
+    mutationFn: async (theme: typeof themes[0]) => {
+      const colorSettings = [
+        { key: "primary_color", value: theme.colors.primary },
+        { key: "secondary_color", value: theme.colors.secondary },
+        { key: "accent_color", value: theme.colors.accent },
+        { key: "background_color", value: theme.colors.background },
+        { key: "foreground_color", value: theme.colors.foreground },
+        { key: "current_theme_id", value: theme.id },
+        { key: "current_theme_name", value: theme.name }
+      ];
+
+      for (const setting of colorSettings) {
+        await apiRequest("POST", "/api/admin/settings", setting);
+      }
+      
+      return theme;
+    },
+    onSuccess: (theme) => {
+      setAppliedTheme(theme.id);
+      queryClient.invalidateQueries({ queryKey: ["/api/settings"] });
+      
+      // Apply theme to document immediately
+      const root = document.documentElement;
+      root.style.setProperty('--primary', theme.colors.primary.replace('hsl(', '').replace(')', ''));
+      root.style.setProperty('--secondary', theme.colors.secondary.replace('hsl(', '').replace(')', ''));
+      root.style.setProperty('--accent', theme.colors.accent.replace('hsl(', '').replace(')', ''));
+      root.style.setProperty('--background', theme.colors.background.replace('hsl(', '').replace(')', ''));
+      root.style.setProperty('--foreground', theme.colors.foreground.replace('hsl(', '').replace(')', ''));
+      
+      toast({
+        title: "تم تطبيق الثيم بنجاح",
+        description: `تم تطبيق ثيم "${theme.name}" على الموقع`,
+      });
+    },
+    onError: (error) => {
+      toast({
+        title: "خطأ في تطبيق الثيم",
+        description: "حدث خطأ أثناء تطبيق الثيم. حاول مرة أخرى.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  // Early returns after all hooks
   if (authLoading) {
-    return <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-    </div>;
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
+          <p className="mt-2 text-gray-600 arabic-text">جاري التحقق من الصلاحية...</p>
+        </div>
+      </div>
+    );
   }
 
   if (!isAuthenticated) {
     return null;
   }
 
-  const [selectedTheme, setSelectedTheme] = useState<string | null>(null);
-  const { toast } = useToast();
+  const currentThemeId = settings.find(s => s.key === "current_theme_id")?.value || "royal-blue";
 
-  const applyThemeMutation = useMutation({
-    mutationFn: async (themeId: string) => {
-      const theme = themes.find(t => t.id === themeId);
-      if (!theme) throw new Error("Theme not found");
-      
-      // Apply primary color
-      await apiRequest("POST", "/api/admin/settings", {
-        key: "primary_color",
-        value: theme.colors.primary
-      });
-      
-      return theme;
-    },
-    onSuccess: (theme) => {
-      toast({
-        title: "تم تطبيق الثيم بنجاح",
-        description: `تم تطبيق ثيم "${theme.nameAr}" على المتجر`,
-      });
-      
-      // Refresh page to show new theme
-      setTimeout(() => {
-        window.location.reload();
-      }, 1500);
-    },
-    onError: (error) => {
-      toast({
-        title: "خطأ في تطبيق الثيم",
-        description: error.message,
-        variant: "destructive",
-      });
-    },
-  });
-
-  const handleApplyTheme = (themeId: string) => {
-    setSelectedTheme(themeId);
-    applyThemeMutation.mutate(themeId);
+  const handleApplyTheme = (theme: typeof themes[0]) => {
+    applyThemeMutation.mutate(theme);
   };
 
-  const categories = [
-    { id: "محفوظ", name: "محفوظ", nameEn: "Saved" },
-    { id: "أساسي", name: "أساسي", nameEn: "Original" },
-    { id: "classic", name: "كلاسيكي", nameEn: "Classic" },
-    { id: "luxury", name: "فاخر", nameEn: "Luxury" }, 
-    { id: "warm", name: "دافئ", nameEn: "Warm" },
-    { id: "dark", name: "داكن", nameEn: "Dark" },
-    { id: "feminine", name: "نسائي", nameEn: "Feminine" },
-    { id: "natural", name: "طبيعي", nameEn: "Natural" }
-  ];
-
   return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-3">
-        <Palette className="w-8 h-8 text-blue-600" />
-        <div>
-          <h1 className="text-2xl font-bold arabic-text">معرض الثيمات</h1>
-          <p className="text-gray-600 arabic-text">اختر الثيم المفضل لمتجرك</p>
+    <div className="min-h-screen bg-gray-50 flex" dir="rtl">
+      <AdminSidebar />
+      
+      <main className="flex-1 mr-64 p-6">
+        <div className="mb-6">
+          <h1 className="text-2xl font-bold text-gray-900 arabic-text flex items-center gap-2">
+            <Palette className="w-6 h-6" />
+            معرض الثيمات والألوان
+          </h1>
+          <p className="text-gray-600 arabic-text">اختر الثيم المناسب لموقعك من المجموعة المتنوعة</p>
         </div>
-      </div>
 
-      {/* Categories */}
-      <div className="flex flex-wrap gap-2">
-        {categories.map((category) => (
-          <Badge key={category.id} variant="outline" className="arabic-text">
-            {category.name}
-          </Badge>
-        ))}
-      </div>
-
-      {/* Themes Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {themes.map((theme) => (
-          <Card key={theme.id} className="relative overflow-hidden hover:shadow-lg transition-all duration-300">
-            <CardHeader className="pb-3">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="text-gray-600">{theme.icon}</div>
-                  <div>
-                    <CardTitle className="text-lg arabic-text">{theme.nameAr}</CardTitle>
-                    <p className="text-sm text-gray-600">{theme.name}</p>
-                  </div>
-                </div>
-                <Badge variant="outline" className="text-xs">
-                  {categories.find(c => c.id === theme.category)?.name}
-                </Badge>
-              </div>
-            </CardHeader>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {themes.map((theme) => {
+            const isCurrentTheme = currentThemeId === theme.id;
+            const isApplying = applyThemeMutation.isPending && appliedTheme === theme.id;
             
-            <CardContent className="space-y-4">
-              {/* Color Preview */}
-              <div className="grid grid-cols-5 gap-1 h-12 rounded-lg overflow-hidden">
-                <div 
-                  className="flex-1" 
-                  style={{ backgroundColor: theme.colors.primary }}
-                  title="اللون الأساسي"
-                />
-                <div 
-                  className="flex-1" 
-                  style={{ backgroundColor: theme.colors.secondary }}
-                  title="اللون الثانوي"
-                />
-                <div 
-                  className="flex-1" 
-                  style={{ backgroundColor: theme.colors.accent }}
-                  title="لون التمييز"
-                />
-                <div 
-                  className="flex-1" 
-                  style={{ backgroundColor: theme.colors.background }}
-                  title="لون الخلفية"
-                />
-                <div 
-                  className="flex-1 border" 
-                  style={{ backgroundColor: theme.colors.text }}
-                  title="لون النص"
-                />
-              </div>
-
-              {/* Preview Text */}
-              <div 
-                className="p-3 rounded-lg text-center"
-                style={{ 
-                  backgroundColor: theme.colors.background,
-                  color: theme.colors.text,
-                  border: `1px solid ${theme.colors.primary}20`
-                }}
-              >
-                <p className="text-sm arabic-text font-medium">{theme.preview}</p>
-              </div>
-
-              {/* Description */}
-              <p className="text-sm text-gray-600 arabic-text">
-                {theme.descriptionAr}
-              </p>
-
-              {/* Apply Button */}
-              <Button
-                onClick={() => handleApplyTheme(theme.id)}
-                disabled={applyThemeMutation.isPending && selectedTheme === theme.id}
-                className="w-full"
-                style={{ 
-                  backgroundColor: theme.colors.primary,
-                  color: theme.colors.background
-                }}
-              >
-                {applyThemeMutation.isPending && selectedTheme === theme.id ? (
-                  <div className="flex items-center gap-2">
-                    <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
-                    جاري التطبيق...
+            return (
+              <Card key={theme.id} className={`group hover:shadow-lg transition-all duration-300 ${isCurrentTheme ? 'ring-2 ring-primary' : ''}`}>
+                <CardHeader className="pb-3">
+                  <div className="flex items-center justify-between">
+                    <CardTitle className="text-lg arabic-text">{theme.name}</CardTitle>
+                    <div className="flex gap-2">
+                      {theme.isSaved && (
+                        <Badge variant="secondary" className="arabic-text">
+                          <Sparkles className="w-3 h-3 ml-1" />
+                          محفوظ
+                        </Badge>
+                      )}
+                      {isCurrentTheme && (
+                        <Badge className="arabic-text">
+                          <Check className="w-3 h-3 ml-1" />
+                          مُطبق
+                        </Badge>
+                      )}
+                    </div>
                   </div>
-                ) : (
-                  <div className="flex items-center gap-2 arabic-text">
-                    <Check className="w-4 h-4" />
-                    تطبيق هذا الثيم
+                  <p className="text-sm text-gray-600 arabic-text">{theme.description}</p>
+                  <Badge variant="outline" className="w-fit arabic-text">{theme.category}</Badge>
+                </CardHeader>
+                
+                <CardContent className="space-y-4">
+                  {/* معاينة الألوان */}
+                  <div className="space-y-2">
+                    <p className="text-sm font-medium arabic-text">معاينة الألوان:</p>
+                    <div className="grid grid-cols-5 gap-2">
+                      <div className="space-y-1">
+                        <div 
+                          className="w-full h-8 rounded border-2 border-gray-200"
+                          style={{ backgroundColor: theme.colors.primary }}
+                        ></div>
+                        <p className="text-xs text-center arabic-text">أساسي</p>
+                      </div>
+                      <div className="space-y-1">
+                        <div 
+                          className="w-full h-8 rounded border-2 border-gray-200"
+                          style={{ backgroundColor: theme.colors.secondary }}
+                        ></div>
+                        <p className="text-xs text-center arabic-text">ثانوي</p>
+                      </div>
+                      <div className="space-y-1">
+                        <div 
+                          className="w-full h-8 rounded border-2 border-gray-200"
+                          style={{ backgroundColor: theme.colors.accent }}
+                        ></div>
+                        <p className="text-xs text-center arabic-text">مميز</p>
+                      </div>
+                      <div className="space-y-1">
+                        <div 
+                          className="w-full h-8 rounded border-2 border-gray-200"
+                          style={{ backgroundColor: theme.colors.background }}
+                        ></div>
+                        <p className="text-xs text-center arabic-text">خلفية</p>
+                      </div>
+                      <div className="space-y-1">
+                        <div 
+                          className="w-full h-8 rounded border-2 border-gray-200"
+                          style={{ backgroundColor: theme.colors.foreground }}
+                        ></div>
+                        <p className="text-xs text-center arabic-text">نص</p>
+                      </div>
+                    </div>
                   </div>
-                )}
-              </Button>
-            </CardContent>
 
-            {/* Selected indicator */}
-            {selectedTheme === theme.id && applyThemeMutation.isPending && (
-              <div className="absolute inset-0 bg-black/10 flex items-center justify-center">
-                <div className="bg-white rounded-full p-3 shadow-lg">
-                  <div className="w-6 h-6 border-3 border-gray-300 border-t-blue-600 rounded-full animate-spin" />
-                </div>
-              </div>
-            )}
-          </Card>
-        ))}
-      </div>
+                  {/* معاينة التصميم */}
+                  <div className="bg-gray-50 p-3 rounded-lg border">
+                    <div 
+                      className="p-3 rounded text-center text-white font-medium text-sm"
+                      style={{ backgroundColor: theme.colors.primary }}
+                    >
+                      زر أساسي
+                    </div>
+                    <div className="mt-2 p-2 rounded text-center text-sm" style={{ 
+                      backgroundColor: theme.colors.secondary,
+                      color: theme.colors.foreground 
+                    }}>
+                      محتوى الصفحة
+                    </div>
+                  </div>
 
-      {/* Custom Theme Note */}
-      <Card className="bg-blue-50 border-blue-200">
-        <CardContent className="p-4">
-          <div className="flex items-start gap-3">
-            <Sparkles className="w-5 h-5 text-blue-600 mt-1" />
-            <div>
-              <h3 className="font-medium text-blue-900 arabic-text">ثيم مخصص</h3>
-              <p className="text-sm text-blue-700 arabic-text mt-1">
-                هل تريد ثيم مخصص بألوان معينة؟ أخبرني بالألوان التي تفضلها وسأنشئ لك ثيم خاص!
-              </p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+                  <Button
+                    onClick={() => handleApplyTheme(theme)}
+                    disabled={isCurrentTheme || isApplying}
+                    className="w-full arabic-text"
+                    variant={isCurrentTheme ? "outline" : "default"}
+                  >
+                    {isApplying ? (
+                      <>
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white ml-2"></div>
+                        جاري التطبيق...
+                      </>
+                    ) : isCurrentTheme ? (
+                      "الثيم المُطبق حالياً"
+                    ) : (
+                      "تطبيق الثيم"
+                    )}
+                  </Button>
+                </CardContent>
+              </Card>
+            );
+          })}
+        </div>
+
+        <div className="mt-8 p-4 bg-blue-50 rounded-lg border border-blue-200">
+          <h3 className="font-semibold text-blue-900 arabic-text mb-2">💡 نصائح للاستخدام:</h3>
+          <ul className="text-sm text-blue-800 arabic-text space-y-1">
+            <li>• يمكنك تطبيق أي ثيم وسيتم حفظه تلقائياً</li>
+            <li>• الثيم المخصص المحفوظ يحتوي على آخر تخصيصاتك</li>
+            <li>• يمكنك العودة لأي ثيم في أي وقت</li>
+            <li>• التغييرات تظهر فوراً على الموقع</li>
+          </ul>
+        </div>
+      </main>
     </div>
   );
 }
