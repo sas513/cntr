@@ -8,6 +8,7 @@ import { Link } from "wouter";
 import type { Product, Category, StoreSetting } from "@shared/schema";
 import heroImagePath from "@assets/unico_h_hero_1_1755545621968.png";
 import watchImagePath from "@assets/rolex-watch.png";
+import perfumeImagePath from "@assets/hqdefault_1755548467976.jpg";
 
 export default function Home() {
   const { data: featuredProducts = [], isLoading: productsLoading } = useQuery<Product[]>({
@@ -160,7 +161,7 @@ export default function Home() {
             <Link href={`/products?category=${perfumesCategory?.id}`}>
               <div className="relative group cursor-pointer overflow-hidden rounded-2xl shadow-lg">
                 <img 
-                  src="https://images.unsplash.com/photo-1541643600914-78b084683601?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600" 
+                  src={perfumeImagePath} 
                   alt="مجموعة العطور الفاخرة" 
                   className="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-500 cached-image"
                   loading="eager"
