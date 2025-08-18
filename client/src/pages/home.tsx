@@ -62,7 +62,7 @@ export default function Home() {
             </p>
             <div className="flex gap-3 sm:gap-4 flex-col sm:flex-row justify-center sm:justify-start">
               <Link href="/products">
-                <Button size="lg" className="w-full sm:w-auto bg-white hover:bg-gray-100 text-primary font-medium shadow-xl">
+                <Button size="lg" className="w-full sm:w-auto bg-white hover:bg-gray-100 font-medium shadow-xl text-[#0c0c0d]">
                   تسوق الآن
                 </Button>
               </Link>
