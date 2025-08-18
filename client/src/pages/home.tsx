@@ -16,10 +16,14 @@ export default function Home() {
 
   const { data: categories = [] } = useQuery<Category[]>({
     queryKey: ["/api/categories"],
+    staleTime: 10 * 60 * 1000, // 10 minutes
+    gcTime: 30 * 60 * 1000, // 30 minutes
   });
 
   const { data: settings = [] } = useQuery<StoreSetting[]>({
     queryKey: ["/api/settings"],
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    gcTime: 10 * 60 * 1000, // 10 minutes
   });
 
   const getSetting = (key: string) => 
@@ -137,11 +141,9 @@ export default function Home() {
                 <img 
                   src={watchImagePath} 
                   alt="مجموعة الساعات الفاخرة" 
-                  className="w-full h-60 sm:h-72 md:h-80 object-cover group-hover:scale-110 transition-transform duration-500"
-                  onError={(e) => {
-                    console.log('Watch image failed to load');
-                    e.currentTarget.src = "https://images.unsplash.com/photo-1547996160-81dfa63595aa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80";
-                  }}
+                  className="w-full h-60 sm:h-72 md:h-80 object-cover group-hover:scale-110 transition-transform duration-500 cached-image"
+                  loading="eager"
+                  decoding="sync"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
                 <div className="absolute bottom-6 right-6 text-white">
@@ -158,9 +160,11 @@ export default function Home() {
             <Link href={`/products?category=${perfumesCategory?.id}`}>
               <div className="relative group cursor-pointer overflow-hidden rounded-2xl shadow-lg">
                 <img 
-                  src={getSetting("perfumes_category_image") || "https://images.unsplash.com/photo-1541643600914-78b084683601?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600"} 
+                  src="https://images.unsplash.com/photo-1541643600914-78b084683601?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600" 
                   alt="مجموعة العطور الفاخرة" 
-                  className="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-500"
+                  className="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-500 cached-image"
+                  loading="eager"
+                  decoding="sync"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
                 <div className="absolute bottom-6 right-6 text-white">
