@@ -29,7 +29,7 @@ export default function Home() {
   
   const heroTitle = getSetting("homepage_hero_title") || "أفخر تشكيلة من الساعات والعطور";
   const heroSubtitle = getSetting("homepage_hero_subtitle") || "اكتشف مجموعتنا الحصرية من أرقى الساعات والعطور العالمية بأفضل الأسعار";
-  const heroImage = getSetting("hero_image") || "https://images.unsplash.com/photo-1524592094714-0f0654e20314?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80";
+  const heroImage = getSetting("hero_image") || "https://images.unsplash.com/photo-1609268448511-1d641e0dc5ac?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80";
   const freeShippingThreshold = getSetting("free_shipping_threshold");
   const deliveryTime = getSetting("delivery_time") || "1-3 أيام عمل";
   const warrantyPeriod = getSetting("warranty_period") || "12";
@@ -49,7 +49,7 @@ export default function Home() {
           }}
           onError={(e) => {
             console.log('Hero image failed to load:', heroImage);
-            e.currentTarget.style.backgroundImage = 'url("https://images.unsplash.com/photo-1524592094714-0f0654e20314?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80")';
+            e.currentTarget.style.backgroundImage = 'url("https://images.unsplash.com/photo-1609268448511-1d641e0dc5ac?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80")';
           }}
         ></div>
         
