@@ -12,6 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import AdminSidebar from "@/components/admin/sidebar";
 import { useAdminAuth } from "@/hooks/use-admin-auth";
+import { ObjectUploader } from "@/components/ObjectUploader";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { Plus, Edit, Trash2, Search, Package } from "lucide-react";
@@ -263,65 +264,69 @@ export default function AdminProducts() {
                 </Button>
               </DialogTrigger>
               
-              <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+              <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700">
                 <DialogHeader>
-                  <DialogTitle className="arabic-text">
+                  <DialogTitle className="arabic-text text-gray-900 dark:text-gray-100">
                     {editingProduct ? "تعديل المنتج" : "إضافة منتج جديد"}
                   </DialogTitle>
                 </DialogHeader>
                 
-                <form onSubmit={handleSubmit} className="space-y-6">
+                <form onSubmit={handleSubmit} className="space-y-6 text-gray-900 dark:text-gray-100">
                   <div className="grid md:grid-cols-2 gap-4">
                     <div>
-                      <Label htmlFor="nameAr" className="arabic-text">الاسم بالعربية *</Label>
+                      <Label htmlFor="nameAr" className="arabic-text text-gray-900 dark:text-gray-100">الاسم بالعربية *</Label>
                       <Input
                         id="nameAr"
                         value={formData.nameAr}
                         onChange={(e) => setFormData(prev => ({ ...prev, nameAr: e.target.value }))}
                         placeholder="اسم المنتج بالعربية"
                         required
+                        className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100"
                       />
                     </div>
                     
                     <div>
-                      <Label htmlFor="name">الاسم بالإنجليزية *</Label>
+                      <Label htmlFor="name" className="text-gray-900 dark:text-gray-100">الاسم بالإنجليزية *</Label>
                       <Input
                         id="name"
                         value={formData.name}
                         onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
                         placeholder="Product name in English"
                         required
+                        className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100"
                       />
                     </div>
                   </div>
 
                   <div className="grid md:grid-cols-2 gap-4">
                     <div>
-                      <Label htmlFor="descriptionAr" className="arabic-text">الوصف بالعربية</Label>
+                      <Label htmlFor="descriptionAr" className="arabic-text text-gray-900 dark:text-gray-100">الوصف بالعربية</Label>
                       <Textarea
                         id="descriptionAr"
                         value={formData.descriptionAr}
                         onChange={(e) => setFormData(prev => ({ ...prev, descriptionAr: e.target.value }))}
                         placeholder="وصف المنتج بالعربية"
                         rows={3}
+                        className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100"
                       />
                     </div>
                     
                     <div>
-                      <Label htmlFor="description">الوصف بالإنجليزية</Label>
+                      <Label htmlFor="description" className="text-gray-900 dark:text-gray-100">الوصف بالإنجليزية</Label>
                       <Textarea
                         id="description"
                         value={formData.description}
                         onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
                         placeholder="Product description in English"
                         rows={3}
+                        className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100"
                       />
                     </div>
                   </div>
 
                   <div className="grid md:grid-cols-3 gap-4">
                     <div>
-                      <Label htmlFor="price" className="arabic-text">السعر (د.ع) *</Label>
+                      <Label htmlFor="price" className="arabic-text text-gray-900 dark:text-gray-100">السعر (د.ع) *</Label>
                       <Input
                         id="price"
                         type="number"
@@ -329,6 +334,7 @@ export default function AdminProducts() {
                         onChange={(e) => setFormData(prev => ({ ...prev, price: e.target.value }))}
                         placeholder="السعر"
                         required
+                        className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100"
                       />
                     </div>
                     
@@ -390,33 +396,79 @@ export default function AdminProducts() {
                   {/* Images */}
                   <div>
                     <Label className="arabic-text">صور المنتج</Label>
-                    <div className="space-y-2 mt-2">
+                    <div className="space-y-3 mt-2">
                       {formData.images.map((image, index) => (
-                        <div key={index} className="flex gap-2">
-                          <Input
-                            value={image}
-                            onChange={(e) => updateImageField(index, e.target.value)}
-                            placeholder="رابط الصورة"
-                          />
-                          {formData.images.length > 1 && (
-                            <Button
-                              type="button"
-                              variant="outline"
-                              size="sm"
-                              onClick={() => removeImageField(index)}
-                            >
-                              حذف
-                            </Button>
-                          )}
+                        <div key={index} className="space-y-2">
+                          <div className="flex gap-2">
+                            <Input
+                              value={image}
+                              onChange={(e) => updateImageField(index, e.target.value)}
+                              placeholder="رابط الصورة أو استخدم زر الرفع"
+                              className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600"
+                            />
+                            {formData.images.length > 1 && (
+                              <Button
+                                type="button"
+                                size="sm"
+                                onClick={() => removeImageField(index)}
+                                className="bg-red-500 hover:bg-red-600 text-white"
+                              >
+                                حذف
+                              </Button>
+                            )}
+                          </div>
+                          
+                          <ObjectUploader
+                            maxNumberOfFiles={1}
+                            maxFileSize={5242880} // 5MB
+                            onGetUploadParameters={async () => {
+                              const response = await fetch('/api/objects/upload', {
+                                method: 'POST',
+                                headers: {
+                                  'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                                  'Content-Type': 'application/json'
+                                }
+                              });
+                              const data = await response.json();
+                              return {
+                                method: 'PUT' as const,
+                                url: data.uploadURL
+                              };
+                            }}
+                            onComplete={(result) => {
+                              const uploadedFile = result.successful[0];
+                              if (uploadedFile?.uploadURL) {
+                                const objectStorageService = {
+                                  normalizeObjectEntityPath: (url: string) => {
+                                    if (url.includes('storage.googleapis.com')) {
+                                      const urlPath = new URL(url).pathname;
+                                      const parts = urlPath.split('/');
+                                      if (parts.length >= 4) {
+                                        const entityId = parts.slice(3).join('/');
+                                        return `/objects/${entityId}`;
+                                      }
+                                    }
+                                    return url;
+                                  }
+                                };
+                                const normalizedPath = objectStorageService.normalizeObjectEntityPath(uploadedFile.uploadURL);
+                                updateImageField(index, normalizedPath);
+                              }
+                            }}
+                            buttonClassName="bg-blue-600 hover:bg-blue-700 text-white w-full"
+                          >
+                            <span>📁 رفع صورة</span>
+                          </ObjectUploader>
                         </div>
                       ))}
+                      
                       <Button
                         type="button"
-                        variant="outline"
                         size="sm"
                         onClick={addImageField}
+                        className="bg-white hover:bg-gray-100 text-black border border-gray-300"
                       >
-                        إضافة صورة
+                        إضافة حقل صورة جديد
                       </Button>
                     </div>
                   </div>
