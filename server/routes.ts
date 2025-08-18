@@ -1,5 +1,4 @@
 import type { Express } from "express";
-import express from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { generateToken, requireAdmin, isBlocked, recordFailedAttempt, clearFailedAttempts, clearAllFailedAttempts, type AuthRequest } from "./auth";
@@ -9,10 +8,7 @@ import { loginSchema, insertProductSchema, insertOrderSchema, insertCustomerActi
 import { z } from "zod";
 import bcrypt from "bcryptjs";
 import { db } from "./db";
-import multer from "multer";
-import path from "path";
-import fs from "fs";
-// import { ObjectStorageService, ObjectNotFoundError } from "./objectStorage.js";
+import { ObjectStorageService, ObjectNotFoundError } from "./objectStorage.js";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   
@@ -522,72 +518,45 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Simple file upload endpoint using multer for direct uploads
-  
-  // Create uploads directory if it doesn't exist
-  const uploadsDir = path.join(process.cwd(), 'uploads');
-  if (!fs.existsSync(uploadsDir)) {
-    fs.mkdirSync(uploadsDir, { recursive: true });
-  }
-  
-  const storage = multer.diskStorage({
-    destination: function (req: any, file: any, cb: any) {
-      cb(null, uploadsDir);
-    },
-    filename: function (req: any, file: any, cb: any) {
-      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-      cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
-    }
-  });
-  
-  const upload = multer({ 
-    storage: storage,
-    limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
-    fileFilter: function (req: any, file: any, cb: any) {
-      if (file.mimetype.startsWith('image/')) {
-        cb(null, true);
-      } else {
-        cb(new Error('Only image files are allowed!'), false);
-      }
-    }
-  });
-
-  // Upload endpoint
-  app.post("/api/upload-image", requireAdmin, upload.single('image'), (req: any, res) => {
+  // Get upload URL for product images
+  app.post("/api/objects/upload", async (req: AuthRequest, res) => {
     try {
-      if (!req.file) {
-        return res.status(400).json({ error: "No file uploaded" });
+      // Check if user is authenticated with token
+      const token = req.headers.authorization?.replace('Bearer ', '');
+      if (!token) {
+        return res.status(401).json({ message: "غير مصرح بالوصول" });
       }
-      
-      const imageUrl = `/uploads/${req.file.filename}`;
-      res.json({ 
-        success: true, 
-        imageUrl: imageUrl,
-        filename: req.file.filename 
-      });
+
+      // Verify token manually for this endpoint
+      const jwt = require('jsonwebtoken');
+      const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback-secret');
+      if (!decoded) {
+        return res.status(401).json({ message: "غير مصرح بالوصول" });
+      }
+
+      const objectStorageService = new ObjectStorageService();
+      const uploadURL = await objectStorageService.getObjectEntityUploadURL();
+      res.json({ uploadURL });
     } catch (error) {
-      console.error("Error uploading file:", error);
-      res.status(500).json({ error: "Failed to upload file" });
+      console.error("Error getting upload URL:", error);
+      res.status(500).json({ error: "Failed to get upload URL" });
     }
   });
 
-  // Serve uploaded images
-  app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
-
-  // Serve uploaded objects - disabled for now
-  // app.get("/objects/:objectPath(*)", async (req, res) => {
-  //   const objectStorageService = new ObjectStorageService();
-  //   try {
-  //     const objectFile = await objectStorageService.getObjectEntityFile(req.path);
-  //     objectStorageService.downloadObject(objectFile, res);
-  //   } catch (error) {
-  //     console.error("Error serving object:", error);
-  //     if (error instanceof ObjectNotFoundError) {
-  //       return res.sendStatus(404);
-  //     }
-  //     return res.sendStatus(500);
-  //   }
-  // });
+  // Serve uploaded objects
+  app.get("/objects/:objectPath(*)", async (req, res) => {
+    const objectStorageService = new ObjectStorageService();
+    try {
+      const objectFile = await objectStorageService.getObjectEntityFile(req.path);
+      objectStorageService.downloadObject(objectFile, res);
+    } catch (error) {
+      console.error("Error serving object:", error);
+      if (error instanceof ObjectNotFoundError) {
+        return res.sendStatus(404);
+      }
+      return res.sendStatus(500);
+    }
+  });
 
   // Placeholder image endpoint
   app.get("/api/placeholder-image", (req, res) => {

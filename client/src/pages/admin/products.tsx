@@ -12,7 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import AdminSidebar from "@/components/admin/sidebar";
 import { useAdminAuth } from "@/hooks/use-admin-auth";
-import { SimpleImageUpload } from "@/components/SimpleImageUpload";
+import { ObjectUploader } from "@/components/ObjectUploader";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { Plus, Edit, Trash2, Search, Package } from "lucide-react";
@@ -395,17 +395,78 @@ export default function AdminProducts() {
 
                   {/* Images */}
                   <div>
-                    <Label className="arabic-text text-gray-900 dark:text-gray-100">صور المنتج</Label>
+                    <Label className="arabic-text">صور المنتج</Label>
                     <div className="space-y-3 mt-2">
                       {formData.images.map((image, index) => (
-                        <SimpleImageUpload
-                          key={index}
-                          value={image}
-                          onChange={(url) => updateImageField(index, url)}
-                          index={index}
-                          onRemove={() => removeImageField(index)}
-                          canRemove={formData.images.length > 1}
-                        />
+                        <div key={index} className="space-y-2">
+                          <div className="flex gap-2">
+                            <Input
+                              value={image}
+                              onChange={(e) => updateImageField(index, e.target.value)}
+                              placeholder="رابط الصورة أو استخدم زر الرفع"
+                              className="bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600"
+                            />
+                            {formData.images.length > 1 && (
+                              <Button
+                                type="button"
+                                size="sm"
+                                onClick={() => removeImageField(index)}
+                                className="bg-red-500 hover:bg-red-600 text-white"
+                              >
+                                حذف
+                              </Button>
+                            )}
+                          </div>
+                          
+                          <ObjectUploader
+                            maxNumberOfFiles={1}
+                            maxFileSize={5242880} // 5MB
+                            onGetUploadParameters={async () => {
+                              const response = await fetch('/api/objects/upload', {
+                                method: 'POST',
+                                headers: {
+                                  'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                                  'Content-Type': 'application/json'
+                                }
+                              });
+                              const data = await response.json();
+                              return {
+                                method: 'PUT' as const,
+                                url: data.uploadURL
+                              };
+                            }}
+                            onComplete={(result) => {
+                              const uploadedFile = result.successful[0];
+                              if (uploadedFile?.uploadURL) {
+                                try {
+                                  // تحويل رابط Google Storage إلى رابط محلي
+                                  const url = new URL(uploadedFile.uploadURL);
+                                  const pathParts = url.pathname.split('/');
+                                  
+                                  // البحث عن الجزء الخاص بـ uploads/
+                                  const uploadsIndex = pathParts.findIndex(part => part === 'uploads');
+                                  if (uploadsIndex !== -1 && uploadsIndex < pathParts.length - 1) {
+                                    const objectId = pathParts[uploadsIndex + 1];
+                                    const localImagePath = `/objects/uploads/${objectId}`;
+                                    updateImageField(index, localImagePath);
+                                    console.log('تم رفع الصورة بنجاح:', localImagePath);
+                                  } else {
+                                    // fallback إذا لم نجد uploads
+                                    const entityId = pathParts.slice(-1)[0];
+                                    const localImagePath = `/objects/uploads/${entityId}`;
+                                    updateImageField(index, localImagePath);
+                                  }
+                                } catch (error) {
+                                  console.error('خطأ في معالجة رابط الصورة:', error);
+                                  updateImageField(index, uploadedFile.uploadURL);
+                                }
+                              }
+                            }}
+                            buttonClassName="bg-blue-600 hover:bg-blue-700 text-white w-full"
+                          >
+                            <span>📁 رفع صورة</span>
+                          </ObjectUploader>
+                        </div>
                       ))}
                       
                       <Button
