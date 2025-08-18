@@ -29,7 +29,7 @@ export default function Home() {
   
   const heroTitle = getSetting("homepage_hero_title") || "أفخر تشكيلة من الساعات والعطور";
   const heroSubtitle = getSetting("homepage_hero_subtitle") || "اكتشف مجموعتنا الحصرية من أرقى الساعات والعطور العالمية بأفضل الأسعار";
-  const heroImage = getSetting("hero_image") || "https://images.unsplash.com/photo-1606318158708-c0e2bbddf3db?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80";
+  const heroImage = getSetting("hero_image") || "https://images.unsplash.com/photo-1524592094714-0f0654e20314?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80";
   const freeShippingThreshold = getSetting("free_shipping_threshold");
   const deliveryTime = getSetting("delivery_time") || "1-3 أيام عمل";
   const warrantyPeriod = getSetting("warranty_period") || "12";
@@ -40,10 +40,16 @@ export default function Home() {
       <section className="relative bg-gradient-to-r from-primary to-primary/80 text-white overflow-hidden">
         <div className="absolute inset-0 bg-black/30"></div>
         <div 
-          className="absolute inset-0 bg-cover bg-center transition-opacity duration-500"
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-500"
           style={{
             backgroundImage: `url("${heroImage}")`,
-            opacity: 0.9
+            backgroundSize: 'cover',
+            backgroundPosition: 'center center',
+            opacity: 0.8
+          }}
+          onError={(e) => {
+            console.log('Hero image failed to load:', heroImage);
+            e.currentTarget.style.backgroundImage = 'url("https://images.unsplash.com/photo-1524592094714-0f0654e20314?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80")';
           }}
         ></div>
         
