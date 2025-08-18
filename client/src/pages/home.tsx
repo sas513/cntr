@@ -6,7 +6,7 @@ import ProductCard from "@/components/product-card";
 import { Gem, Clock, Truck, Shield, Headphones, RotateCcw, Star } from "lucide-react";
 import { Link } from "wouter";
 import type { Product, Category, StoreSetting } from "@shared/schema";
-// Hero image will be loaded from settings
+import heroImagePath from "@assets/unico_h_hero_1_1755545621968.png";
 
 export default function Home() {
   const { data: featuredProducts = [], isLoading: productsLoading } = useQuery<Product[]>({
@@ -29,7 +29,7 @@ export default function Home() {
   
   const heroTitle = getSetting("homepage_hero_title") || "أفخر تشكيلة من الساعات والعطور";
   const heroSubtitle = getSetting("homepage_hero_subtitle") || "اكتشف مجموعتنا الحصرية من أرقى الساعات والعطور العالمية بأفضل الأسعار";
-  const heroImage = getSetting("hero_image") || "https://images.unsplash.com/photo-1609268448511-1d641e0dc5ac?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80";
+  const heroImage = getSetting("hero_image") || heroImagePath;
   const freeShippingThreshold = getSetting("free_shipping_threshold");
   const deliveryTime = getSetting("delivery_time") || "1-3 أيام عمل";
   const warrantyPeriod = getSetting("warranty_period") || "12";
@@ -49,7 +49,7 @@ export default function Home() {
           }}
           onError={(e) => {
             console.log('Hero image failed to load:', heroImage);
-            e.currentTarget.style.backgroundImage = 'url("https://images.unsplash.com/photo-1609268448511-1d641e0dc5ac?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80")';
+            e.currentTarget.style.backgroundImage = `url("${heroImagePath}")`;
           }}
         ></div>
         
