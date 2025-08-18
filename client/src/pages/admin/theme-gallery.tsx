@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useMutation } from "@tanstack/react-query";
+import { useAdminAuth } from "@/hooks/use-admin-auth";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { 
@@ -159,6 +160,18 @@ const themes: Theme[] = [
 ];
 
 export default function ThemeGallery() {
+  const { isLoading: authLoading, isAuthenticated } = useAdminAuth();
+
+  if (authLoading) {
+    return <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+    </div>;
+  }
+
+  if (!isAuthenticated) {
+    return null;
+  }
+
   const [selectedTheme, setSelectedTheme] = useState<string | null>(null);
   const { toast } = useToast();
 

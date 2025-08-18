@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import AdminSidebar from "@/components/admin/sidebar";
 import StatsCard from "@/components/admin/stats-card";
+import { useAdminAuth } from "@/hooks/use-admin-auth";
 import { 
   DollarSign, 
   ShoppingBag, 
@@ -32,6 +33,25 @@ interface Stats {
 }
 
 export default function AdminDashboard() {
+  const { admin, isLoading: authLoading, isAuthenticated } = useAdminAuth();
+
+  // Show loading while checking authentication
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
+          <p className="mt-2 text-gray-600 arabic-text">جاري التحقق من الصلاحية...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Redirect handled by useAdminAuth hook
+  if (!isAuthenticated) {
+    return null;
+  }
+
   const { data: stats } = useQuery<Stats>({
     queryKey: ["/api/analytics/stats"],
   });

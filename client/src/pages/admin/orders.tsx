@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import AdminSidebar from "@/components/admin/sidebar";
+import { useAdminAuth } from "@/hooks/use-admin-auth";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { ORDER_STATUSES } from "@/lib/constants";
@@ -14,6 +15,18 @@ import { ShoppingBag, Eye, Calendar, MapPin, Phone, User } from "lucide-react";
 import type { Order } from "@shared/schema";
 
 export default function AdminOrders() {
+  const { isLoading: authLoading, isAuthenticated } = useAdminAuth();
+
+  if (authLoading) {
+    return <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+    </div>;
+  }
+
+  if (!isAuthenticated) {
+    return null;
+  }
+
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [statusFilter, setStatusFilter] = useState<string>("all");
 

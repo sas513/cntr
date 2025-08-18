@@ -8,12 +8,25 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import AdminSidebar from "@/components/admin/sidebar";
+import { useAdminAuth } from "@/hooks/use-admin-auth";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { Save, Store, Palette, Phone, MapPin, Mail, FileText, Shield, Truck, MessageSquare, Send, Loader2, Image, Users, Info } from "lucide-react";
 import type { StoreSetting } from "@shared/schema";
 
 export default function AdminSettings() {
+  const { isLoading: authLoading, isAuthenticated } = useAdminAuth();
+
+  if (authLoading) {
+    return <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+    </div>;
+  }
+
+  if (!isAuthenticated) {
+    return null;
+  }
+
   const [isDirty, setIsDirty] = useState(false);
   const [isTestingBot, setIsTestingBot] = useState(false);
   const { toast } = useToast();

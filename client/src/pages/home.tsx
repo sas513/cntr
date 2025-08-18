@@ -36,7 +36,7 @@ export default function Home() {
   const heroImageSetting = getSetting("hero_image");
   const heroImage = heroImageSetting?.startsWith("@assets/") 
     ? heroBackgroundImage 
-    : heroImageSetting || heroBackgroundImage;
+    : heroImageSetting || "https://images.unsplash.com/photo-1606318158708-c0e2bbddf3db?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80";
   const freeShippingThreshold = getSetting("free_shipping_threshold");
   const deliveryTime = getSetting("delivery_time") || "1-3 أيام عمل";
   const warrantyPeriod = getSetting("warranty_period") || "12";

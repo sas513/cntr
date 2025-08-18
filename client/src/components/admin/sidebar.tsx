@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useAdminAuth } from "@/hooks/use-admin-auth";
 import { 
   LayoutDashboard, 
   Package, 
@@ -47,10 +48,10 @@ const navigationItems = [
 
 export default function AdminSidebar() {
   const [location] = useLocation();
+  const { logout } = useAdminAuth();
 
   const handleLogout = () => {
-    localStorage.removeItem("adminToken");
-    window.location.href = "/admin/login";
+    logout();
   };
 
   return (

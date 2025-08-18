@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import AdminSidebar from "@/components/admin/sidebar";
+import { useAdminAuth } from "@/hooks/use-admin-auth";
 import { 
   DollarSign, 
   TrendingUp, 
@@ -18,6 +19,17 @@ import {
 import type { Order, Product, CustomerActivity, StoreSetting } from "@shared/schema";
 
 export default function AdminReports() {
+  const { isLoading: authLoading, isAuthenticated } = useAdminAuth();
+
+  if (authLoading) {
+    return <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+    </div>;
+  }
+
+  if (!isAuthenticated) {
+    return null;
+  }
   const { data: orders = [] } = useQuery<Order[]>({
     queryKey: ["/api/orders"],
   });
@@ -243,10 +255,10 @@ export default function AdminReports() {
               </CardHeader>
               <CardContent className="space-y-4">
                 {topProducts.length > 0 ? topProducts.map(([product, quantity], index) => (
-                  <div key={product} className="flex items-center justify-between">
+                  <div key={`${product}-${index}`} className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <Badge variant="outline">{index + 1}</Badge>
-                      <span className="arabic-text font-medium">{product}</span>
+                      <span className="arabic-text font-medium">{product as string}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <span className="font-semibold">{quantity}</span>

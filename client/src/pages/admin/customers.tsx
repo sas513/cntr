@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import AdminSidebar from "@/components/admin/sidebar";
+import { useAdminAuth } from "@/hooks/use-admin-auth";
 import { Search, Users, Eye, ShoppingBag, Activity } from "lucide-react";
 import type { Order, CustomerActivity } from "@shared/schema";
 
@@ -20,6 +21,17 @@ interface CustomerData {
 }
 
 export default function AdminCustomers() {
+  const { isLoading: authLoading, isAuthenticated } = useAdminAuth();
+
+  if (authLoading) {
+    return <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+    </div>;
+  }
+
+  if (!isAuthenticated) {
+    return null;
+  }
   const [searchQuery, setSearchQuery] = useState("");
 
   const { data: orders = [] } = useQuery<Order[]>({
@@ -40,16 +52,16 @@ export default function AdminCustomers() {
       existing.totalSpent += orderTotal;
       if (order.createdAt && new Date(order.createdAt) > existing.lastActivity) {
         existing.lastActivity = new Date(order.createdAt);
-        existing.customerName = order.customerName;
-        existing.customerPhone = order.customerPhone;
-        existing.customerEmail = order.customerEmail;
+        existing.customerName = order.customerName || undefined;
+        existing.customerPhone = order.customerPhone || undefined;
+        existing.customerEmail = order.customerEmail || undefined;
       }
     } else {
       acc.push({
         sessionId: order.sessionId,
-        customerName: order.customerName,
-        customerPhone: order.customerPhone,
-        customerEmail: order.customerEmail,
+        customerName: order.customerName || undefined,
+        customerPhone: order.customerPhone || undefined,
+        customerEmail: order.customerEmail || undefined,
         totalOrders: 1,
         totalSpent: orderTotal,
         lastActivity: new Date(order.createdAt!),
