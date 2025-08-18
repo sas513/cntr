@@ -36,7 +36,7 @@ const navigationItems = [
   },
   {
     title: "الثيمات والألوان",
-    href: "/admin/themes",
+    href: "/admin/theme-gallery",
     icon: Palette,
   },
   {

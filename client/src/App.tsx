@@ -65,7 +65,7 @@ function Router() {
       <Route path="/admin/products" component={AdminProducts} />
       <Route path="/admin/orders" component={AdminOrders} />
       <Route path="/admin/customers" component={AdminCustomers} />
-      <Route path="/admin/themes" component={ThemeGallery} />
+      <Route path="/admin/theme-gallery" component={ThemeGallery} />
       <Route path="/admin/settings" component={AdminSettings} />
       <Route path="/admin/reports" component={AdminReports} />
       
