@@ -6,11 +6,7 @@ import ProductCard from "@/components/product-card";
 import { Gem, Clock, Truck, Shield, Headphones, RotateCcw, Star } from "lucide-react";
 import { Link } from "wouter";
 import type { Product, Category, StoreSetting } from "@shared/schema";
-import heroBackgroundImage from "@assets/hero-background-new.png";
-
-// Preload the hero image to prevent flashing
-const img = new Image();
-img.src = heroBackgroundImage;
+// Hero image will be loaded from settings
 
 export default function Home() {
   const { data: featuredProducts = [], isLoading: productsLoading } = useQuery<Product[]>({
@@ -33,10 +29,7 @@ export default function Home() {
   
   const heroTitle = getSetting("homepage_hero_title") || "أفخر تشكيلة من الساعات والعطور";
   const heroSubtitle = getSetting("homepage_hero_subtitle") || "اكتشف مجموعتنا الحصرية من أرقى الساعات والعطور العالمية بأفضل الأسعار";
-  const heroImageSetting = getSetting("hero_image");
-  const heroImage = heroImageSetting?.startsWith("@assets/") 
-    ? heroBackgroundImage 
-    : heroImageSetting || "https://images.unsplash.com/photo-1606318158708-c0e2bbddf3db?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80";
+  const heroImage = getSetting("hero_image") || "https://images.unsplash.com/photo-1606318158708-c0e2bbddf3db?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80";
   const freeShippingThreshold = getSetting("free_shipping_threshold");
   const deliveryTime = getSetting("delivery_time") || "1-3 أيام عمل";
   const warrantyPeriod = getSetting("warranty_period") || "12";
