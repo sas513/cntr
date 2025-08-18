@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import AdminSidebar from "@/components/admin/sidebar";
-import StatsCard from "@/components/admin/stats-card";
+
 import { useAdminAuth } from "@/hooks/use-admin-auth";
 import { 
   DollarSign, 
@@ -88,34 +88,57 @@ export default function AdminDashboard() {
 
         {/* إحصائيات سريعة */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <StatsCard
-            title="إجمالي المبيعات"
-            value={stats?.totalSales || "0 د.ع"}
-            icon={DollarSign}
-            change="+12%"
-            changeLabel="من الشهر الماضي"
-          />
-          <StatsCard
-            title="الطلبات"
-            value={stats?.totalOrders?.toString() || "0"}
-            icon={ShoppingBag}
-            change="+8%"
-            changeLabel="من الأسبوع الماضي"
-          />
-          <StatsCard
-            title="العملاء"
-            value={stats?.totalCustomers?.toString() || "0"}
-            icon={Users}
-            change="+15%"
-            changeLabel="عملاء جدد"
-          />
-          <StatsCard
-            title="المنتجات"
-            value={stats?.totalProducts?.toString() || "0"}
-            icon={Package}
-            change="مستقر"
-            changeLabel="في المخزون"
-          />
+          <Card>
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-600 arabic-text">إجمالي المبيعات</p>
+                  <p className="text-2xl font-bold text-gray-900">{stats?.totalSales || "0 د.ع"}</p>
+                </div>
+                <DollarSign className="w-8 h-8 text-green-600" />
+              </div>
+              <p className="text-xs text-gray-500 mt-2 arabic-text">+12% من الشهر الماضي</p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-600 arabic-text">الطلبات</p>
+                  <p className="text-2xl font-bold text-gray-900">{stats?.totalOrders?.toString() || "0"}</p>
+                </div>
+                <ShoppingBag className="w-8 h-8 text-blue-600" />
+              </div>
+              <p className="text-xs text-gray-500 mt-2 arabic-text">+8% من الأسبوع الماضي</p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-600 arabic-text">العملاء</p>
+                  <p className="text-2xl font-bold text-gray-900">{stats?.totalCustomers?.toString() || "0"}</p>
+                </div>
+                <Users className="w-8 h-8 text-purple-600" />
+              </div>
+              <p className="text-xs text-gray-500 mt-2 arabic-text">+15% عملاء جدد</p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-gray-600 arabic-text">المنتجات</p>
+                  <p className="text-2xl font-bold text-gray-900">{stats?.totalProducts?.toString() || "0"}</p>
+                </div>
+                <Package className="w-8 h-8 text-orange-600" />
+              </div>
+              <p className="text-xs text-gray-500 mt-2 arabic-text">مستقر في المخزون</p>
+            </CardContent>
+          </Card>
         </div>
 
         {/* الإجراءات السريعة */}
