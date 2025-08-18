@@ -37,20 +37,16 @@ export default function Home() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative text-white overflow-hidden min-h-[600px]">
-        <div 
-          className="absolute inset-0 hero-background"
-          style={{
-            backgroundImage: `url("${heroImage}")`
-          }}
-          onError={(e) => {
-            console.log('Hero image failed to load:', heroImage);
-            e.currentTarget.style.backgroundImage = `url("${heroImagePath}")`;
-          }}
-        ></div>
-        <div className="absolute inset-0 bg-black/40"></div>
+      <section 
+        className="relative text-white overflow-hidden min-h-[600px] hero-background"
+        style={{
+          backgroundImage: `url("${heroImagePath}")`,
+          backgroundColor: '#1B365D'
+        }}
+      >
+        <div className="absolute inset-0 bg-black/40 z-10"></div>
         
-        <div className="relative container mx-auto px-3 sm:px-4 py-16 sm:py-20 md:py-24 flex items-center min-h-[600px]">
+        <div className="relative z-20 container mx-auto px-3 sm:px-4 py-16 sm:py-20 md:py-24 flex items-center min-h-[600px]">
           <div className="max-w-2xl animate-fade-in text-center sm:text-right">
             <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 leading-tight arabic-text text-white drop-shadow-2xl">
               {heroTitle}
