@@ -7,7 +7,7 @@ import { Gem, Clock, Truck, Shield, Headphones, RotateCcw, Star } from "lucide-r
 import { Link } from "wouter";
 import type { Product, Category, StoreSetting } from "@shared/schema";
 import heroImagePath from "@assets/unico_h_hero_1_1755545621968.png";
-import watchImagePath from "@assets/Screenshot 2025-08-18 230722_1755547721365.png";
+import watchImagePath from "@assets/rolex-watch.png";
 
 export default function Home() {
   const { data: featuredProducts = [], isLoading: productsLoading } = useQuery<Product[]>({
@@ -135,9 +135,13 @@ export default function Home() {
             <Link href={`/products?category=${watchesCategory?.id}`}>
               <div className="relative group cursor-pointer overflow-hidden rounded-2xl shadow-lg">
                 <img 
-                  src={getSetting("watches_category_image") || watchImagePath} 
+                  src={watchImagePath} 
                   alt="مجموعة الساعات الفاخرة" 
                   className="w-full h-60 sm:h-72 md:h-80 object-cover group-hover:scale-110 transition-transform duration-500"
+                  onError={(e) => {
+                    console.log('Watch image failed to load');
+                    e.currentTarget.src = "https://images.unsplash.com/photo-1547996160-81dfa63595aa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80";
+                  }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
                 <div className="absolute bottom-6 right-6 text-white">
