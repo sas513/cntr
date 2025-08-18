@@ -6,7 +6,7 @@ import ProductCard from "@/components/product-card";
 import { Gem, Clock, Truck, Shield, Headphones, RotateCcw, Star } from "lucide-react";
 import { Link } from "wouter";
 import type { Product, Category, StoreSetting } from "@shared/schema";
-import heroImagePath from "@assets/unico_h_hero_1_1755545621968.png";
+import heroImagePath from "@assets/ChatGPT Image 18 أغسطس 2025، 11_29_50 م_1755549026405.png";
 import watchImagePath from "@assets/rolex-watch.png";
 import perfumeImagePath from "@assets/hqdefault_1755548467976.jpg";
 
