@@ -7,6 +7,7 @@ import { Gem, Clock, Truck, Shield, Headphones, RotateCcw, Star } from "lucide-r
 import { Link } from "wouter";
 import type { Product, Category, StoreSetting } from "@shared/schema";
 import heroImagePath from "@assets/unico_h_hero_1_1755545621968.png";
+import watchImagePath from "@assets/Screenshot 2025-08-18 230722_1755547721365.png";
 
 export default function Home() {
   const { data: featuredProducts = [], isLoading: productsLoading } = useQuery<Product[]>({
@@ -134,7 +135,7 @@ export default function Home() {
             <Link href={`/products?category=${watchesCategory?.id}`}>
               <div className="relative group cursor-pointer overflow-hidden rounded-2xl shadow-lg">
                 <img 
-                  src={getSetting("watches_category_image") || "https://images.unsplash.com/photo-1524592094714-0f0654e20314?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600"} 
+                  src={getSetting("watches_category_image") || watchImagePath} 
                   alt="مجموعة الساعات الفاخرة" 
                   className="w-full h-60 sm:h-72 md:h-80 object-cover group-hover:scale-110 transition-transform duration-500"
                 />
