@@ -16,12 +16,12 @@
 
 /* تحسين تحميل الصور - منع إعادة التحميل */
 .cached-image {
-  image-rendering: -webkit-optimize-contrast;
-  image-rendering: crisp-edges;
-  will-change: transform;
+  image-rendering: auto;
+  will-change: auto;
   transform: translateZ(0);
   backface-visibility: hidden;
   perspective: 1000px;
+  transition: opacity 0.3s ease;
 }
 
 /* تحسين سرعة تحميل الصور المهمة */

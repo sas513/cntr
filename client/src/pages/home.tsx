@@ -1,3 +1,4 @@
+import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -11,6 +12,20 @@ import watchImagePath from "@assets/rolex-watch.png";
 import perfumeImagePath from "@assets/hqdefault_1755548467976.jpg";
 
 export default function Home() {
+  // Preload critical images
+  React.useEffect(() => {
+    const preloadImages = [
+      heroImagePath,
+      watchImagePath,
+      perfumeImagePath
+    ];
+    
+    preloadImages.forEach(src => {
+      const img = new Image();
+      img.src = src;
+    });
+  }, []);
+
   const { data: featuredProducts = [], isLoading: productsLoading } = useQuery<Product[]>({
     queryKey: ["/api/products?featured=true"],
   });
@@ -46,7 +61,7 @@ export default function Home() {
       <section 
         className="relative text-white overflow-hidden min-h-[600px] hero-background"
         style={{
-          backgroundImage: `url("/api/images/hero-background")`,
+          backgroundImage: `url("${heroImagePath}")`,
           backgroundColor: '#1B365D'
         }}
       >
@@ -140,11 +155,14 @@ export default function Home() {
             <Link href={`/products?category=${watchesCategory?.id}`}>
               <div className="relative group cursor-pointer overflow-hidden rounded-2xl shadow-lg">
                 <img 
-                  src="/api/images/watches" 
+                  src={watchImagePath} 
                   alt="مجموعة الساعات الفاخرة" 
                   className="w-full h-60 sm:h-72 md:h-80 object-cover group-hover:scale-110 transition-transform duration-500 cached-image hero-image"
                   loading="eager"
                   decoding="sync"
+                  onError={(e) => {
+                    e.currentTarget.src = "/api/images/watches";
+                  }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
                 <div className="absolute bottom-6 right-6 text-white">
@@ -161,11 +179,14 @@ export default function Home() {
             <Link href={`/products?category=${perfumesCategory?.id}`}>
               <div className="relative group cursor-pointer overflow-hidden rounded-2xl shadow-lg">
                 <img 
-                  src="/api/images/perfumes" 
+                  src={perfumeImagePath} 
                   alt="مجموعة العطور الفاخرة" 
                   className="w-full h-60 sm:h-72 md:h-80 object-cover group-hover:scale-110 transition-transform duration-500 cached-image hero-image"
                   loading="eager"
                   decoding="sync"
+                  onError={(e) => {
+                    e.currentTarget.src = "/api/images/perfumes";
+                  }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
                 <div className="absolute bottom-6 right-6 text-white">
