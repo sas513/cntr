@@ -24,11 +24,20 @@ export async function generateLocalUploadPath(originalName: string): Promise<str
   return path.join(UPLOADS_DIR, fileName);
 }
 
-export async function saveUploadedFile(buffer: Buffer, fileName: string): Promise<string> {
+export async function saveUploadedFile(buffer: Buffer, originalName: string): Promise<string> {
   await ensureUploadsDir();
+  
+  // استخراج امتداد الملف
+  const ext = path.extname(originalName);
+  
+  // إنشاء اسم ملف فريد
+  const uniqueId = randomBytes(16).toString('hex');
+  const fileName = `${uniqueId}${ext}`;
   
   const filePath = path.join(UPLOADS_DIR, fileName);
   await fs.writeFile(filePath, buffer);
+  
+  console.log(`File saved successfully: ${fileName}`);
   
   // إرجاع المسار النسبي لاستخدامه في الويب
   return `/uploads/${fileName}`;
