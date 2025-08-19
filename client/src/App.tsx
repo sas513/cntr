@@ -56,7 +56,6 @@ function App() {
                   <Route path="/admin/settings" component={AdminSettings} />
                   <Route path="/admin/reports" component={AdminReports} />
                   <Route path="/admin" component={AdminDashboard} />
-                  <Route component={NotFound} />
                 </Switch>
               ) : (
                 // Customer Layout - With Header/Footer
