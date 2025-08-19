@@ -21,7 +21,7 @@ import ReturnPolicy from "@/pages/return-policy";
 import ShippingPolicy from "@/pages/shipping-policy";
 import AdminLogin from "@/pages/admin/login";
 import AdminDashboard from "@/pages/admin/dashboard";
-import AdminProducts from "@/pages/admin/simple-products";
+import AdminProducts from "@/pages/admin/basic-products";
 import AdminOrders from "@/pages/admin/orders";
 import AdminCustomers from "@/pages/admin/customers";
 import AdminSettings from "@/pages/admin/settings";
