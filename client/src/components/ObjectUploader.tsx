@@ -79,6 +79,9 @@ export function ObjectUploader({
         console.log('Upload started - keeping modal open');
         setIsUploading(true);
       })
+      .on("upload-started", (file) => {
+        console.log('File upload started:', file.name);
+      })
       .on("complete", (result) => {
         console.log('Upload completed');
         setIsUploading(false);

@@ -509,11 +509,6 @@ export default function AdminProducts() {
                               const data = await response.json();
                               console.log('Upload URL received successfully');
                               
-                              toast({
-                                title: "جاري رفع الصورة",
-                                description: "تم الحصول على رابط الرفع بنجاح",
-                              });
-                              
                               return {
                                 method: 'PUT' as const,
                                 url: data.uploadURL
@@ -553,7 +548,7 @@ export default function AdminProducts() {
                                     console.log('تم رفع الصورة بنجاح:', localImagePath);
                                     toast({
                                       title: "تم رفع الصورة بنجاح ✅",
-                                      description: `حجم الملف: ${Math.round((uploadedFile.size || 0) / 1024)}KB`,
+                                      description: `تم حفظ الصورة - حجم الملف: ${Math.round((uploadedFile.size || 0) / 1024)}KB`,
                                     });
                                   } else {
                                     // fallback إذا لم نجد uploads
@@ -563,7 +558,7 @@ export default function AdminProducts() {
                                     console.log('تم رفع الصورة بنجاح (fallback):', localImagePath);
                                     toast({
                                       title: "تم رفع الصورة بنجاح ✅",
-                                      description: `حجم الملف: ${Math.round((uploadedFile.size || 0) / 1024)}KB`,
+                                      description: `تم حفظ الصورة - حجم الملف: ${Math.round((uploadedFile.size || 0) / 1024)}KB`,
                                     });
                                   }
                                 } catch (error) {
