@@ -6,7 +6,7 @@ const requestCounts = new Map<string, { count: number; resetTime: number }>();
 // Clean up expired entries every 5 minutes
 setInterval(() => {
   const now = Date.now();
-  for (const [ip, data] of requestCounts.entries()) {
+  for (const [ip, data] of Array.from(requestCounts.entries())) {
     if (now > data.resetTime) {
       requestCounts.delete(ip);
     }
@@ -60,7 +60,7 @@ export function securityHeaders(req: Request, res: Response, next: NextFunction)
   // Content Security Policy
   res.setHeader('Content-Security-Policy', 
     "default-src 'self'; " +
-    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com; " +
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://replit.com; " +
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; " +
     "font-src 'self' https://fonts.gstatic.com; " +
     "img-src 'self' data: https: blob:; " +
