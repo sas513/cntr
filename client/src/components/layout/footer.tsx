@@ -198,7 +198,7 @@ export default function Footer() {
         
         <div className="border-t border-gray-600 pt-8 text-center">
           <p className="text-gray-300 arabic-text">
-            &copy; 2024 {storeName}. جميع الحقوق محفوظة.
+            &copy; 2019 {storeName}. جميع الحقوق محفوظة.
           </p>
         </div>
       </div>
