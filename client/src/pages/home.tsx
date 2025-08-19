@@ -68,7 +68,7 @@ export default function Home() {
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
-          backgroundAttachment: 'fixed'
+          backgroundColor: 'transparent'
         }}
       >
         <div className="absolute inset-0 bg-black/40 z-10"></div>

@@ -55,8 +55,8 @@ img {
   background-size: cover !important;
   background-position: center !important;
   background-repeat: no-repeat !important;
-  background-color: #1B365D !important;
-  background-attachment: fixed !important;
+  background-color: transparent !important;
+  background-attachment: scroll !important;
 }
 
 .hero-background::before,
