@@ -12,7 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import AdminSidebar from "@/components/admin/sidebar";
 import { useAdminAuth } from "@/hooks/use-admin-auth";
-import { ObjectUploader } from "@/components/ObjectUploader";
+import { SimpleImageUploader } from "@/components/SimpleImageUploader";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { Plus, Edit, Trash2, Search, Package } from "lucide-react";
@@ -458,156 +458,16 @@ export default function AdminProducts() {
                             )}
                           </div>
                           
-                          <ObjectUploader
-                            maxNumberOfFiles={1}
-                            maxFileSize={5242880} // 5MB
-                            onGetUploadParameters={async () => {
-                              const token = localStorage.getItem('adminToken');
-                              console.log('Getting upload URL with token:', token ? 'Present' : 'Missing');
-                              
-                              if (!token) {
-                                toast({
-                                  title: "خطأ في التوثيق",
-                                  description: "يجب تسجيل الدخول أولاً",
-                                  variant: "destructive",
-                                });
-                                throw new Error('Not authenticated');
-                              }
-                              
-                              const response = await fetch('/api/objects/upload', {
-                                method: 'POST',
-                                headers: {
-                                  'Authorization': `Bearer ${token}`,
-                                  'Content-Type': 'application/json'
-                                }
-                              });
-                              
-                              if (!response.ok) {
-                                const errorText = await response.text();
-                                console.error('Upload URL request failed:', response.status, errorText);
-                                
-                                if (response.status === 401) {
-                                  toast({
-                                    title: "انتهت جلسة العمل",
-                                    description: "يرجى تسجيل الدخول مرة أخرى",
-                                    variant: "destructive",
-                                  });
-                                  // إعادة توجيه لصفحة تسجيل الدخول
-                                  setTimeout(() => {
-                                    window.location.href = "/admin/login";
-                                  }, 2000);
-                                } else {
-                                  toast({
-                                    title: "خطأ في الخادم",
-                                    description: "فشل في الحصول على رابط الرفع",
-                                    variant: "destructive",
-                                  });
-                                }
-                                throw new Error('Failed to get upload URL');
-                              }
-                              
-                              const data = await response.json();
-                              console.log('Upload URL received successfully');
-                              
-                              return {
-                                method: 'PUT' as const,
-                                url: data.uploadURL
-                              };
+                          <SimpleImageUploader
+                            maxFileSize={5 * 1024 * 1024}
+                            buttonClassName="w-full"
+                            onUploadComplete={(imagePath) => {
+                              updateImageField(index, imagePath);
                             }}
-                            onComplete={(result) => {
-                              console.log('Upload result:', result);
-                              
-                              // فحص وجود أخطاء
-                              if (result.failed && result.failed.length > 0) {
-                                console.error('Upload failed:', result.failed);
-                                const failedFile = result.failed[0];
-                                console.error('Detailed error:', failedFile);
-                                
-                                let errorMessage = 'خطأ غير معروف';
-                                if (failedFile.error) {
-                                  if (typeof failedFile.error === 'string') {
-                                    errorMessage = failedFile.error;
-                                  } else if (failedFile.error.message) {
-                                    errorMessage = failedFile.error.message;
-                                  } else if (failedFile.error.toString) {
-                                    errorMessage = failedFile.error.toString();
-                                  }
-                                }
-                                
-                                // ترجمة بعض الأخطاء الشائعة
-                                if (errorMessage.includes('NetworkError') || errorMessage.includes('Failed to fetch')) {
-                                  errorMessage = 'مشكلة في الاتصال بالإنترنت';
-                                } else if (errorMessage.includes('403') || errorMessage.includes('Forbidden')) {
-                                  errorMessage = 'ليس مسموح برفع هذا الملف';
-                                } else if (errorMessage.includes('413') || errorMessage.includes('too large')) {
-                                  errorMessage = 'حجم الملف كبير جداً (الحد الأقصى 5MB)';
-                                } else if (errorMessage.includes('401') || errorMessage.includes('Unauthorized')) {
-                                  errorMessage = 'انتهت صلاحية الجلسة - يرجى المحاولة مرة أخرى';
-                                }
-                                
-                                toast({
-                                  title: "فشل في رفع الصورة",
-                                  description: errorMessage,
-                                  variant: "destructive",
-                                });
-                                return;
-                              }
-                              
-                              const uploadedFile = result.successful?.[0];
-                              if (uploadedFile?.uploadURL) {
-                                try {
-                                  // تحويل رابط Google Storage إلى رابط محلي
-                                  const url = new URL(uploadedFile.uploadURL);
-                                  const pathParts = url.pathname.split('/');
-                                  
-                                  console.log('Upload URL:', uploadedFile.uploadURL);
-                                  console.log('Path parts:', pathParts);
-                                  
-                                  // البحث عن الجزء الخاص بـ uploads/
-                                  const uploadsIndex = pathParts.findIndex(part => part === 'uploads');
-                                  if (uploadsIndex !== -1 && uploadsIndex < pathParts.length - 1) {
-                                    const objectId = pathParts[uploadsIndex + 1];
-                                    const localImagePath = `/objects/uploads/${objectId}`;
-                                    updateImageField(index, localImagePath);
-                                    console.log('تم رفع الصورة بنجاح:', localImagePath);
-                                    toast({
-                                      title: "تم رفع الصورة بنجاح ✅",
-                                      description: `تم حفظ الصورة - حجم الملف: ${Math.round((uploadedFile.size || 0) / 1024)}KB`,
-                                    });
-                                  } else {
-                                    // fallback إذا لم نجد uploads
-                                    const entityId = pathParts.slice(-1)[0];
-                                    const localImagePath = `/objects/uploads/${entityId}`;
-                                    updateImageField(index, localImagePath);
-                                    console.log('تم رفع الصورة بنجاح (fallback):', localImagePath);
-                                    toast({
-                                      title: "تم رفع الصورة بنجاح ✅",
-                                      description: `تم حفظ الصورة - حجم الملف: ${Math.round((uploadedFile.size || 0) / 1024)}KB`,
-                                    });
-                                  }
-                                } catch (error) {
-                                  console.error('خطأ في معالجة رابط الصورة:', error);
-                                  // استخدام الرابط الأصلي كما هو
-                                  updateImageField(index, uploadedFile.uploadURL);
-                                  toast({
-                                    title: "تم رفع الصورة ⚠️",
-                                    description: "رفعت بتنسيق مختلف - قد تحتاج إلى تحديث الصفحة",
-                                    variant: "destructive",
-                                  });
-                                }
-                              } else {
-                                console.error('No upload URL in result:', result);
-                                toast({
-                                  title: "خطأ في نتيجة الرفع",
-                                  description: "لم يتم الحصول على رابط الصورة المرفوعة",
-                                  variant: "destructive",
-                                });
-                              }
-                            }}
-                            buttonClassName="bg-blue-600 hover:bg-blue-700 text-white w-full"
                           >
-                            <span>📁 رفع صورة</span>
-                          </ObjectUploader>
+                            <Plus className="h-4 w-4 ml-2" />
+                            رفع صورة
+                          </SimpleImageUploader>
                         </div>
                       ))}
                       

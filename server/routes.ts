@@ -9,6 +9,8 @@ import { z } from "zod";
 import bcrypt from "bcryptjs";
 import { db } from "./db";
 import { ObjectStorageService, ObjectNotFoundError } from "./objectStorage";
+import { saveUploadedFile, getLocalImageUrl } from "./localStorage";
+import multer from 'multer';
 
 export async function registerRoutes(app: Express): Promise<Server> {
   
@@ -518,59 +520,78 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Get upload URL for product images
-  app.post("/api/objects/upload", requireAdmin, async (req: AuthRequest, res) => {
+  // إعداد multer للرفع المحلي
+  const upload = multer({
+    limits: {
+      fileSize: 5 * 1024 * 1024, // 5MB حد أقصى
+    },
+    fileFilter: (req, file, cb) => {
+      // قبول الصور فقط
+      if (file.mimetype.startsWith('image/')) {
+        cb(null, true);
+      } else {
+        cb(new Error('نوع الملف غير مسموح - يجب أن يكون صورة'));
+      }
+    }
+  });
+
+  // رفع الصور محلياً
+  app.post("/api/upload/image", requireAdmin, upload.single('image'), async (req: AuthRequest, res) => {
     try {
-      console.log('Upload URL request from admin:', req.admin?.username);
+      console.log('Local image upload request from admin:', req.admin?.username);
       
-      // Check environment variables
-      const privateDir = process.env.PRIVATE_OBJECT_DIR;
-      const publicPaths = process.env.PUBLIC_OBJECT_SEARCH_PATHS;
-      
-      if (!privateDir) {
-        console.error('PRIVATE_OBJECT_DIR not configured');
-        return res.status(500).json({ 
-          error: "Object storage not configured - PRIVATE_OBJECT_DIR missing" 
+      if (!req.file) {
+        return res.status(400).json({ 
+          error: "لم يتم تحديد أي ملف للرفع" 
         });
       }
       
-      if (!publicPaths) {
-        console.error('PUBLIC_OBJECT_SEARCH_PATHS not configured');
-        return res.status(500).json({ 
-          error: "Object storage not configured - PUBLIC_OBJECT_SEARCH_PATHS missing" 
-        });
-      }
-      
-      const objectStorageService = new ObjectStorageService();
-      const uploadURL = await objectStorageService.getObjectEntityUploadURL();
-      console.log('Generated upload URL successfully for admin:', req.admin?.username);
+      // حفظ الملف محلياً
+      const imagePath = await saveUploadedFile(req.file.buffer, req.file.originalname);
+      console.log('Image uploaded successfully:', imagePath);
       
       res.json({ 
-        uploadURL,
-        message: "Upload URL generated successfully"
+        success: true,
+        imagePath,
+        message: "تم رفع الصورة بنجاح"
       });
     } catch (error) {
-      console.error("Error getting upload URL:", error);
+      console.error("Error uploading image:", error);
       
       if (error instanceof Error) {
-        if (error.message.includes('PRIVATE_OBJECT_DIR')) {
-          return res.status(500).json({ 
-            error: "تكوين التخزين غير مكتمل - يرجى الاتصال بالمطور" 
-          });
-        }
-        
         return res.status(500).json({ 
-          error: "خطأ في إنشاء رابط الرفع: " + error.message 
+          error: "خطأ في رفع الصورة: " + error.message 
         });
       }
       
       res.status(500).json({ 
-        error: "خطأ غير معروف في إنشاء رابط الرفع" 
+        error: "خطأ غير معروف في رفع الصورة" 
       });
     }
   });
 
-  // Serve uploaded objects
+  // Get upload URL for product images (fallback للنظام القديم)
+  app.post("/api/objects/upload", requireAdmin, async (req: AuthRequest, res) => {
+    // تحويل الطلب إلى استخدام النظام المحلي
+    res.json({ 
+      useLocalUpload: true,
+      endpoint: "/api/upload/image",
+      message: "استخدم النظام المحلي لرفع الصور"
+    });
+  });
+
+  // Serve uploaded images locally
+  app.use('/uploads', (req, res, next) => {
+    // إضافة headers للكاش
+    res.setHeader('Cache-Control', 'public, max-age=3600');
+    next();
+  });
+  
+  // تقديم الصور المرفوعة محلياً
+  const express = await import('express');
+  app.use('/uploads', express.static('uploads'));
+
+  // Serve uploaded objects (للنظام القديم)
   app.get("/objects/:objectPath(*)", async (req, res) => {
     const objectStorageService = new ObjectStorageService();
     try {
