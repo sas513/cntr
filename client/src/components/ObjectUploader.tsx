@@ -59,6 +59,8 @@ export function ObjectUploader({
   children,
 }: ObjectUploaderProps) {
   const [showModal, setShowModal] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  
   const [uppy] = useState(() =>
     new Uppy({
       restrictions: {
@@ -66,14 +68,33 @@ export function ObjectUploader({
         maxFileSize,
       },
       autoProceed: false,
+      allowMultipleUploadBatches: false,
+      debug: true,
     })
       .use(AwsS3, {
         shouldUseMultipart: false,
         getUploadParameters: onGetUploadParameters,
       })
+      .on("upload", () => {
+        console.log('Upload started - keeping modal open');
+        setIsUploading(true);
+      })
       .on("complete", (result) => {
+        console.log('Upload completed');
+        setIsUploading(false);
         onComplete?.(result);
-        setShowModal(false);
+        // إبقاء المودال مفتوحاً لثوانٍ قليلة لعرض النتيجة
+        setTimeout(() => {
+          setShowModal(false);
+        }, 3000);
+      })
+      .on("error", (error) => {
+        console.error('Upload error:', error);
+        setIsUploading(false);
+        // إبقاء المودال مفتوحاً عند حدوث خطأ
+        setTimeout(() => {
+          setShowModal(false);
+        }, 3000);
       })
   );
 
@@ -86,7 +107,13 @@ export function ObjectUploader({
       <DashboardModal
         uppy={uppy}
         open={showModal}
-        onRequestClose={() => setShowModal(false)}
+        onRequestClose={() => {
+          // منع إغلاق المودال أثناء الرفع
+          if (!isUploading) {
+            setShowModal(false);
+          }
+        }}
+        closeModalOnClickOutside={!isUploading}
         proudlyDisplayPoweredByUppy={false}
       />
     </div>
