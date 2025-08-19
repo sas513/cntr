@@ -82,7 +82,7 @@ export function SimpleImageUploader({
         });
       }, 200);
 
-      const token = localStorage.getItem('authToken');
+      const token = localStorage.getItem('adminToken');
       const response = await fetch('/api/upload/image', {
         method: 'POST',
         headers: {
@@ -168,14 +168,14 @@ export function SimpleImageUploader({
             {!selectedFile ? (
               <div className="text-center space-y-4">
                 <div 
-                  className="border-2 border-dashed border-gray-300 rounded-lg p-8 hover:border-gray-400 transition-colors cursor-pointer"
+                  className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-8 hover:border-gray-400 dark:hover:border-gray-500 transition-colors cursor-pointer bg-gray-50 dark:bg-gray-800/50"
                   onClick={() => fileInputRef.current?.click()}
                 >
-                  <Upload className="mx-auto h-12 w-12 text-gray-400" />
-                  <p className="mt-2 text-sm text-gray-600">
+                  <Upload className="mx-auto h-12 w-12 text-gray-400 dark:text-gray-500" />
+                  <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">
                     اضغط لاختيار صورة
                   </p>
-                  <p className="text-xs text-gray-400">
+                  <p className="text-xs text-gray-400 dark:text-gray-500">
                     حد أقصى: {Math.round(maxFileSize / (1024 * 1024))}MB
                   </p>
                 </div>
@@ -201,8 +201,8 @@ export function SimpleImageUploader({
                 )}
                 
                 <div className="text-center space-y-2">
-                  <p className="font-medium">{selectedFile.name}</p>
-                  <p className="text-sm text-gray-500">
+                  <p className="font-medium text-gray-900 dark:text-gray-100">{selectedFile.name}</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">
                     {Math.round(selectedFile.size / 1024)}KB
                   </p>
                 </div>
@@ -210,7 +210,7 @@ export function SimpleImageUploader({
                 {isUploading && (
                   <div className="space-y-2">
                     <Progress value={uploadProgress} className="h-2" />
-                    <p className="text-sm text-center text-gray-600">
+                    <p className="text-sm text-center text-gray-600 dark:text-gray-300">
                       جاري الرفع... {uploadProgress}%
                     </p>
                   </div>
@@ -232,7 +232,7 @@ export function SimpleImageUploader({
                   <Button
                     onClick={handleUpload}
                     disabled={isUploading || uploadProgress === 100}
-                    className="bg-blue-600 hover:bg-blue-700"
+                    className="bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white"
                   >
                     {uploadProgress === 100 ? (
                       <>
