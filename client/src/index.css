@@ -50,6 +50,19 @@ img {
   display: none !important;
 }
 
+/* منع اللون الذي يظهر فوق الخلفية */
+.hero-background {
+  background-size: cover !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  background-color: transparent !important;
+}
+
+.hero-background::before,
+.hero-background::after {
+  background-color: transparent !important;
+}
+
 /* تحسين سرعة تحميل الصور المهمة */
 .hero-image {
   image-rendering: auto;
