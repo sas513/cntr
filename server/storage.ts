@@ -295,6 +295,13 @@ export class MemStorage implements IStorage {
 
   async createProduct(insertProduct: InsertProduct): Promise<Product> {
     const id = this.currentProductId++;
+    
+    // Filter out empty images and tags
+    const cleanImages = insertProduct.images?.filter(img => img && img.trim() !== '') || [];
+    const cleanTags = insertProduct.tags?.filter(tag => tag && tag.trim() !== '') || [];
+    
+    console.log('Creating product with images:', cleanImages);
+    
     const product: Product = { 
       ...insertProduct, 
       id, 
@@ -303,12 +310,14 @@ export class MemStorage implements IStorage {
       originalPrice: insertProduct.originalPrice || null,
       isActive: insertProduct.isActive ?? true,
       categoryId: insertProduct.categoryId || null,
-
-      images: insertProduct.images || null,
-      tags: insertProduct.tags || null,
+      sku: insertProduct.sku || null,
+      images: cleanImages.length > 0 ? cleanImages : null,
+      tags: cleanTags.length > 0 ? cleanTags : null,
       createdAt: new Date() 
     };
     this.products.set(id, product);
+    
+    console.log('Product saved with images:', product.images);
     return product;
   }
 
@@ -316,8 +325,23 @@ export class MemStorage implements IStorage {
     const product = this.products.get(id);
     if (!product) return undefined;
     
+    // Clean images and tags if they're being updated
+    if (updateData.images) {
+      const cleanImages = updateData.images.filter(img => img && img.trim() !== '');
+      updateData.images = cleanImages.length > 0 ? cleanImages : null;
+    }
+    
+    if (updateData.tags) {
+      const cleanTags = updateData.tags.filter(tag => tag && tag.trim() !== '');
+      updateData.tags = cleanTags.length > 0 ? cleanTags : null;
+    }
+    
+    console.log('Updating product with images:', updateData.images);
+    
     const updated = { ...product, ...updateData };
     this.products.set(id, updated);
+    
+    console.log('Product updated with images:', updated.images);
     return updated;
   }
 
