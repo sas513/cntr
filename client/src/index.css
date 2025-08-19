@@ -16,79 +16,10 @@
 
 /* تحسين تحميل الصور - منع إعادة التحميل */
 .cached-image {
-  image-rendering: auto;
-  will-change: auto;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  will-change: transform;
   transform: translateZ(0);
-  backface-visibility: hidden;
-  perspective: 1000px;
-  opacity: 1 !important;
-  background: transparent !important;
-}
-
-/* منع ظهور مؤشر التحميل */
-.cached-image::before,
-.cached-image::after {
-  display: none !important;
-}
-
-/* منع أي loading placeholders */
-img[loading] {
-  background: transparent !important;
-  opacity: 1 !important;
-}
-
-/* منع loading spinners على جميع الصور */
-img {
-  background-color: transparent !important;
-  background-image: none !important;
-}
-
-/* إخفاء أي animation loaders */
-.loading,
-.spinner,
-.skeleton {
-  display: none !important;
-}
-
-/* خلفية ثابتة بدون تحميل */
-.hero-background {
-  background-size: cover !important;
-  background-position: center !important;
-  background-repeat: no-repeat !important;
-  background-color: transparent !important;
-  background-attachment: fixed !important;
-  opacity: 1 !important;
-  transition: none !important;
-  animation: none !important;
-}
-
-.hero-background::before,
-.hero-background::after {
-  background-color: transparent !important;
-  display: none !important;
-}
-
-/* منع أي تأثيرات تحميل على الخلفية */
-.hero-background,
-.hero-background * {
-  transition: none !important;
-  animation: none !important;
-  opacity: 1 !important;
-}
-
-/* تحسين سرعة تحميل الصور المهمة */
-.hero-image {
-  image-rendering: auto;
-  object-fit: cover;
-  backface-visibility: hidden;
-  transform: translateZ(0);
-}
-
-/* تحسين الصور المصغرة */
-.thumbnail-image {
-  image-rendering: auto;
-  object-fit: cover;
-  transition: transform 0.2s ease;
 }
 
 /* تحسين الأداء للصور */

@@ -1,10 +1,8 @@
-import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import ProductCard from "@/components/product-card";
-
 import { Gem, Clock, Truck, Shield, Headphones, RotateCcw, Star } from "lucide-react";
 import { Link } from "wouter";
 import type { Product, Category, StoreSetting } from "@shared/schema";
@@ -13,23 +11,6 @@ import watchImagePath from "@assets/rolex-watch.png";
 import perfumeImagePath from "@assets/hqdefault_1755548467976.jpg";
 
 export default function Home() {
-  // Preload critical images immediately
-  React.useEffect(() => {
-    const preloadImages = [
-      heroImagePath,
-      watchImagePath,
-      perfumeImagePath
-    ];
-    
-    preloadImages.forEach(src => {
-      const link = document.createElement('link');
-      link.rel = 'preload';
-      link.as = 'image';
-      link.href = src;
-      document.head.appendChild(link);
-    });
-  }, []);
-
   const { data: featuredProducts = [], isLoading: productsLoading } = useQuery<Product[]>({
     queryKey: ["/api/products?featured=true"],
   });
@@ -66,11 +47,7 @@ export default function Home() {
         className="relative text-white overflow-hidden min-h-[600px] hero-background"
         style={{
           backgroundImage: `url("${heroImagePath}")`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          backgroundColor: 'transparent',
-          opacity: 1
+          backgroundColor: '#1B365D'
         }}
       >
         <div className="absolute inset-0 bg-black/40 z-10"></div>
@@ -165,20 +142,9 @@ export default function Home() {
                 <img 
                   src={watchImagePath} 
                   alt="مجموعة الساعات الفاخرة" 
-                  className="w-full h-60 sm:h-72 md:h-80 object-cover group-hover:scale-110 transition-transform duration-500 cached-image hero-image"
+                  className="w-full h-60 sm:h-72 md:h-80 object-cover group-hover:scale-110 transition-transform duration-500 cached-image"
                   loading="eager"
                   decoding="sync"
-                  style={{
-                    opacity: 1,
-                    background: 'transparent',
-                    minHeight: 'auto'
-                  }}
-                  onLoad={(e) => {
-                    e.currentTarget.style.opacity = '1';
-                  }}
-                  onError={(e) => {
-                    e.currentTarget.src = "/api/images/watches";
-                  }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
                 <div className="absolute bottom-6 right-6 text-white">
@@ -197,20 +163,9 @@ export default function Home() {
                 <img 
                   src={perfumeImagePath} 
                   alt="مجموعة العطور الفاخرة" 
-                  className="w-full h-60 sm:h-72 md:h-80 object-cover group-hover:scale-110 transition-transform duration-500 cached-image hero-image"
+                  className="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-500 cached-image"
                   loading="eager"
                   decoding="sync"
-                  style={{
-                    opacity: 1,
-                    background: 'transparent',
-                    minHeight: 'auto'
-                  }}
-                  onLoad={(e) => {
-                    e.currentTarget.style.opacity = '1';
-                  }}
-                  onError={(e) => {
-                    e.currentTarget.src = "/api/images/perfumes";
-                  }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
                 <div className="absolute bottom-6 right-6 text-white">
