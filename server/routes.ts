@@ -522,13 +522,51 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/objects/upload", requireAdmin, async (req: AuthRequest, res) => {
     try {
       console.log('Upload URL request from admin:', req.admin?.username);
+      
+      // Check environment variables
+      const privateDir = process.env.PRIVATE_OBJECT_DIR;
+      const publicPaths = process.env.PUBLIC_OBJECT_SEARCH_PATHS;
+      
+      if (!privateDir) {
+        console.error('PRIVATE_OBJECT_DIR not configured');
+        return res.status(500).json({ 
+          error: "Object storage not configured - PRIVATE_OBJECT_DIR missing" 
+        });
+      }
+      
+      if (!publicPaths) {
+        console.error('PUBLIC_OBJECT_SEARCH_PATHS not configured');
+        return res.status(500).json({ 
+          error: "Object storage not configured - PUBLIC_OBJECT_SEARCH_PATHS missing" 
+        });
+      }
+      
       const objectStorageService = new ObjectStorageService();
       const uploadURL = await objectStorageService.getObjectEntityUploadURL();
-      console.log('Generated upload URL successfully');
-      res.json({ uploadURL });
+      console.log('Generated upload URL successfully for admin:', req.admin?.username);
+      
+      res.json({ 
+        uploadURL,
+        message: "Upload URL generated successfully"
+      });
     } catch (error) {
       console.error("Error getting upload URL:", error);
-      res.status(500).json({ error: "Failed to get upload URL" });
+      
+      if (error instanceof Error) {
+        if (error.message.includes('PRIVATE_OBJECT_DIR')) {
+          return res.status(500).json({ 
+            error: "تكوين التخزين غير مكتمل - يرجى الاتصال بالمطور" 
+          });
+        }
+        
+        return res.status(500).json({ 
+          error: "خطأ في إنشاء رابط الرفع: " + error.message 
+        });
+      }
+      
+      res.status(500).json({ 
+        error: "خطأ غير معروف في إنشاء رابط الرفع" 
+      });
     }
   });
 

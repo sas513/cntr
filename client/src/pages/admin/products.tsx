@@ -465,6 +465,15 @@ export default function AdminProducts() {
                               const token = localStorage.getItem('adminToken');
                               console.log('Getting upload URL with token:', token ? 'Present' : 'Missing');
                               
+                              if (!token) {
+                                toast({
+                                  title: "خطأ في التوثيق",
+                                  description: "يجب تسجيل الدخول أولاً",
+                                  variant: "destructive",
+                                });
+                                throw new Error('Not authenticated');
+                              }
+                              
                               const response = await fetch('/api/objects/upload', {
                                 method: 'POST',
                                 headers: {
@@ -474,24 +483,66 @@ export default function AdminProducts() {
                               });
                               
                               if (!response.ok) {
-                                console.error('Upload URL request failed:', response.status, await response.text());
+                                const errorText = await response.text();
+                                console.error('Upload URL request failed:', response.status, errorText);
+                                
+                                if (response.status === 401) {
+                                  toast({
+                                    title: "انتهت جلسة العمل",
+                                    description: "يرجى تسجيل الدخول مرة أخرى",
+                                    variant: "destructive",
+                                  });
+                                  // إعادة توجيه لصفحة تسجيل الدخول
+                                  setTimeout(() => {
+                                    window.location.href = "/admin/login";
+                                  }, 2000);
+                                } else {
+                                  toast({
+                                    title: "خطأ في الخادم",
+                                    description: "فشل في الحصول على رابط الرفع",
+                                    variant: "destructive",
+                                  });
+                                }
                                 throw new Error('Failed to get upload URL');
                               }
                               
                               const data = await response.json();
                               console.log('Upload URL received successfully');
+                              
+                              toast({
+                                title: "جاري رفع الصورة",
+                                description: "تم الحصول على رابط الرفع بنجاح",
+                              });
+                              
                               return {
                                 method: 'PUT' as const,
                                 url: data.uploadURL
                               };
                             }}
                             onComplete={(result) => {
+                              console.log('Upload result:', result);
+                              
+                              // فحص وجود أخطاء
+                              if (result.failed && result.failed.length > 0) {
+                                console.error('Upload failed:', result.failed);
+                                const failureReason = result.failed[0].error || 'Unknown error';
+                                toast({
+                                  title: "فشل في رفع الصورة",
+                                  description: `سبب الفشل: ${failureReason}`,
+                                  variant: "destructive",
+                                });
+                                return;
+                              }
+                              
                               const uploadedFile = result.successful?.[0];
                               if (uploadedFile?.uploadURL) {
                                 try {
                                   // تحويل رابط Google Storage إلى رابط محلي
                                   const url = new URL(uploadedFile.uploadURL);
                                   const pathParts = url.pathname.split('/');
+                                  
+                                  console.log('Upload URL:', uploadedFile.uploadURL);
+                                  console.log('Path parts:', pathParts);
                                   
                                   // البحث عن الجزء الخاص بـ uploads/
                                   const uploadsIndex = pathParts.findIndex(part => part === 'uploads');
@@ -501,8 +552,8 @@ export default function AdminProducts() {
                                     updateImageField(index, localImagePath);
                                     console.log('تم رفع الصورة بنجاح:', localImagePath);
                                     toast({
-                                      title: "تم رفع الصورة",
-                                      description: "تم رفع الصورة بنجاح",
+                                      title: "تم رفع الصورة بنجاح ✅",
+                                      description: `حجم الملف: ${Math.round((uploadedFile.size || 0) / 1024)}KB`,
                                     });
                                   } else {
                                     // fallback إذا لم نجد uploads
@@ -511,23 +562,25 @@ export default function AdminProducts() {
                                     updateImageField(index, localImagePath);
                                     console.log('تم رفع الصورة بنجاح (fallback):', localImagePath);
                                     toast({
-                                      title: "تم رفع الصورة",
-                                      description: "تم رفع الصورة بنجاح",
+                                      title: "تم رفع الصورة بنجاح ✅",
+                                      description: `حجم الملف: ${Math.round((uploadedFile.size || 0) / 1024)}KB`,
                                     });
                                   }
                                 } catch (error) {
                                   console.error('خطأ في معالجة رابط الصورة:', error);
+                                  // استخدام الرابط الأصلي كما هو
                                   updateImageField(index, uploadedFile.uploadURL);
                                   toast({
-                                    title: "تحذير",
-                                    description: "تم رفع الصورة ولكن بتنسيق مختلف",
+                                    title: "تم رفع الصورة ⚠️",
+                                    description: "رفعت بتنسيق مختلف - قد تحتاج إلى تحديث الصفحة",
                                     variant: "destructive",
                                   });
                                 }
                               } else {
+                                console.error('No upload URL in result:', result);
                                 toast({
-                                  title: "خطأ",
-                                  description: "فشل في رفع الصورة",
+                                  title: "خطأ في نتيجة الرفع",
+                                  description: "لم يتم الحصول على رابط الصورة المرفوعة",
                                   variant: "destructive",
                                 });
                               }
