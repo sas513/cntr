@@ -20,6 +20,23 @@
   image-rendering: crisp-edges;
   will-change: transform;
   transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* تحسين سرعة تحميل الصور المهمة */
+.hero-image {
+  image-rendering: auto;
+  object-fit: cover;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+/* تحسين الصور المصغرة */
+.thumbnail-image {
+  image-rendering: auto;
+  object-fit: cover;
+  transition: transform 0.2s ease;
 }
 
 /* تحسين الأداء للصور */

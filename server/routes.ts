@@ -10,7 +10,32 @@ import bcrypt from "bcryptjs";
 import { db } from "./db";
 import { ObjectStorageService, ObjectNotFoundError } from "./objectStorage";
 
+// Cache headers for better performance
+const CACHE_HEADERS = {
+  'Cache-Control': 'public, max-age=31536000', // 1 year
+  'ETag': '',
+  'Last-Modified': new Date().toUTCString()
+};
+
 export async function registerRoutes(app: Express): Promise<Server> {
+  
+  // Add placeholder image endpoint with caching
+  app.get('/api/placeholder-image', (req, res) => {
+    res.set({
+      'Content-Type': 'image/svg+xml',
+      'Cache-Control': 'public, max-age=31536000'
+    });
+    
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300">
+      <rect width="400" height="300" fill="#f0f0f0"/>
+      <rect x="150" y="110" width="100" height="80" fill="#ddd" rx="8"/>
+      <circle cx="175" cy="135" r="12" fill="#bbb"/>
+      <path d="m165 155 10-10 10 10 15-15 20 20v20h-55v-25z" fill="#bbb"/>
+      <text x="200" y="190" font-family="Arial" font-size="14" fill="#999" text-anchor="middle">صورة المنتج</text>
+    </svg>`;
+    
+    res.send(svg);
+  });
   
   // Check if any users exist
   app.get('/api/admin/check-users', async (req, res) => {

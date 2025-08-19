@@ -73,9 +73,23 @@ export default function ProductCard({ product }: ProductCardProps) {
     >
       <div className="relative">
         <img
-          src={product.images?.[0] || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300"}
+          src={product.images?.[0] || "/api/placeholder-image"}
           alt={product.nameAr}
-          className="w-full h-44 sm:h-52 md:h-60 object-cover group-hover:scale-105 transition-transform duration-300 rounded-xl"
+          className="w-full h-44 sm:h-52 md:h-60 object-cover group-hover:scale-105 transition-transform duration-300 rounded-xl cached-image"
+          loading="eager"
+          decoding="sync"
+          style={{
+            imageRendering: 'crisp-edges',
+            willChange: 'auto',
+            transform: 'translateZ(0)'
+          }}
+          onError={(e) => {
+            e.currentTarget.src = "/api/placeholder-image";
+          }}
+          onLoad={(e) => {
+            // Mark as loaded to prevent re-loading
+            e.currentTarget.style.opacity = '1';
+          }}
         />
         
         {/* Badges */}

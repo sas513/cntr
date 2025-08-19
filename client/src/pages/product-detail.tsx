@@ -159,9 +159,14 @@ export default function ProductDetail() {
           <div>
             <div className="mb-4">
               <img
-                src={product.images?.[selectedImage] || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=600"}
+                src={product.images?.[selectedImage] || "/api/placeholder-image"}
                 alt={product.nameAr}
-                className="w-full h-96 object-cover rounded-lg shadow-lg"
+                className="w-full h-96 object-cover rounded-lg shadow-lg cached-image"
+                loading="eager"
+                decoding="sync"
+                onError={(e) => {
+                  e.currentTarget.src = "/api/placeholder-image";
+                }}
               />
             </div>
             

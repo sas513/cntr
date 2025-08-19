@@ -142,9 +142,13 @@ export default function Home() {
                 <img 
                   src={watchImagePath} 
                   alt="مجموعة الساعات الفاخرة" 
-                  className="w-full h-60 sm:h-72 md:h-80 object-cover group-hover:scale-110 transition-transform duration-500 cached-image"
+                  className="w-full h-60 sm:h-72 md:h-80 object-cover group-hover:scale-110 transition-transform duration-500 cached-image hero-image"
                   loading="eager"
                   decoding="sync"
+
+                  onError={(e) => {
+                    e.currentTarget.src = "/api/placeholder-image";
+                  }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
                 <div className="absolute bottom-6 right-6 text-white">
@@ -163,9 +167,12 @@ export default function Home() {
                 <img 
                   src={perfumeImagePath} 
                   alt="مجموعة العطور الفاخرة" 
-                  className="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-500 cached-image"
+                  className="w-full h-60 sm:h-72 md:h-80 object-cover group-hover:scale-110 transition-transform duration-500 cached-image hero-image"
                   loading="eager"
                   decoding="sync"
+                  onError={(e) => {
+                    e.currentTarget.src = "/api/placeholder-image";
+                  }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
                 <div className="absolute bottom-6 right-6 text-white">
