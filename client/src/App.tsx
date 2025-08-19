@@ -59,7 +59,7 @@ function CustomerLayout() {
 function Router() {
   return (
     <Switch>
-      {/* Admin Routes - No Header/Footer */}
+      {/* Admin Routes - Most specific first */}
       <Route path="/admin/login" component={AdminLogin} />
       <Route path="/admin/products" component={AdminProducts} />
       <Route path="/admin/orders" component={AdminOrders} />
