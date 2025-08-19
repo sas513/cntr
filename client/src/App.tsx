@@ -49,6 +49,7 @@ function App() {
                 // Admin Layout - No Header/Footer
                 <Switch>
                   <Route path="/admin/login" component={AdminLogin} />
+                  <Route path="/admin/products/new" component={AdminProducts} />
                   <Route path="/admin/products" component={AdminProducts} />
                   <Route path="/admin/orders" component={AdminOrders} />
                   <Route path="/admin/customers" component={AdminCustomers} />

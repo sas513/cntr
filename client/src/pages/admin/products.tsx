@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,10 +16,12 @@ import { ObjectUploader } from "@/components/ObjectUploader";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { Plus, Edit, Trash2, Search, Package } from "lucide-react";
+import { useLocation } from "wouter";
 import type { Product, Category } from "@shared/schema";
 
 export default function AdminProducts() {
   const { isLoading: authLoading, isAuthenticated } = useAdminAuth();
+  const [location, setLocation] = useLocation();
   const [searchQuery, setSearchQuery] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
@@ -41,6 +43,17 @@ export default function AdminProducts() {
 
   const { toast } = useToast();
   const queryClient = useQueryClient();
+
+  // Auto-open dialog when navigating to /admin/products/new
+  useEffect(() => {
+    if (location === '/admin/products/new') {
+      setIsDialogOpen(true);
+      setEditingProduct(null);
+      resetForm();
+      // Navigate to /admin/products to clean URL
+      setLocation('/admin/products');
+    }
+  }, [location, setLocation]);
 
   const { data: products = [], isLoading } = useQuery<Product[]>({
     queryKey: ["/api/products"],
