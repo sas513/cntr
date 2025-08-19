@@ -181,6 +181,28 @@ export default function AdminProducts() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!formData.categoryId) {
+      toast({
+        title: "خطأ",
+        description: "يرجى اختيار فئة للمنتج",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // التحقق من وجود صور قبل الحفظ
+    const hasImages = formData.images.some(img => img.trim() !== "");
+    if (!hasImages) {
+      toast({
+        title: "تحذير",
+        description: "لم يتم رفع أي صورة للمنتج. يمكنك المتابعة بدون صور أو رفع صورة أولاً.",
+      });
+    }
+
+    console.log('Form data before submit:', formData);
+    console.log('Images in form:', formData.images);
+
     if (editingProduct) {
       updateProductMutation.mutate(formData);
     } else {
@@ -465,16 +487,36 @@ export default function AdminProducts() {
                                     const localImagePath = `/objects/uploads/${objectId}`;
                                     updateImageField(index, localImagePath);
                                     console.log('تم رفع الصورة بنجاح:', localImagePath);
+                                    toast({
+                                      title: "تم رفع الصورة",
+                                      description: "تم رفع الصورة بنجاح",
+                                    });
                                   } else {
                                     // fallback إذا لم نجد uploads
                                     const entityId = pathParts.slice(-1)[0];
                                     const localImagePath = `/objects/uploads/${entityId}`;
                                     updateImageField(index, localImagePath);
+                                    console.log('تم رفع الصورة بنجاح (fallback):', localImagePath);
+                                    toast({
+                                      title: "تم رفع الصورة",
+                                      description: "تم رفع الصورة بنجاح",
+                                    });
                                   }
                                 } catch (error) {
                                   console.error('خطأ في معالجة رابط الصورة:', error);
                                   updateImageField(index, uploadedFile.uploadURL);
+                                  toast({
+                                    title: "تحذير",
+                                    description: "تم رفع الصورة ولكن بتنسيق مختلف",
+                                    variant: "destructive",
+                                  });
                                 }
+                              } else {
+                                toast({
+                                  title: "خطأ",
+                                  description: "فشل في رفع الصورة",
+                                  variant: "destructive",
+                                });
                               }
                             }}
                             buttonClassName="bg-blue-600 hover:bg-blue-700 text-white w-full"
