@@ -69,8 +69,20 @@ function Router() {
       <Route path="/admin/reports" component={AdminReports} />
       <Route path="/admin" component={AdminDashboard} />
       
-      {/* Customer Routes - With Header/Footer */}
-      <Route component={CustomerLayout} />
+      {/* Customer Routes - Only for non-admin paths */}
+      <Route path="/" component={CustomerLayout} />
+      <Route path="/products" component={CustomerLayout} />
+      <Route path="/product/:id" component={CustomerLayout} />
+      <Route path="/cart" component={CustomerLayout} />
+      <Route path="/offers" component={CustomerLayout} />
+      <Route path="/about" component={CustomerLayout} />
+      <Route path="/privacy-policy" component={CustomerLayout} />
+      <Route path="/terms-conditions" component={CustomerLayout} />
+      <Route path="/return-policy" component={CustomerLayout} />
+      <Route path="/shipping-policy" component={CustomerLayout} />
+      
+      {/* 404 for everything else */}
+      <Route component={NotFound} />
     </Switch>
   );
 }
