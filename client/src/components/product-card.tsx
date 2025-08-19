@@ -79,15 +79,15 @@ export default function ProductCard({ product }: ProductCardProps) {
           loading="eager"
           decoding="sync"
           style={{
-            imageRendering: 'crisp-edges',
-            willChange: 'auto',
-            transform: 'translateZ(0)'
+            opacity: 1,
+            background: 'transparent',
+            transform: 'translateZ(0)',
+            minHeight: 'auto'
           }}
           onError={(e) => {
             e.currentTarget.src = "/api/placeholder-image";
           }}
           onLoad={(e) => {
-            // Mark as loaded to prevent re-loading
             e.currentTarget.style.opacity = '1';
           }}
         />

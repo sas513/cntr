@@ -164,6 +164,14 @@ export default function ProductDetail() {
                 className="w-full h-96 object-cover rounded-lg shadow-lg cached-image"
                 loading="eager"
                 decoding="sync"
+                style={{
+                  opacity: 1,
+                  background: 'transparent',
+                  minHeight: 'auto'
+                }}
+                onLoad={(e) => {
+                  e.currentTarget.style.opacity = '1';
+                }}
                 onError={(e) => {
                   e.currentTarget.src = "/api/placeholder-image";
                 }}

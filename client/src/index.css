@@ -21,7 +21,33 @@
   transform: translateZ(0);
   backface-visibility: hidden;
   perspective: 1000px;
-  transition: opacity 0.3s ease;
+  opacity: 1 !important;
+  background: transparent !important;
+}
+
+/* منع ظهور مؤشر التحميل */
+.cached-image::before,
+.cached-image::after {
+  display: none !important;
+}
+
+/* منع أي loading placeholders */
+img[loading] {
+  background: transparent !important;
+  opacity: 1 !important;
+}
+
+/* منع loading spinners على جميع الصور */
+img {
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
+/* إخفاء أي animation loaders */
+.loading,
+.spinner,
+.skeleton {
+  display: none !important;
 }
 
 /* تحسين سرعة تحميل الصور المهمة */

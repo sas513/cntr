@@ -160,6 +160,14 @@ export default function Home() {
                   className="w-full h-60 sm:h-72 md:h-80 object-cover group-hover:scale-110 transition-transform duration-500 cached-image hero-image"
                   loading="eager"
                   decoding="sync"
+                  style={{
+                    opacity: 1,
+                    background: 'transparent',
+                    minHeight: 'auto'
+                  }}
+                  onLoad={(e) => {
+                    e.currentTarget.style.opacity = '1';
+                  }}
                   onError={(e) => {
                     e.currentTarget.src = "/api/images/watches";
                   }}
@@ -184,6 +192,14 @@ export default function Home() {
                   className="w-full h-60 sm:h-72 md:h-80 object-cover group-hover:scale-110 transition-transform duration-500 cached-image hero-image"
                   loading="eager"
                   decoding="sync"
+                  style={{
+                    opacity: 1,
+                    background: 'transparent',
+                    minHeight: 'auto'
+                  }}
+                  onLoad={(e) => {
+                    e.currentTarget.style.opacity = '1';
+                  }}
                   onError={(e) => {
                     e.currentTarget.src = "/api/images/perfumes";
                   }}
