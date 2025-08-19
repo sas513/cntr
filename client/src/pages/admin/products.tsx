@@ -421,14 +421,24 @@ export default function AdminProducts() {
                             maxNumberOfFiles={1}
                             maxFileSize={5242880} // 5MB
                             onGetUploadParameters={async () => {
+                              const token = localStorage.getItem('adminToken');
+                              console.log('Getting upload URL with token:', token ? 'Present' : 'Missing');
+                              
                               const response = await fetch('/api/objects/upload', {
                                 method: 'POST',
                                 headers: {
-                                  'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                                  'Authorization': `Bearer ${token}`,
                                   'Content-Type': 'application/json'
                                 }
                               });
+                              
+                              if (!response.ok) {
+                                console.error('Upload URL request failed:', response.status, await response.text());
+                                throw new Error('Failed to get upload URL');
+                              }
+                              
                               const data = await response.json();
+                              console.log('Upload URL received successfully');
                               return {
                                 method: 'PUT' as const,
                                 url: data.uploadURL
