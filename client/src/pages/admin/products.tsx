@@ -12,7 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import AdminSidebar from "@/components/admin/sidebar";
 import { useAdminAuth } from "@/hooks/use-admin-auth";
-import { ObjectUploader } from "@/components/ObjectUploader";
+
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { Plus, Edit, Trash2, Search, Package } from "lucide-react";
@@ -527,84 +527,9 @@ export default function AdminProducts() {
                             )}
                           </div>
                           
-                          <ObjectUploader
-                            maxNumberOfFiles={1}
-                            maxFileSize={5242880} // 5MB
-                            onGetUploadParameters={async () => {
-                              const token = localStorage.getItem('adminToken');
-                              console.log('Getting upload URL with token:', token ? 'Present' : 'Missing');
-                              
-                              const response = await fetch('/api/objects/upload', {
-                                method: 'POST',
-                                headers: {
-                                  'Authorization': `Bearer ${token}`,
-                                  'Content-Type': 'application/json'
-                                }
-                              });
-                              
-                              if (!response.ok) {
-                                console.error('Upload URL request failed:', response.status, await response.text());
-                                throw new Error('Failed to get upload URL');
-                              }
-                              
-                              const data = await response.json();
-                              console.log('Upload URL received successfully');
-                              return {
-                                method: 'PUT' as const,
-                                url: data.uploadURL
-                              };
-                            }}
-                            onComplete={(result) => {
-                              const uploadedFile = result.successful?.[0];
-                              if (uploadedFile?.uploadURL) {
-                                try {
-                                  // تحويل رابط Google Storage إلى رابط محلي
-                                  const url = new URL(uploadedFile.uploadURL);
-                                  const pathParts = url.pathname.split('/');
-                                  
-                                  // البحث عن الجزء الخاص بـ uploads/
-                                  const uploadsIndex = pathParts.findIndex(part => part === 'uploads');
-                                  if (uploadsIndex !== -1 && uploadsIndex < pathParts.length - 1) {
-                                    const objectId = pathParts[uploadsIndex + 1];
-                                    const localImagePath = `/objects/uploads/${objectId}`;
-                                    updateImageField(index, localImagePath);
-                                    console.log('تم رفع الصورة بنجاح:', localImagePath);
-                                    toast({
-                                      title: "تم رفع الصورة",
-                                      description: "تم رفع الصورة بنجاح",
-                                    });
-                                  } else {
-                                    // fallback إذا لم نجد uploads
-                                    const entityId = pathParts.slice(-1)[0];
-                                    const localImagePath = `/objects/uploads/${entityId}`;
-                                    updateImageField(index, localImagePath);
-                                    console.log('تم رفع الصورة بنجاح (fallback):', localImagePath);
-                                    toast({
-                                      title: "تم رفع الصورة",
-                                      description: "تم رفع الصورة بنجاح",
-                                    });
-                                  }
-                                } catch (error) {
-                                  console.error('خطأ في معالجة رابط الصورة:', error);
-                                  updateImageField(index, uploadedFile.uploadURL);
-                                  toast({
-                                    title: "تحذير",
-                                    description: "تم رفع الصورة ولكن بتنسيق مختلف",
-                                    variant: "destructive",
-                                  });
-                                }
-                              } else {
-                                toast({
-                                  title: "خطأ",
-                                  description: "فشل في رفع الصورة",
-                                  variant: "destructive",
-                                });
-                              }
-                            }}
-                            buttonClassName="bg-blue-600 hover:bg-blue-700 text-white w-full"
-                          >
-                            <span>📁 رفع صورة</span>
-                          </ObjectUploader>
+                          <div className="text-sm text-gray-500 arabic-text">
+                            اكتب رابط الصورة في الحقل أعلاه أو استخدم صور من attached_assets
+                          </div>
                         </div>
                       ))}
                       
