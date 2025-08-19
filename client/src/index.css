@@ -56,12 +56,24 @@ img {
   background-position: center !important;
   background-repeat: no-repeat !important;
   background-color: transparent !important;
-  background-attachment: scroll !important;
+  background-attachment: fixed !important;
+  opacity: 1 !important;
+  transition: none !important;
+  animation: none !important;
 }
 
 .hero-background::before,
 .hero-background::after {
   background-color: transparent !important;
+  display: none !important;
+}
+
+/* منع أي تأثيرات تحميل على الخلفية */
+.hero-background,
+.hero-background * {
+  transition: none !important;
+  animation: none !important;
+  opacity: 1 !important;
 }
 
 /* تحسين سرعة تحميل الصور المهمة */

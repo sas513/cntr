@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import ProductCard from "@/components/product-card";
+
 import { Gem, Clock, Truck, Shield, Headphones, RotateCcw, Star } from "lucide-react";
 import { Link } from "wouter";
 import type { Product, Category, StoreSetting } from "@shared/schema";
@@ -68,7 +69,8 @@ export default function Home() {
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
-          backgroundColor: 'transparent'
+          backgroundColor: 'transparent',
+          opacity: 1
         }}
       >
         <div className="absolute inset-0 bg-black/40 z-10"></div>
