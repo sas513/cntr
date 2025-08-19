@@ -12,7 +12,7 @@ import watchImagePath from "@assets/rolex-watch.png";
 import perfumeImagePath from "@assets/hqdefault_1755548467976.jpg";
 
 export default function Home() {
-  // Preload critical images
+  // Preload critical images immediately
   React.useEffect(() => {
     const preloadImages = [
       heroImagePath,
@@ -21,8 +21,11 @@ export default function Home() {
     ];
     
     preloadImages.forEach(src => {
-      const img = new Image();
-      img.src = src;
+      const link = document.createElement('link');
+      link.rel = 'preload';
+      link.as = 'image';
+      link.href = src;
+      document.head.appendChild(link);
     });
   }, []);
 
@@ -60,6 +63,13 @@ export default function Home() {
       {/* Hero Section */}
       <section 
         className="relative text-white overflow-hidden min-h-[600px] hero-background"
+        style={{
+          backgroundImage: `url("${heroImagePath}")`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          backgroundAttachment: 'fixed'
+        }}
       >
         <div className="absolute inset-0 bg-black/40 z-10"></div>
         
