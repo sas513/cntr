@@ -520,10 +520,34 @@ export default function AdminProducts() {
                               // فحص وجود أخطاء
                               if (result.failed && result.failed.length > 0) {
                                 console.error('Upload failed:', result.failed);
-                                const failureReason = result.failed[0].error || 'Unknown error';
+                                const failedFile = result.failed[0];
+                                console.error('Detailed error:', failedFile);
+                                
+                                let errorMessage = 'خطأ غير معروف';
+                                if (failedFile.error) {
+                                  if (typeof failedFile.error === 'string') {
+                                    errorMessage = failedFile.error;
+                                  } else if (failedFile.error.message) {
+                                    errorMessage = failedFile.error.message;
+                                  } else if (failedFile.error.toString) {
+                                    errorMessage = failedFile.error.toString();
+                                  }
+                                }
+                                
+                                // ترجمة بعض الأخطاء الشائعة
+                                if (errorMessage.includes('NetworkError') || errorMessage.includes('Failed to fetch')) {
+                                  errorMessage = 'مشكلة في الاتصال بالإنترنت';
+                                } else if (errorMessage.includes('403') || errorMessage.includes('Forbidden')) {
+                                  errorMessage = 'ليس مسموح برفع هذا الملف';
+                                } else if (errorMessage.includes('413') || errorMessage.includes('too large')) {
+                                  errorMessage = 'حجم الملف كبير جداً (الحد الأقصى 5MB)';
+                                } else if (errorMessage.includes('401') || errorMessage.includes('Unauthorized')) {
+                                  errorMessage = 'انتهت صلاحية الجلسة - يرجى المحاولة مرة أخرى';
+                                }
+                                
                                 toast({
                                   title: "فشل في رفع الصورة",
-                                  description: `سبب الفشل: ${failureReason}`,
+                                  description: errorMessage,
                                   variant: "destructive",
                                 });
                                 return;

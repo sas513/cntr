@@ -79,9 +79,7 @@ export function ObjectUploader({
         console.log('Upload started - keeping modal open');
         setIsUploading(true);
       })
-      .on("upload-started", (file) => {
-        console.log('File upload started:', file.name);
-      })
+
       .on("complete", (result) => {
         console.log('Upload completed');
         setIsUploading(false);
@@ -94,10 +92,14 @@ export function ObjectUploader({
       .on("error", (error) => {
         console.error('Upload error:', error);
         setIsUploading(false);
-        // إبقاء المودال مفتوحاً عند حدوث خطأ
+        // إبقاء المودال مفتوحاً عند حدوث خطأ لفترة أطول
         setTimeout(() => {
           setShowModal(false);
-        }, 3000);
+        }, 5000);
+      })
+      .on("upload-error", (file, error) => {
+        console.error('File upload error:', file?.name, error);
+        setIsUploading(false);
       })
   );
 
