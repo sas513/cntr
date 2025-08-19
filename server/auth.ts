@@ -70,31 +70,46 @@ export function clearAllFailedAttempts(): void {
 }
 
 export function requireAdmin(req: AuthRequest, res: Response, next: NextFunction) {
+  console.log('requireAdmin middleware called for:', req.path);
   const clientIP = req.ip || req.connection.remoteAddress || 'unknown';
 
   const authHeader = req.headers.authorization;
+  console.log('Authorization header:', authHeader ? 'Present' : 'Missing');
   const token = authHeader?.startsWith("Bearer ") ? authHeader.slice(7) : null;
 
   if (!token) {
+    console.log('No token provided for admin access');
     return res.status(401).json({ message: "رمز المصادقة مطلوب" });
   }
 
-  const decoded = verifyToken(token);
-  if (!decoded || decoded.role !== "admin") {
-    return res.status(401).json({ message: "غير مصرح بالوصول" });
+  try {
+    const decoded = verifyToken(token);
+    console.log('Token decoded:', decoded ? 'Success' : 'Failed');
+    console.log('Token role:', decoded?.role);
+    
+    if (!decoded || decoded.role !== "admin") {
+      console.log('Invalid token or not admin role:', decoded);
+      return res.status(401).json({ message: "غير مصرح بالوصول" });
+    }
+
+    // Check token age for additional security
+    const tokenAge = Date.now() / 1000 - (decoded.iat || 0);
+    console.log('Token age (seconds):', tokenAge);
+    if (tokenAge > 8 * 60 * 60) { // 8 hours max
+      console.log('Token expired:', tokenAge);
+      return res.status(401).json({ message: "انتهت صلاحية الجلسة" });
+    }
+
+    req.admin = {
+      id: decoded.userId,
+      username: decoded.username,
+      role: decoded.role,
+    };
+
+    console.log('Admin authenticated successfully:', req.admin.username);
+    next();
+  } catch (error) {
+    console.error('Token verification error:', error);
+    return res.status(401).json({ message: "رمز مصادقة غير صالح" });
   }
-
-  // Check token age for additional security
-  const tokenAge = Date.now() / 1000 - decoded.iat;
-  if (tokenAge > 8 * 60 * 60) { // 8 hours max
-    return res.status(401).json({ message: "انتهت صلاحية الجلسة" });
-  }
-
-  req.admin = {
-    id: decoded.userId,
-    username: decoded.username,
-    role: decoded.role,
-  };
-
-  next();
 }

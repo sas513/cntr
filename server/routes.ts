@@ -521,8 +521,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Get upload URL for product images
   app.post("/api/objects/upload", requireAdmin, async (req: AuthRequest, res) => {
     try {
+      console.log('Upload URL request from admin:', req.admin?.username);
       const objectStorageService = new ObjectStorageService();
       const uploadURL = await objectStorageService.getObjectEntityUploadURL();
+      console.log('Generated upload URL successfully');
       res.json({ uploadURL });
     } catch (error) {
       console.error("Error getting upload URL:", error);

@@ -618,8 +618,10 @@ export default function AdminProducts() {
                               alt={product.nameAr}
                               className="w-12 h-12 object-cover rounded-lg bg-gray-100 border border-gray-200"
                               onError={(e) => {
-                                // إذا فشلت الصورة، نستخدم placeholder منطقي
                                 e.currentTarget.src = "/api/placeholder-image";
+                              }}
+                              onLoad={() => {
+                                console.log('Image loaded successfully:', product.images?.[0]);
                               }}
                             />
                           </TableCell>
