@@ -9,6 +9,7 @@ import { z } from "zod";
 import bcrypt from "bcryptjs";
 import { db } from "./db";
 import { ObjectStorageService, ObjectNotFoundError } from "./objectStorage";
+import { serveWatchesImage, servePerfumesImage, serveHeroBackground } from "./image-service";
 
 // Cache headers for better performance
 const CACHE_HEADERS = {
@@ -36,6 +37,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
     
     res.send(svg);
   });
+
+  // Fast local images for categories
+  app.get('/api/images/watches', serveWatchesImage);
+  app.get('/api/images/perfumes', servePerfumesImage);
+  app.get('/api/images/hero-background', serveHeroBackground);
   
   // Check if any users exist
   app.get('/api/admin/check-users', async (req, res) => {

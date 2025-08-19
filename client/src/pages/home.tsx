@@ -46,7 +46,7 @@ export default function Home() {
       <section 
         className="relative text-white overflow-hidden min-h-[600px] hero-background"
         style={{
-          backgroundImage: `url("${heroImagePath}")`,
+          backgroundImage: `url("/api/images/hero-background")`,
           backgroundColor: '#1B365D'
         }}
       >
@@ -140,15 +140,11 @@ export default function Home() {
             <Link href={`/products?category=${watchesCategory?.id}`}>
               <div className="relative group cursor-pointer overflow-hidden rounded-2xl shadow-lg">
                 <img 
-                  src={watchImagePath} 
+                  src="/api/images/watches" 
                   alt="مجموعة الساعات الفاخرة" 
                   className="w-full h-60 sm:h-72 md:h-80 object-cover group-hover:scale-110 transition-transform duration-500 cached-image hero-image"
                   loading="eager"
                   decoding="sync"
-
-                  onError={(e) => {
-                    e.currentTarget.src = "/api/placeholder-image";
-                  }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
                 <div className="absolute bottom-6 right-6 text-white">
@@ -165,14 +161,11 @@ export default function Home() {
             <Link href={`/products?category=${perfumesCategory?.id}`}>
               <div className="relative group cursor-pointer overflow-hidden rounded-2xl shadow-lg">
                 <img 
-                  src={perfumeImagePath} 
+                  src="/api/images/perfumes" 
                   alt="مجموعة العطور الفاخرة" 
                   className="w-full h-60 sm:h-72 md:h-80 object-cover group-hover:scale-110 transition-transform duration-500 cached-image hero-image"
                   loading="eager"
                   decoding="sync"
-                  onError={(e) => {
-                    e.currentTarget.src = "/api/placeholder-image";
-                  }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
                 <div className="absolute bottom-6 right-6 text-white">
