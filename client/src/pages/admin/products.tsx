@@ -23,6 +23,8 @@ export default function AdminProducts() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [bulkProductsText, setBulkProductsText] = useState("");
+  const [bulkCategoryId, setBulkCategoryId] = useState("");
   const [formData, setFormData] = useState({
     name: "",
     nameAr: "",
@@ -141,6 +143,30 @@ export default function AdminProducts() {
     },
   });
 
+  const bulkAddMutation = useMutation({
+    mutationFn: async (productsData: any[]) => {
+      for (const productData of productsData) {
+        await apiRequest("POST", "/api/products", productData);
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/products"] });
+      setBulkProductsText("");
+      setBulkCategoryId("");
+      toast({
+        title: "تم إضافة المنتجات",
+        description: "تم إضافة جميع المنتجات بنجاح",
+      });
+    },
+    onError: () => {
+      toast({
+        title: "خطأ",
+        description: "حدث خطأ أثناء إضافة المنتجات",
+        variant: "destructive",
+      });
+    },
+  });
+
   const resetForm = () => {
     setFormData({
       name: "",
@@ -252,6 +278,61 @@ export default function AdminProducts() {
     }));
   };
 
+  const handleBulkAdd = () => {
+    if (!bulkProductsText.trim()) {
+      toast({
+        title: "خطأ",
+        description: "يرجى إدخال بيانات المنتجات",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!bulkCategoryId) {
+      toast({
+        title: "خطأ",
+        description: "يرجى اختيار فئة للمنتجات",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const lines = bulkProductsText.trim().split('\n');
+    const productsData = [];
+
+    for (const line of lines) {
+      const parts = line.split('|').map(part => part.trim());
+      if (parts.length >= 3) {
+        productsData.push({
+          name: parts[0],
+          nameAr: parts[0],
+          description: parts[1] || "",
+          descriptionAr: parts[1] || "",
+          price: parts[2],
+          originalPrice: parts[3] || null,
+          stock: parseInt(parts[4]) || 0,
+          sku: parts[5] || "",
+          categoryId: parseInt(bulkCategoryId),
+          images: [],
+          tags: [],
+          isActive: true,
+          isFeatured: false,
+        });
+      }
+    }
+
+    if (productsData.length === 0) {
+      toast({
+        title: "خطأ",
+        description: "لم يتم العثور على بيانات منتجات صحيحة",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    bulkAddMutation.mutate(productsData);
+  };
+
   const filteredProducts = products.filter(product =>
     product.nameAr.toLowerCase().includes(searchQuery.toLowerCase()) ||
     product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -283,13 +364,14 @@ export default function AdminProducts() {
               </p>
             </div>
             
-            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-              <DialogTrigger asChild>
-                <Button className="bg-white hover:bg-gray-100 text-black border border-gray-300" onClick={() => { resetForm(); setEditingProduct(null); }}>
-                  <Plus className="w-4 h-4 ml-2" />
-                  إضافة منتج جديد
-                </Button>
-              </DialogTrigger>
+            <div className="flex gap-2">
+              <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button className="bg-white hover:bg-gray-100 text-black border border-gray-300" onClick={() => { resetForm(); setEditingProduct(null); }}>
+                    <Plus className="w-4 h-4 ml-2" />
+                    إضافة منتج جديد
+                  </Button>
+                </DialogTrigger>
               
               <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700">
                 <DialogHeader>
@@ -611,6 +693,62 @@ export default function AdminProducts() {
                 </form>
               </DialogContent>
             </Dialog>
+              
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+                    <Package className="w-4 h-4 ml-2" />
+                    إضافة متعددة
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-2xl">
+                  <DialogHeader>
+                    <DialogTitle className="arabic-text">إضافة منتجات متعددة</DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-4">
+                    <p className="text-sm text-muted-foreground arabic-text">
+                      أدخل معلومات المنتجات، منتج واحد في كل سطر بالتنسيق التالي:
+                    </p>
+                    <div className="bg-gray-50 p-3 rounded text-sm font-mono">
+                      اسم المنتج | الوصف | السعر | السعر الأصلي | المخزون | SKU
+                    </div>
+                    <p className="text-xs text-muted-foreground arabic-text">
+                      مثال: عطر شانيل | عطر فاخر | 150000 | 200000 | 10 | CH001
+                    </p>
+                    <Textarea
+                      placeholder="اسم المنتج الأول | الوصف | السعر | السعر الأصلي | المخزون | SKU
+اسم المنتج الثاني | الوصف | السعر | السعر الأصلي | المخزون | SKU"
+                      rows={8}
+                      className="font-mono text-sm"
+                      value={bulkProductsText}
+                      onChange={(e) => setBulkProductsText(e.target.value)}
+                    />
+                    <div className="space-y-2">
+                      <Label className="arabic-text">الفئة للمنتجات الجديدة</Label>
+                      <Select value={bulkCategoryId} onValueChange={setBulkCategoryId}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="اختر الفئة" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {categories.map((category) => (
+                            <SelectItem key={category.id} value={category.id.toString()}>
+                              {category.nameAr}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <Button 
+                      onClick={handleBulkAdd}
+                      disabled={bulkAddMutation.isPending}
+                      className="w-full bg-green-600 hover:bg-green-700"
+                    >
+                      {bulkAddMutation.isPending ? "جاري الإضافة..." : "إضافة جميع المنتجات"}
+                    </Button>
+                  </div>
+                </DialogContent>
+              </Dialog>
+            </div>
           </div>
 
           {/* Search and Filters */}
