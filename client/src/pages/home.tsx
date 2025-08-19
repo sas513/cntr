@@ -60,10 +60,6 @@ export default function Home() {
       {/* Hero Section */}
       <section 
         className="relative text-white overflow-hidden min-h-[600px] hero-background"
-        style={{
-          backgroundImage: `url("${heroImagePath}")`,
-          backgroundColor: 'transparent'
-        }}
       >
         <div className="absolute inset-0 bg-black/40 z-10"></div>
         
