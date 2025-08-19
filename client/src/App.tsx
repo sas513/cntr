@@ -61,13 +61,13 @@ function Router() {
     <Switch>
       {/* Admin Routes - No Header/Footer */}
       <Route path="/admin/login" component={AdminLogin} />
-      <Route path="/admin" component={AdminDashboard} />
       <Route path="/admin/products" component={AdminProducts} />
       <Route path="/admin/orders" component={AdminOrders} />
       <Route path="/admin/customers" component={AdminCustomers} />
       <Route path="/admin/theme-gallery" component={ThemeGallery} />
       <Route path="/admin/settings" component={AdminSettings} />
       <Route path="/admin/reports" component={AdminReports} />
+      <Route path="/admin" component={AdminDashboard} />
       
       {/* Customer Routes - With Header/Footer */}
       <Route component={CustomerLayout} />
