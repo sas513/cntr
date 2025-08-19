@@ -62,6 +62,9 @@ export default function AdminProducts() {
         tags: productData.tags.filter((tag: string) => tag.trim() !== ""),
       };
       
+      console.log('Sending product data:', cleanedData);
+      console.log('Product images array:', cleanedData.images);
+      
       await apiRequest("POST", "/api/products", cleanedData);
     },
     onSuccess: () => {
@@ -93,6 +96,9 @@ export default function AdminProducts() {
         images: productData.images.filter((img: string) => img.trim() !== ""),
         tags: productData.tags.filter((tag: string) => tag.trim() !== ""),
       };
+      
+      console.log('Updating product data:', cleanedData);
+      console.log('Product images array:', cleanedData.images);
       
       await apiRequest("PUT", `/api/products/${editingProduct!.id}`, cleanedData);
     },
