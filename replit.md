@@ -3,7 +3,15 @@
 ## Project Overview
 A comprehensive Arabic e-commerce website for "بابلون إكسبرس" (Babylon Express) featuring a modern professional interface for customers to shop from a wide range of products like AliExpress, plus a complete admin dashboard for store management. Now transformed into a multi-category marketplace covering electronics, fashion, home & garden, sports, beauty, toys, automotive, and books & media.
 
-## Recent Achievements (January 2025)
+## Recent Achievements (August 2025)
+
+✅ **Store Category Expansion (August 20, 2025)**
+- Added three new product categories to expand store offerings
+- New categories: ساعات نسائية (Women Watches), نظارات (Sunglasses), إكسسوارات (Accessories)
+- Total categories now: 5 (Watches, Perfumes, Women Watches, Sunglasses, Accessories)
+- Enhanced product categorization for better customer experience
+
+## Previous Achievements (January 2025)
 ✅ **Complete Telegram Bot Integration**
 - Automatic order notifications in Arabic sent to Telegram
 - Admin configuration panel for bot token and chat ID
