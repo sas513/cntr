@@ -149,7 +149,7 @@ export default function Home() {
                 categoryImage = "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&q=80";
               }
               
-              // console.log(`Category: ${category.nameAr}, ImageURL: ${category.imageUrl}, Final: ${categoryImage}`);
+              console.log(`Category: ${category.nameAr}, ImageURL: ${category.imageUrl}, Final: ${categoryImage}`);
               
               return (
                 <Link key={category.id} href={`/products?category=${category.id}`}>
@@ -157,9 +157,13 @@ export default function Home() {
                     <img 
                       src={categoryImage} 
                       alt={`مجموعة ${category.nameAr}`} 
-                      className="w-full h-60 sm:h-72 object-cover group-hover:scale-110 transition-transform duration-500 cached-image"
-                      loading="eager"
-                      decoding="sync"
+                      className="w-full h-60 sm:h-72 object-cover group-hover:scale-110 transition-transform duration-500"
+                      loading="lazy"
+                      onError={(e) => {
+                        console.error(`Failed to load image for ${category.nameAr}:`, categoryImage);
+                        e.currentTarget.src = "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&q=80";
+                      }}
+                      onLoad={() => console.log(`Image loaded successfully for ${category.nameAr}`)}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
                     <div className="absolute bottom-6 right-6 text-white">
