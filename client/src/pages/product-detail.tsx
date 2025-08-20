@@ -7,7 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useCart } from "@/hooks/use-cart";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import { Heart, Star, Truck, Shield, RotateCcw, Plus, Minus, ArrowRight, Camera } from "lucide-react";
+import { Heart, Star, Truck, Shield, RotateCcw, Plus, Minus, ArrowRight, Camera, ShoppingCart } from "lucide-react";
 import type { Product } from "@shared/schema";
 import ImagePreview from "@/components/ImagePreview";
 
@@ -289,10 +289,11 @@ export default function ProductDetail() {
             <div className="space-y-4 mb-8">
               <Button 
                 size="lg" 
-                className="w-full text-[#000000]"
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white"
                 onClick={() => addToCartMutation.mutate()}
                 disabled={!product.stock || product.stock === 0 || addToCartMutation.isPending}
               >
+                <ShoppingCart className="w-5 h-5 ml-2" />
                 {addToCartMutation.isPending ? "جاري الإضافة..." : "أضف إلى السلة"}
               </Button>
               <Button variant="outline" size="lg" className="w-full">
