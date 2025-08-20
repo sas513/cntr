@@ -289,7 +289,7 @@ export default function ProductDetail() {
             <div className="space-y-4 mb-8">
               <Button 
                 size="lg" 
-                className="w-full"
+                className="w-full text-[#000000]"
                 onClick={() => addToCartMutation.mutate()}
                 disabled={!product.stock || product.stock === 0 || addToCartMutation.isPending}
               >
