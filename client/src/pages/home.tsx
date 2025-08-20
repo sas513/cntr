@@ -30,8 +30,7 @@ export default function Home() {
   const getSetting = (key: string) => 
     settings.find(s => s.key === key)?.value || "";
 
-  const watchesCategory = categories.find(cat => cat.slug === "watches");
-  const perfumesCategory = categories.find(cat => cat.slug === "perfumes");
+  const activeCategories = categories.filter(cat => cat.isActive);
   
   const heroTitle = getSetting("homepage_hero_title") || "أفخر تشكيلة من الساعات والعطور";
   const heroSubtitle = getSetting("homepage_hero_subtitle") || "اكتشف مجموعتنا الحصرية من أرقى الساعات والعطور العالمية بأفضل الأسعار";
@@ -135,48 +134,45 @@ export default function Home() {
             <p className="text-base sm:text-lg md:text-xl text-muted-foreground arabic-text">اختر من مجموعتنا المتنوعة</p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
-            {/* Watches Category */}
-            <Link href={`/products?category=${watchesCategory?.id}`}>
-              <div className="relative group cursor-pointer overflow-hidden rounded-2xl shadow-lg">
-                <img 
-                  src={watchImagePath} 
-                  alt="مجموعة الساعات الفاخرة" 
-                  className="w-full h-60 sm:h-72 md:h-80 object-cover group-hover:scale-110 transition-transform duration-500 cached-image"
-                  loading="eager"
-                  decoding="sync"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-                <div className="absolute bottom-6 right-6 text-white">
-                  <h3 className="text-3xl font-bold mb-2 arabic-text">الساعات</h3>
-                  <p className="text-lg opacity-90 arabic-text">أحدث التصاميم العالمية</p>
-                  <Button className="mt-4 bg-white hover:bg-gray-100 text-black font-medium">
-                    تسوق الآن
-                  </Button>
-                </div>
-              </div>
-            </Link>
-            
-            {/* Perfumes Category */}
-            <Link href={`/products?category=${perfumesCategory?.id}`}>
-              <div className="relative group cursor-pointer overflow-hidden rounded-2xl shadow-lg">
-                <img 
-                  src={perfumeImagePath} 
-                  alt="مجموعة العطور الفاخرة" 
-                  className="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-500 cached-image"
-                  loading="eager"
-                  decoding="sync"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-                <div className="absolute bottom-6 right-6 text-white">
-                  <h3 className="text-3xl font-bold mb-2 arabic-text">العطور</h3>
-                  <p className="text-lg opacity-90 arabic-text">أرقى العطور العالمية</p>
-                  <Button className="mt-4 bg-white hover:bg-gray-100 text-black font-medium">
-                    تسوق الآن
-                  </Button>
-                </div>
-              </div>
-            </Link>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            {activeCategories.map((category) => {
+              // صور افتراضية للفئات القديمة
+              let categoryImage = category.imageUrl;
+              if (!categoryImage) {
+                if (category.slug === "watches") {
+                  categoryImage = watchImagePath;
+                } else if (category.slug === "perfumes") {
+                  categoryImage = perfumeImagePath;
+                } else {
+                  // صورة افتراضية للفئات الجديدة بدون صورة
+                  categoryImage = "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&q=80";
+                }
+              }
+              
+              return (
+                <Link key={category.id} href={`/products?category=${category.id}`}>
+                  <div className="relative group cursor-pointer overflow-hidden rounded-2xl shadow-lg">
+                    <img 
+                      src={categoryImage} 
+                      alt={`مجموعة ${category.nameAr}`} 
+                      className="w-full h-60 sm:h-72 object-cover group-hover:scale-110 transition-transform duration-500 cached-image"
+                      loading="eager"
+                      decoding="sync"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                    <div className="absolute bottom-6 right-6 text-white">
+                      <h3 className="text-2xl sm:text-3xl font-bold mb-2 arabic-text">{category.nameAr}</h3>
+                      <p className="text-sm sm:text-lg opacity-90 arabic-text">
+                        {category.descriptionAr || category.description || "تشكيلة متنوعة ومميزة"}
+                      </p>
+                      <Button className="mt-4 bg-white hover:bg-gray-100 text-black font-medium">
+                        تسوق الآن
+                      </Button>
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
           </div>
         </div>
       </section>
