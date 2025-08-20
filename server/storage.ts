@@ -48,6 +48,7 @@ export interface IStorage {
   getOrder(id: number): Promise<Order | undefined>;
   createOrder(order: InsertOrder): Promise<Order>;
   updateOrderStatus(id: number, status: string): Promise<Order | undefined>;
+  cancelOrder(id: number): Promise<Order | undefined>;
 
   // Store Settings
   getStoreSettings(): Promise<StoreSetting[]>;

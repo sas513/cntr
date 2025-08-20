@@ -381,8 +381,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "الطلب ملغي مسبقاً" });
       }
       
-      // تحديث حالة الطلب إلى ملغي
-      const cancelledOrder = await storage.updateOrderStatus(id, 'cancelled');
+      // تحديث حالة الطلب إلى ملغي وإرجاع المنتجات للمخزون
+      const cancelledOrder = await storage.cancelOrder(id);
       
       if (!cancelledOrder) {
         return res.status(500).json({ message: "فشل في إلغاء الطلب" });

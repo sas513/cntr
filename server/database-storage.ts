@@ -308,6 +308,41 @@ export class DatabaseStorage implements IStorage {
     return order;
   }
 
+  async cancelOrder(id: number): Promise<Order | undefined> {
+    // الحصول على تفاصيل الطلب أولاً
+    const [order] = await db
+      .select()
+      .from(orders)
+      .where(eq(orders.id, id));
+
+    if (!order || order.status === 'cancelled') {
+      return undefined;
+    }
+
+    // إرجاع المنتجات للمخزون
+    if (Array.isArray(order.items)) {
+      for (const item of order.items) {
+        if (item.productId && item.quantity) {
+          await db
+            .update(products)
+            .set({ 
+              stock: sql`stock + ${item.quantity}` 
+            })
+            .where(eq(products.id, item.productId));
+        }
+      }
+    }
+
+    // تحديث حالة الطلب إلى ملغي
+    const [cancelledOrder] = await db
+      .update(orders)
+      .set({ status: 'cancelled' })
+      .where(eq(orders.id, id))
+      .returning();
+
+    return cancelledOrder;
+  }
+
   // Store Settings
   async getStoreSettings(): Promise<StoreSetting[]> {
     return await db.select().from(storeSettings);
