@@ -136,18 +136,20 @@ export default function Home() {
           
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {activeCategories.map((category) => {
-              // صور افتراضية للفئات القديمة
-              let categoryImage = category.imageUrl;
-              if (!categoryImage) {
-                if (category.slug === "watches") {
-                  categoryImage = watchImagePath;
-                } else if (category.slug === "perfumes") {
-                  categoryImage = perfumeImagePath;
-                } else {
-                  // صورة افتراضية للفئات الجديدة بدون صورة
-                  categoryImage = "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&q=80";
-                }
+              // اختيار الصورة المناسبة لكل فئة
+              let categoryImage;
+              if (category.imageUrl) {
+                categoryImage = category.imageUrl;
+              } else if (category.slug === "watches") {
+                categoryImage = watchImagePath;
+              } else if (category.slug === "perfumes") {
+                categoryImage = perfumeImagePath;
+              } else {
+                // صورة افتراضية للفئات بدون صورة
+                categoryImage = "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&q=80";
               }
+              
+              console.log(`Category: ${category.nameAr}, Image: ${categoryImage}`);
               
               return (
                 <Link key={category.id} href={`/products?category=${category.id}`}>
