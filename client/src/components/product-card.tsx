@@ -19,6 +19,7 @@ export default function ProductCard({ product }: ProductCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const [showImagePreview, setShowImagePreview] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [imageError, setImageError] = useState(false);
   const { addToCart } = useCart();
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -68,10 +69,11 @@ export default function ProductCard({ product }: ProductCardProps) {
     ? Math.round(((parseFloat(product.originalPrice!) - parseFloat(product.price)) / parseFloat(product.originalPrice!)) * 100)
     : 0;
   
-  // قائمة الصور - استخدام صورة افتراضية إذا لم توجد صور
+  // قائمة الصور مع نظام احتياطي محلي
+  const defaultImage = "/uploads/da4e1b6084648e728d6e6039cb75445b.jpg";
   const productImages = product.images && product.images.length > 0 
     ? product.images 
-    : ["https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300"];
+    : [defaultImage];
 
   const handleImagePreview = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -88,10 +90,11 @@ export default function ProductCard({ product }: ProductCardProps) {
     >
       <div className="relative">
         <img
-          src={productImages[0]}
+          src={imageError ? defaultImage : productImages[0]}
           alt={product.nameAr}
           className="w-full h-44 sm:h-52 md:h-60 object-cover group-hover:scale-105 transition-transform duration-300 rounded-xl cursor-pointer"
           onClick={handleImagePreview}
+          onError={() => setImageError(true)}
         />
         
         {/* Badges */}

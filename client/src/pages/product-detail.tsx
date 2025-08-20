@@ -17,6 +17,7 @@ export default function ProductDetail() {
   const [selectedImage, setSelectedImage] = useState(0);
   const [showImagePreview, setShowImagePreview] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [imageError, setImageError] = useState(false);
   const { addToCart } = useCart();
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -142,10 +143,11 @@ export default function ProductDetail() {
     ? Math.round(((parseFloat(product.originalPrice!) - parseFloat(product.price)) / parseFloat(product.originalPrice!)) * 100)
     : 0;
 
-  // قائمة الصور - استخدام صورة افتراضية إذا لم توجد صور  
+  // قائمة الصور مع نظام احتياطي محلي
+  const defaultImage = "/uploads/da4e1b6084648e728d6e6039cb75445b.jpg";
   const productImages = product.images && product.images.length > 0 
     ? product.images 
-    : ["https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=600"];
+    : [defaultImage];
 
   const handleImagePreview = () => {
     setCurrentImageIndex(selectedImage);
@@ -172,10 +174,11 @@ export default function ProductDetail() {
           <div>
             <div className="mb-4 relative group">
               <img
-                src={productImages[selectedImage]}
+                src={imageError ? defaultImage : productImages[selectedImage]}
                 alt={product.nameAr}
                 className="w-full h-96 object-cover rounded-lg shadow-lg cursor-pointer transition-transform hover:scale-105"
                 onClick={handleImagePreview}
+                onError={() => setImageError(true)}
               />
               
               {/* Camera Overlay */}
@@ -207,6 +210,10 @@ export default function ProductDetail() {
                       src={image}
                       alt={`${product.nameAr} ${index + 1}`}
                       className="w-full h-full object-cover"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = defaultImage;
+                      }}
                     />
                   </button>
                 ))}
