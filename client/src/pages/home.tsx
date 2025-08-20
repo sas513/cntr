@@ -9,6 +9,7 @@ import type { Product, Category, StoreSetting } from "@shared/schema";
 import heroImagePath from "@assets/ChatGPT Image 18 أغسطس 2025، 11_29_50 م_1755549026405.png";
 import watchImagePath from "@assets/rolex-watch.png";
 import perfumeImagePath from "@assets/hqdefault_1755548467976.jpg";
+import womenWatchImagePath from "@assets/luxury-watch-collection.png";
 
 export default function Home() {
   const { data: featuredProducts = [], isLoading: productsLoading } = useQuery<Product[]>({
@@ -144,12 +145,14 @@ export default function Home() {
                 categoryImage = watchImagePath;
               } else if (category.slug === "perfumes") {
                 categoryImage = perfumeImagePath;
+              } else if (category.slug === "women-watches") {
+                categoryImage = womenWatchImagePath;
               } else {
                 // صورة افتراضية للفئات بدون صورة
                 categoryImage = "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&q=80";
               }
               
-              console.log(`Category: ${category.nameAr}, ImageURL: ${category.imageUrl}, Final: ${categoryImage}`);
+              // console.log(`Category: ${category.nameAr}, ImageURL: ${category.imageUrl}, Final: ${categoryImage}`);
               
               return (
                 <Link key={category.id} href={`/products?category=${category.id}`}>
