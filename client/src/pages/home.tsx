@@ -17,8 +17,8 @@ export default function Home() {
 
   const { data: categories = [] } = useQuery<Category[]>({
     queryKey: ["/api/categories"],
-    staleTime: 10 * 60 * 1000, // 10 minutes
-    gcTime: 30 * 60 * 1000, // 30 minutes
+    staleTime: 0, // إجبار إعادة التحميل
+    gcTime: 0, // عدم حفظ في ذاكرة التخزين المؤقت
   });
 
   const { data: settings = [] } = useQuery<StoreSetting[]>({
@@ -149,7 +149,7 @@ export default function Home() {
                 categoryImage = "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&q=80";
               }
               
-              console.log(`Category: ${category.nameAr}, Image: ${categoryImage}`);
+              // console.log(`Category: ${category.nameAr}, ImageURL: ${category.imageUrl}, Final: ${categoryImage}`);
               
               return (
                 <Link key={category.id} href={`/products?category=${category.id}`}>
