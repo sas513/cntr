@@ -292,6 +292,20 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createOrder(insertOrder: InsertOrder): Promise<Order> {
+    // خصم المنتجات من المخزون عند إنشاء الطلب
+    if (Array.isArray(insertOrder.items)) {
+      for (const item of insertOrder.items) {
+        if (item.productId && item.quantity) {
+          await db
+            .update(products)
+            .set({ 
+              stock: sql`stock - ${item.quantity}` 
+            })
+            .where(eq(products.id, item.productId));
+        }
+      }
+    }
+
     const [order] = await db
       .insert(orders)
       .values(insertOrder)
@@ -397,11 +411,13 @@ export class DatabaseStorage implements IStorage {
     totalProducts: number;
     totalCustomers: number;
   }> {
+    // حساب المبيعات (استثناء الطلبات الملغية)
     const [salesResult] = await db
       .select({
         total: sql<string>`COALESCE(SUM(CAST(${orders.totalAmount} AS NUMERIC)), 0)`,
       })
-      .from(orders);
+      .from(orders)
+      .where(sql`${orders.status} != 'cancelled'`);
 
     const [ordersResult] = await db
       .select({
