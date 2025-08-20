@@ -116,6 +116,62 @@ ${itemsList}
       throw error;
     }
   }
+
+  async sendCancellationNotification(cancelData: {
+    orderId: number;
+    customerName: string;
+    customerPhone: string;
+    totalAmount: string;
+    cancelledBy: string;
+  }) {
+    // Initialize bot if not already done
+    if (!this.bot || !this.chatId) {
+      const initialized = await this.initializeBot();
+      if (!initialized) {
+        console.log('Telegram bot not configured - skipping cancellation notification');
+        return;
+      }
+    }
+
+    try {
+      const message = this.formatCancellationMessage(cancelData);
+      await this.bot!.sendMessage(this.chatId!, message, { parse_mode: 'HTML' });
+      console.log(`Cancellation notification sent to Telegram for order #${cancelData.orderId}`);
+    } catch (error) {
+      console.error('Failed to send Telegram cancellation notification:', error);
+    }
+  }
+
+  private formatCancellationMessage(cancelData: {
+    orderId: number;
+    customerName: string;
+    customerPhone: string;
+    totalAmount: string;
+    cancelledBy: string;
+  }): string {
+    const cancelDate = new Date().toLocaleDateString('ar-EG', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+
+    return `🚫 <b>تم إلغاء طلب - سنتر المستودع</b>
+
+🆔 <b>رقم الطلب:</b> #${cancelData.orderId}
+📅 <b>تاريخ الإلغاء:</b> ${cancelDate}
+
+👤 <b>بيانات العميل:</b>
+• <b>الاسم:</b> ${cancelData.customerName}
+• <b>الهاتف:</b> ${cancelData.customerPhone}
+
+💰 <b>المبلغ المسترد:</b> ${cancelData.totalAmount} د.ع
+
+👨‍💼 <b>تم الإلغاء بواسطة:</b> ${cancelData.cancelledBy}
+
+⚠️ <b>ملاحظة:</b> تم خصم المبلغ من إجمالي الإيرادات تلقائياً`;
+  }
 }
 
 export const telegramService = new TelegramService();

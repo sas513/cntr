@@ -49,13 +49,14 @@ export default function AdminReports() {
   const getSetting = (key: string) => 
     settings.find(s => s.key === key)?.value || "";
 
-  // حساب الإحصائيات
-  const totalSalesIQD = orders.reduce((sum, order) => sum + parseFloat(order.totalAmount), 0);
+  // حساب الإحصائيات (استثناء الطلبات الملغية من المبيعات)
+  const confirmedOrders = orders.filter(order => order.status !== 'cancelled');
+  const totalSalesIQD = confirmedOrders.reduce((sum, order) => sum + parseFloat(order.totalAmount), 0);
   const exchangeRate = parseFloat(getSetting("usd_exchange_rate")) || 1500;
   const totalSalesUSD = totalSalesIQD / exchangeRate;
   const totalOrders = orders.length;
   const totalProducts = products.length;
-  const avgOrderValue = totalOrders > 0 ? totalSalesIQD / totalOrders : 0;
+  const avgOrderValue = confirmedOrders.length > 0 ? totalSalesIQD / confirmedOrders.length : 0;
 
   // الطلبات الجديدة (آخر 24 ساعة)
   const newOrders = orders.filter(order => {

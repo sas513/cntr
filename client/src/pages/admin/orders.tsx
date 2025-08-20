@@ -11,7 +11,7 @@ import { useAdminAuth } from "@/hooks/use-admin-auth";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { ORDER_STATUSES } from "@/lib/constants";
-import { ShoppingBag, Eye, Calendar, MapPin, Phone, User } from "lucide-react";
+import { ShoppingBag, Eye, Calendar, MapPin, Phone, User, X } from "lucide-react";
 import type { Order } from "@shared/schema";
 
 export default function AdminOrders() {
@@ -52,6 +52,27 @@ export default function AdminOrders() {
       toast({
         title: "خطأ",
         description: "حدث خطأ أثناء تحديث حالة الطلب",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const cancelOrderMutation = useMutation({
+    mutationFn: async (orderId: number) => {
+      const response = await apiRequest("POST", `/api/orders/${orderId}/cancel`, {});
+      return response;
+    },
+    onSuccess: (data: any) => {
+      queryClient.invalidateQueries({ queryKey: ["/api/orders"] });
+      toast({
+        title: "تم إلغاء الطلب بنجاح",
+        description: `تم إلغاء الطلب وخصم ${data.refundAmount} د.ع من الإيرادات`,
+      });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "خطأ في إلغاء الطلب",
+        description: error.message || "حدث خطأ أثناء إلغاء الطلب",
         variant: "destructive",
       });
     },
@@ -341,7 +362,7 @@ export default function AdminOrders() {
                                       </div>
                                     </div>
 
-                                    {/* Status Update */}
+                                    {/* Status Update and Cancel */}
                                     <div>
                                       <h4 className="font-semibold mb-3 arabic-text">تحديث حالة الطلب</h4>
                                       <div className="flex gap-2">
@@ -366,6 +387,22 @@ export default function AdminOrders() {
                                             <SelectItem value="cancelled">ملغي</SelectItem>
                                           </SelectContent>
                                         </Select>
+                                        
+                                        {selectedOrder.status !== 'cancelled' && (
+                                          <Button
+                                            variant="destructive"
+                                            size="sm"
+                                            onClick={() => {
+                                              if (confirm('هل أنت متأكد من إلغاء هذا الطلب؟ سيتم خصم المبلغ من الإيرادات.')) {
+                                                cancelOrderMutation.mutate(selectedOrder.id);
+                                              }
+                                            }}
+                                            disabled={cancelOrderMutation.isPending}
+                                          >
+                                            <X className="w-4 h-4 mr-1" />
+                                            إلغاء الطلب
+                                          </Button>
+                                        )}
                                       </div>
                                     </div>
                                   </div>
@@ -393,6 +430,23 @@ export default function AdminOrders() {
                                 <SelectItem value="cancelled">ملغي</SelectItem>
                               </SelectContent>
                             </Select>
+
+                            {order.status !== 'cancelled' && (
+                              <Button
+                                variant="destructive"
+                                size="sm"
+                                onClick={() => {
+                                  if (confirm('هل أنت متأكد من إلغاء هذا الطلب؟ سيتم خصم المبلغ من الإيرادات.')) {
+                                    cancelOrderMutation.mutate(order.id);
+                                  }
+                                }}
+                                disabled={cancelOrderMutation.isPending}
+                                className="h-8"
+                                title="إلغاء الطلب"
+                              >
+                                <X className="w-4 h-4" />
+                              </Button>
+                            )}
                           </div>
                         </TableCell>
                       </TableRow>

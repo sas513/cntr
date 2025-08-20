@@ -364,6 +364,69 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // إلغاء الطلب مع خصم المبلغ من الإيرادات
+  app.post("/api/orders/:id/cancel", requireAdmin, async (req: AuthRequest, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      
+      // الحصول على تفاصيل الطلب قبل الإلغاء
+      const orders = await storage.getOrders();
+      const order = orders.find(o => o.id === id);
+      
+      if (!order) {
+        return res.status(404).json({ message: "الطلب غير موجود" });
+      }
+      
+      if (order.status === 'cancelled') {
+        return res.status(400).json({ message: "الطلب ملغي مسبقاً" });
+      }
+      
+      // تحديث حالة الطلب إلى ملغي
+      const cancelledOrder = await storage.updateOrderStatus(id, 'cancelled');
+      
+      if (!cancelledOrder) {
+        return res.status(500).json({ message: "فشل في إلغاء الطلب" });
+      }
+      
+      // إرسال إشعار Telegram بالإلغاء
+      try {
+        await telegramService.sendCancellationNotification({
+          orderId: order.id,
+          customerName: order.customerName,
+          customerPhone: order.customerPhone,
+          totalAmount: order.totalAmount,
+          cancelledBy: req.admin?.username || 'Admin'
+        });
+        console.log(`Telegram cancellation notification sent for order ${id}`);
+      } catch (telegramError) {
+        console.error('Failed to send Telegram cancellation notification:', telegramError);
+        // لا نفشل عملية الإلغاء إذا فشل Telegram
+      }
+      
+      // تسجيل النشاط
+      await storage.logActivity({
+        sessionId: order.sessionId,
+        action: "cancel_order",
+        metadata: { 
+          orderId: order.id, 
+          totalAmount: order.totalAmount,
+          cancelledBy: req.admin?.username 
+        }
+      });
+      
+      console.log(`Order ${id} cancelled successfully by admin: ${req.admin?.username}`);
+      
+      res.json({ 
+        message: "تم إلغاء الطلب بنجاح", 
+        order: cancelledOrder,
+        refundAmount: order.totalAmount 
+      });
+    } catch (error) {
+      console.error('Error cancelling order:', error);
+      res.status(500).json({ message: "فشل في إلغاء الطلب" });
+    }
+  });
+
   // Store Settings
   app.get("/api/settings", async (req, res) => {
     try {
