@@ -7,13 +7,16 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useCart } from "@/hooks/use-cart";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import { Heart, Star, Truck, Shield, RotateCcw, Plus, Minus, ArrowRight } from "lucide-react";
+import { Heart, Star, Truck, Shield, RotateCcw, Plus, Minus, ArrowRight, Camera } from "lucide-react";
 import type { Product } from "@shared/schema";
+import ImagePreview from "@/components/ImagePreview";
 
 export default function ProductDetail() {
   const { id } = useParams();
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
+  const [showImagePreview, setShowImagePreview] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const { addToCart } = useCart();
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -139,6 +142,16 @@ export default function ProductDetail() {
     ? Math.round(((parseFloat(product.originalPrice!) - parseFloat(product.price)) / parseFloat(product.originalPrice!)) * 100)
     : 0;
 
+  // قائمة الصور - استخدام صورة افتراضية إذا لم توجد صور  
+  const productImages = product.images && product.images.length > 0 
+    ? product.images 
+    : ["https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=600"];
+
+  const handleImagePreview = () => {
+    setCurrentImageIndex(selectedImage);
+    setShowImagePreview(true);
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
@@ -157,23 +170,37 @@ export default function ProductDetail() {
         <div className="grid md:grid-cols-2 gap-8 mb-16">
           {/* Images */}
           <div>
-            <div className="mb-4">
+            <div className="mb-4 relative group">
               <img
-                src={product.images?.[selectedImage] || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=600"}
+                src={productImages[selectedImage]}
                 alt={product.nameAr}
-                className="w-full h-96 object-cover rounded-lg shadow-lg"
+                className="w-full h-96 object-cover rounded-lg shadow-lg cursor-pointer transition-transform hover:scale-105"
+                onClick={handleImagePreview}
               />
+              
+              {/* Camera Overlay */}
+              <div className="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity rounded-lg">
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  className="bg-white/90 hover:bg-white backdrop-blur-sm"
+                  onClick={handleImagePreview}
+                >
+                  <Camera className="w-4 h-4 ml-2" />
+                  معاينة الصور
+                </Button>
+              </div>
             </div>
             
             {/* Image Thumbnails */}
-            {product.images && product.images.length > 1 && (
+            {productImages.length > 1 && (
               <div className="flex gap-2">
-                {product.images.map((image, index) => (
+                {productImages.map((image, index) => (
                   <button
                     key={index}
                     onClick={() => setSelectedImage(index)}
-                    className={`w-20 h-20 rounded-lg overflow-hidden border-2 ${
-                      selectedImage === index ? "border-primary" : "border-muted"
+                    className={`w-20 h-20 rounded-lg overflow-hidden border-2 transition-all hover:scale-105 ${
+                      selectedImage === index ? "border-primary shadow-lg" : "border-muted hover:border-primary/50"
                     }`}
                   >
                     <img
@@ -331,6 +358,15 @@ export default function ProductDetail() {
           </section>
         )}
       </div>
+
+      {/* Image Preview Modal */}
+      <ImagePreview
+        images={productImages}
+        currentIndex={currentImageIndex}
+        isOpen={showImagePreview}
+        onClose={() => setShowImagePreview(false)}
+        onIndexChange={setCurrentImageIndex}
+      />
     </div>
   );
 }

@@ -6,9 +6,10 @@ import { Badge } from "@/components/ui/badge";
 import { useCart } from "@/hooks/use-cart";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import { Heart, Star, Eye } from "lucide-react";
+import { Heart, Star, Eye, Camera } from "lucide-react";
 import { Link } from "wouter";
 import type { Product } from "@shared/schema";
+import ImagePreview from "./ImagePreview";
 
 interface ProductCardProps {
   product: Product;
@@ -16,6 +17,8 @@ interface ProductCardProps {
 
 export default function ProductCard({ product }: ProductCardProps) {
   const [isHovered, setIsHovered] = useState(false);
+  const [showImagePreview, setShowImagePreview] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const { addToCart } = useCart();
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -64,6 +67,18 @@ export default function ProductCard({ product }: ProductCardProps) {
   const discountPercentage = hasDiscount 
     ? Math.round(((parseFloat(product.originalPrice!) - parseFloat(product.price)) / parseFloat(product.originalPrice!)) * 100)
     : 0;
+  
+  // قائمة الصور - استخدام صورة افتراضية إذا لم توجد صور
+  const productImages = product.images && product.images.length > 0 
+    ? product.images 
+    : ["https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300"];
+
+  const handleImagePreview = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setCurrentImageIndex(0);
+    setShowImagePreview(true);
+  };
 
   return (
     <div 
@@ -73,9 +88,10 @@ export default function ProductCard({ product }: ProductCardProps) {
     >
       <div className="relative">
         <img
-          src={product.images?.[0] || "https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=300"}
+          src={productImages[0]}
           alt={product.nameAr}
-          className="w-full h-44 sm:h-52 md:h-60 object-cover group-hover:scale-105 transition-transform duration-300 rounded-xl"
+          className="w-full h-44 sm:h-52 md:h-60 object-cover group-hover:scale-105 transition-transform duration-300 rounded-xl cursor-pointer"
+          onClick={handleImagePreview}
         />
         
         {/* Badges */}
@@ -97,8 +113,17 @@ export default function ProductCard({ product }: ProductCardProps) {
           )}
         </div>
 
-        {/* Wishlist Button */}
-        <div className={`absolute top-3 left-3 transition-opacity ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
+        {/* Image Preview and Wishlist Buttons */}
+        <div className={`absolute top-3 left-3 flex flex-col gap-2 transition-opacity ${isHovered ? 'opacity-100' : 'opacity-0'}`}>
+          <Button 
+            size="sm" 
+            variant="secondary" 
+            className="rounded-xl p-2 bg-white/90 hover:bg-white backdrop-blur-sm"
+            onClick={handleImagePreview}
+            title="معاينة الصور"
+          >
+            <Camera className="w-4 h-4" />
+          </Button>
           <Button size="sm" variant="secondary" className="rounded-xl p-2 bg-white/90 hover:bg-white backdrop-blur-sm">
             <Heart className="w-4 h-4" />
           </Button>
@@ -180,6 +205,15 @@ export default function ProductCard({ product }: ProductCardProps) {
           {addToCartMutation.isPending ? "جاري الإضافة..." : "أضف إلى السلة"}
         </Button>
       </div>
+
+      {/* Image Preview Modal */}
+      <ImagePreview
+        images={productImages}
+        currentIndex={currentImageIndex}
+        isOpen={showImagePreview}
+        onClose={() => setShowImagePreview(false)}
+        onIndexChange={setCurrentImageIndex}
+      />
     </div>
   );
 }
