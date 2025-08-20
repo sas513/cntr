@@ -18,6 +18,7 @@ export const categories = pgTable("categories", {
   slug: text("slug").notNull().unique(),
   description: text("description"),
   descriptionAr: text("description_ar"),
+  imageUrl: text("image_url"),
   isActive: boolean("is_active").default(true),
 });
 
