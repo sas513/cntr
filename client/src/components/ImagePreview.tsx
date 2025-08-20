@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { X, ZoomIn, ZoomOut, ChevronLeft, ChevronRight } from "lucide-react";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
 interface ImagePreviewProps {
   images: string[];
@@ -85,7 +86,11 @@ export default function ImagePreview({
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="max-w-6xl w-[95vw] h-[90vh] p-0 bg-black border-none">
+      <DialogContent className="max-w-6xl w-[95vw] h-[90vh] p-0 bg-black border-none" aria-describedby="image-preview-description">
+        <VisuallyHidden>
+          <DialogTitle>معاينة الصور</DialogTitle>
+          <div id="image-preview-description">نافذة معاينة الصور مع إمكانية التكبير والتصغير والتنقل</div>
+        </VisuallyHidden>
         <div className="relative w-full h-full flex items-center justify-center">
           {/* Close Button */}
           <Button
